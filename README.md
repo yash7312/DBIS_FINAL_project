@@ -4,3 +4,17 @@ Temporal Indexing
 
     Implement the temporal + other attribute index  described in  advanced indexing chapter slides online.  Spatial is optional, it can be an ordinary ordered attribute such as string or numeric.
     
+Our project should now be framed as:
+
+Use PostgreSQL’s existing range + GiST framework for temporal indexing, then analyze or improve handling of open-ended intervals and temporal+attribute workloads.
+
+Most likely file to modify
+    rangetypes_gist.c
+
+This is where our actual project contribution should go if we make source-level changes.
+
+Possibly modify later
+    rangetypes_selfuncs.c
+
+Only if experiments show the planner is not choosing the temporal index properly.
+
