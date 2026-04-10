@@ -8,8 +8,8 @@ export LD_LIBRARY_PATH="${POSTGRES_INSTALLDIR}/lib:${LD_LIBRARY_PATH:-}"
 export PATH="${POSTGRES_INSTALLDIR}/bin:${PATH}"
 export PGDATA="${POSTGRES_INSTALLDIR}/data"
 
-TS="$(date +%Y%m%d_%H%M%S)"
-LOG_DIR="$ROOT/experiment_logs/$TS"
+
+LOG_DIR="$ROOT/experiment_logs"
 mkdir -p "$LOG_DIR"
 
 # Start server only if it is not already running.

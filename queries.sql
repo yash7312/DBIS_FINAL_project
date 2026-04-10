@@ -50,7 +50,7 @@ WHERE upper_inf(valid_period);
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT count(*)
 FROM temporal_data
-WHERE valid_period @> CURRENT_TIMESTAMP;
+WHERE valid_period @> timestamp '2024-01-01';
 
 \qecho 'Q10 — Attribute + point query'
 EXPLAIN (ANALYZE, BUFFERS)

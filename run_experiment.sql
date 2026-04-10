@@ -6,6 +6,8 @@
 
 \i /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/indexes.sql
 
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+
 CALL create_no_index();
 VACUUM ANALYZE temporal_data;
 \o :log_dir/results_no_index.txt
