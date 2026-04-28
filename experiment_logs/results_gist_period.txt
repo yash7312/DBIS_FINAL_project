@@ -1,200 +1,197 @@
 Experiment: gist_period
 Q1 — Point query (mid selectivity)
-                                                                      QUERY PLAN                                                                      
-------------------------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=1995.92..1995.93 rows=1 width=8) (actual time=12.911..12.912 rows=1 loops=1)
-   Buffers: shared hit=430
-   ->  Index Only Scan using idx_gist_period on temporal_data  (cost=0.28..1910.46 rows=34182 width=0) (actual time=0.143..10.961 rows=34308 loops=1)
+                                                                     QUERY PLAN                                                                     
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=182.08..182.09 rows=1 width=8) (actual time=1.454..1.455 rows=1 loops=1)
+   Buffers: shared hit=54
+   ->  Index Only Scan using temporal_gist_idx on temporal_data  (cost=0.28..173.36 rows=3490 width=0) (actual time=0.076..1.261 rows=3814 loops=1)
          Index Cond: (valid_period @> '2023-06-01 00:00:00'::timestamp without time zone)
-         Heap Fetches: 2
-         Buffers: shared hit=430
+         Heap Fetches: 0
+         Buffers: shared hit=54
  Planning:
-   Buffers: shared hit=10
- Planning Time: 0.265 ms
- Execution Time: 12.942 ms
+   Buffers: shared hit=7
+ Planning Time: 0.092 ms
+ Execution Time: 1.471 ms
 (10 rows)
 
 Q2 — Point query (low selectivity)
-                                                                     QUERY PLAN                                                                      
------------------------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=1808.30..1808.31 rows=1 width=8) (actual time=9.222..9.223 rows=1 loops=1)
-   Buffers: shared hit=229
-   ->  Index Only Scan using idx_gist_period on temporal_data  (cost=0.28..1730.80 rows=31001 width=0) (actual time=0.079..7.571 rows=30006 loops=1)
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1185.28..1185.29 rows=1 width=8) (actual time=7.556..7.557 rows=1 loops=1)
+   Buffers: shared hit=234
+   ->  Index Only Scan using temporal_gist_idx on temporal_data  (cost=0.28..1127.65 rows=23050 width=0) (actual time=0.085..6.421 rows=23127 loops=1)
          Index Cond: (valid_period @> '2027-01-01 00:00:00'::timestamp without time zone)
-         Heap Fetches: 6
-         Buffers: shared hit=229
- Planning Time: 0.073 ms
- Execution Time: 9.243 ms
+         Heap Fetches: 0
+         Buffers: shared hit=234
+ Planning Time: 0.040 ms
+ Execution Time: 7.568 ms
 (8 rows)
 
 Q3 — Short overlap (tight interval)
-                                                                      QUERY PLAN                                                                      
-------------------------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=2032.68..2032.69 rows=1 width=8) (actual time=13.927..13.928 rows=1 loops=1)
-   Buffers: shared hit=413
-   ->  Index Only Scan using idx_gist_period on temporal_data  (cost=0.28..1945.63 rows=34820 width=0) (actual time=0.167..11.991 rows=34860 loops=1)
+                                                                     QUERY PLAN                                                                     
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=156.46..156.47 rows=1 width=8) (actual time=1.442..1.442 rows=1 loops=1)
+   Buffers: shared hit=47
+   ->  Index Only Scan using temporal_gist_idx on temporal_data  (cost=0.28..148.94 rows=3009 width=0) (actual time=0.081..1.270 rows=3346 loops=1)
          Index Cond: (valid_period && '["2023-05-01 00:00:00","2023-05-10 00:00:00")'::tsrange)
-         Heap Fetches: 1
-         Buffers: shared hit=413
- Planning:
-   Buffers: shared hit=3
- Planning Time: 0.129 ms
- Execution Time: 13.957 ms
-(10 rows)
+         Heap Fetches: 0
+         Buffers: shared hit=47
+ Planning Time: 0.051 ms
+ Execution Time: 1.455 ms
+(8 rows)
 
 Q4 — Medium overlap
-                                                                      QUERY PLAN                                                                      
-------------------------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=3048.50..3048.51 rows=1 width=8) (actual time=18.880..18.881 rows=1 loops=1)
-   Buffers: shared hit=554
-   ->  Index Only Scan using idx_gist_period on temporal_data  (cost=0.28..2917.47 rows=52411 width=0) (actual time=0.152..16.071 rows=52226 loops=1)
+                                                                     QUERY PLAN                                                                     
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=210.10..210.11 rows=1 width=8) (actual time=1.531..1.531 rows=1 loops=1)
+   Buffers: shared hit=57
+   ->  Index Only Scan using temporal_gist_idx on temporal_data  (cost=0.28..199.87 rows=4091 width=0) (actual time=0.047..1.323 rows=4228 loops=1)
          Index Cond: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
-         Heap Fetches: 38
-         Buffers: shared hit=554
- Planning Time: 0.079 ms
- Execution Time: 18.900 ms
+         Heap Fetches: 0
+         Buffers: shared hit=57
+ Planning Time: 0.046 ms
+ Execution Time: 1.543 ms
 (8 rows)
 
 Q5 — Large overlap (stress test)
-                                                        QUERY PLAN                                                         
----------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=3905.29..3905.30 rows=1 width=8) (actual time=38.332..38.333 rows=1 loops=1)
-   Buffers: shared hit=1690
-   ->  Seq Scan on temporal_data  (cost=0.00..3627.57 rows=111086 width=0) (actual time=0.014..31.911 rows=110208 loops=1)
-         Filter: (valid_period && '["2022-01-01 00:00:00","2025-01-01 00:00:00")'::tsrange)
-         Rows Removed by Filter: 44798
-         Buffers: shared hit=1690
- Planning Time: 0.080 ms
- Execution Time: 38.355 ms
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1067.54..1067.55 rows=1 width=8) (actual time=7.255..7.256 rows=1 loops=1)
+   Buffers: shared hit=202
+   ->  Index Only Scan using temporal_gist_idx on temporal_data  (cost=0.28..1015.63 rows=20763 width=0) (actual time=0.078..6.233 rows=20468 loops=1)
+         Index Cond: (valid_period && '["2022-01-01 00:00:00","2025-01-01 00:00:00")'::tsrange)
+         Heap Fetches: 0
+         Buffers: shared hit=202
+ Planning Time: 0.066 ms
+ Execution Time: 7.271 ms
 (8 rows)
 
 Q6 — Containment query
-                                                                      QUERY PLAN                                                                      
-------------------------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=1685.90..1685.91 rows=1 width=8) (actual time=13.535..13.537 rows=1 loops=1)
-   Buffers: shared hit=376
-   ->  Index Only Scan using idx_gist_period on temporal_data  (cost=0.28..1613.70 rows=28881 width=0) (actual time=0.149..11.435 rows=31599 loops=1)
+                                                                    QUERY PLAN                                                                     
+---------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=83.16..83.17 rows=1 width=8) (actual time=0.919..0.919 rows=1 loops=1)
+   Buffers: shared hit=34
+   ->  Index Only Scan using temporal_gist_idx on temporal_data  (cost=0.28..79.30 rows=1544 width=0) (actual time=0.066..0.825 rows=1594 loops=1)
          Index Cond: (valid_period @> '["2023-03-01 00:00:00","2023-03-10 00:00:00")'::tsrange)
          Heap Fetches: 0
-         Buffers: shared hit=376
- Planning:
-   Buffers: shared hit=3
- Planning Time: 0.187 ms
- Execution Time: 13.585 ms
-(10 rows)
+         Buffers: shared hit=34
+ Planning Time: 0.147 ms
+ Execution Time: 0.939 ms
+(8 rows)
 
 Q7 — Contained-by query
-                                                                      QUERY PLAN                                                                      
-------------------------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=1996.98..1996.99 rows=1 width=8) (actual time=20.750..20.751 rows=1 loops=1)
-   Buffers: shared hit=787
-   ->  Index Only Scan using idx_gist_period on temporal_data  (cost=0.28..1911.39 rows=34235 width=0) (actual time=0.217..18.233 rows=39779 loops=1)
+                                                                     QUERY PLAN                                                                     
+----------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=129.66..129.67 rows=1 width=8) (actual time=2.351..2.351 rows=1 loops=1)
+   Buffers: shared hit=122
+   ->  Index Only Scan using temporal_gist_idx on temporal_data  (cost=0.28..123.49 rows=2469 width=0) (actual time=0.068..2.217 rows=2585 loops=1)
          Index Cond: (valid_period <@ '["2023-01-01 00:00:00","2024-01-01 00:00:00")'::tsrange)
-         Heap Fetches: 81
-         Buffers: shared hit=787
- Planning:
-   Buffers: shared hit=3
- Planning Time: 0.122 ms
- Execution Time: 20.778 ms
-(10 rows)
-
-Q8 — Open-ended rows
-                                                       QUERY PLAN                                                        
--------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=3756.75..3756.76 rows=1 width=8) (actual time=22.585..22.586 rows=1 loops=1)
-   Buffers: shared hit=1690
-   ->  Seq Scan on temporal_data  (cost=0.00..3627.57 rows=51669 width=0) (actual time=0.019..20.847 rows=30006 loops=1)
-         Filter: upper_inf(valid_period)
-         Rows Removed by Filter: 125000
-         Buffers: shared hit=1690
- Planning Time: 0.172 ms
- Execution Time: 22.611 ms
+         Heap Fetches: 0
+         Buffers: shared hit=122
+ Planning Time: 0.042 ms
+ Execution Time: 2.361 ms
 (8 rows)
 
-Q9 — Valid now query
-                                                                      QUERY PLAN                                                                      
-------------------------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=2210.40..2210.41 rows=1 width=8) (actual time=14.256..14.259 rows=1 loops=1)
-   Buffers: shared hit=414
-   ->  Index Only Scan using idx_gist_period on temporal_data  (cost=0.28..2115.64 rows=37906 width=0) (actual time=0.147..11.969 rows=38502 loops=1)
-         Index Cond: (valid_period @> '2024-01-01 00:00:00'::timestamp without time zone)
-         Heap Fetches: 6
-         Buffers: shared hit=414
- Planning Time: 0.105 ms
- Execution Time: 14.296 ms
+Query A — Attribute + point containment (indexed expression)
+                                                      QUERY PLAN                                                      
+----------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=27234.25..27234.26 rows=1 width=8) (actual time=562.515..562.516 rows=1 loops=1)
+   Buffers: shared hit=984
+   ->  Seq Scan on temporal_data  (cost=0.00..27234.00 rows=100 width=0) (actual time=0.493..562.498 rows=33 loops=1)
+         Filter: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+         Rows Removed by Filter: 99967
+         Buffers: shared hit=984
+ Planning Time: 0.127 ms
+ Execution Time: 562.530 ms
 (8 rows)
 
-Q10 — Attribute + point query
-                                                               QUERY PLAN                                                                
------------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=3757.15..3757.16 rows=1 width=8) (actual time=13.939..13.940 rows=1 loops=1)
-   Buffers: shared hit=2061
-   ->  Bitmap Heap Scan on temporal_data  (cost=1552.81..3755.54 rows=644 width=0) (actual time=7.977..13.879 rows=586 loops=1)
-         Recheck Cond: (valid_period @> '2023-06-01 00:00:00'::timestamp without time zone)
-         Filter: (attr = 10)
-         Rows Removed by Filter: 33722
-         Heap Blocks: exact=1633
-         Buffers: shared hit=2061
-         ->  Bitmap Index Scan on idx_gist_period  (cost=0.00..1552.64 rows=34182 width=0) (actual time=7.658..7.659 rows=34308 loops=1)
-               Index Cond: (valid_period @> '2023-06-01 00:00:00'::timestamp without time zone)
-               Buffers: shared hit=428
- Planning:
-   Buffers: shared hit=3
- Planning Time: 0.201 ms
- Execution Time: 13.985 ms
-(15 rows)
-
-Q11 — Attribute + overlap query
-                                                     QUERY PLAN                                                      
----------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=4017.56..4017.57 rows=1 width=8) (actual time=31.256..31.257 rows=1 loops=1)
-   Buffers: shared hit=1690
-   ->  Seq Scan on temporal_data  (cost=0.00..4015.09 rows=987 width=0) (actual time=0.012..31.135 rows=975 loops=1)
-         Filter: ((valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange) AND (attr = 10))
-         Rows Removed by Filter: 154031
-         Buffers: shared hit=1690
- Planning Time: 0.089 ms
- Execution Time: 31.284 ms
+Query B — Attribute + interval overlap (indexed expression)
+                                                      QUERY PLAN                                                      
+----------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=27235.25..27235.26 rows=1 width=8) (actual time=586.036..586.037 rows=1 loops=1)
+   Buffers: shared hit=984
+   ->  Seq Scan on temporal_data  (cost=0.00..27234.00 rows=500 width=0) (actual time=0.514..586.016 rows=38 loops=1)
+         Filter: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+         Rows Removed by Filter: 99962
+         Buffers: shared hit=984
+ Planning Time: 0.165 ms
+ Execution Time: 586.059 ms
 (8 rows)
 
-Q12 — Attribute + current rows
-                                                     QUERY PLAN                                                      
----------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=4017.52..4017.53 rows=1 width=8) (actual time=20.549..20.550 rows=1 loops=1)
-   Buffers: shared hit=1690
-   ->  Seq Scan on temporal_data  (cost=0.00..4015.09 rows=973 width=0) (actual time=2.211..20.492 rows=603 loops=1)
-         Filter: (upper_inf(valid_period) AND (attr = 10))
-         Rows Removed by Filter: 154403
-         Buffers: shared hit=1690
- Planning Time: 0.077 ms
- Execution Time: 20.572 ms
-(8 rows)
-
-Q13 — Fetch actual rows (point)
+Query C — Fetch rows for point containment
                                                       QUERY PLAN                                                       
 -----------------------------------------------------------------------------------------------------------------------
- Limit  (cost=0.00..10.61 rows=100 width=32) (actual time=0.012..0.474 rows=100 loops=1)
-   Buffers: shared hit=31
-   ->  Seq Scan on temporal_data  (cost=0.00..3627.57 rows=34182 width=32) (actual time=0.011..0.465 rows=100 loops=1)
-         Filter: (valid_period @> '2023-06-01 00:00:00'::timestamp without time zone)
-         Rows Removed by Filter: 2287
-         Buffers: shared hit=31
+ Limit  (cost=0.00..27234.00 rows=100 width=30) (actual time=0.581..618.202 rows=33 loops=1)
+   Buffers: shared hit=984
+   ->  Seq Scan on temporal_data  (cost=0.00..27234.00 rows=100 width=30) (actual time=0.579..618.186 rows=33 loops=1)
+         Filter: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+         Rows Removed by Filter: 99967
+         Buffers: shared hit=984
  Planning:
-   Buffers: shared hit=3
- Planning Time: 0.102 ms
- Execution Time: 0.489 ms
+   Buffers: shared hit=6
+ Planning Time: 0.380 ms
+ Execution Time: 618.226 ms
 (10 rows)
 
-Q14 — Fetch actual rows (attr + overlap)
-                                                     QUERY PLAN                                                      
----------------------------------------------------------------------------------------------------------------------
- Limit  (cost=0.00..406.80 rows=100 width=32) (actual time=0.009..6.314 rows=100 loops=1)
-   Buffers: shared hit=425
-   ->  Seq Scan on temporal_data  (cost=0.00..4015.09 rows=987 width=32) (actual time=0.009..6.302 rows=100 loops=1)
-         Filter: ((valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange) AND (attr = 10))
-         Rows Removed by Filter: 34620
-         Buffers: shared hit=425
- Planning Time: 0.048 ms
- Execution Time: 6.330 ms
+Query D — Current rows for one attribute
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=2984.26..2984.27 rows=1 width=8) (actual time=14.516..14.517 rows=1 loops=1)
+   Buffers: shared hit=984
+   ->  Seq Scan on temporal_data  (cost=0.00..2984.00 rows=102 width=0) (actual time=0.023..14.503 rows=58 loops=1)
+         Filter: (upper_inf(valid_period) AND (attr = 10) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+         Rows Removed by Filter: 99942
+         Buffers: shared hit=984
+ Planning Time: 0.081 ms
+ Execution Time: 14.538 ms
 (8 rows)
+
+Query E — Current rows without attribute
+                                                        QUERY PLAN                                                         
+---------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=2761.78..2761.79 rows=1 width=8) (actual time=16.717..16.718 rows=1 loops=1)
+   Buffers: shared hit=984
+   ->  Seq Scan on temporal_data  (cost=0.00..2734.00 rows=11111 width=0) (actual time=0.015..16.397 rows=5106 loops=1)
+         Filter: (upper_inf(valid_period) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+         Rows Removed by Filter: 94894
+         Buffers: shared hit=984
+ Planning Time: 0.072 ms
+ Execution Time: 16.742 ms
+(8 rows)
+
+Query F — Fetch current rows
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..2925.49 rows=100 width=30) (actual time=0.021..15.153 rows=58 loops=1)
+   Buffers: shared hit=984
+   ->  Seq Scan on temporal_data  (cost=0.00..2984.00 rows=102 width=30) (actual time=0.020..15.145 rows=58 loops=1)
+         Filter: (upper_inf(valid_period) AND (attr = 10) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+         Rows Removed by Filter: 99942
+         Buffers: shared hit=984
+ Planning Time: 0.073 ms
+ Execution Time: 15.173 ms
+(8 rows)
+
+Query G — True hybrid UNION ALL query
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=30470.96..30470.97 rows=1 width=8) (actual time=339.338..339.340 rows=1 loops=1)
+   Buffers: shared hit=1968
+   ->  Append  (cost=0.00..30470.53 rows=169 width=0) (actual time=0.348..339.320 rows=33 loops=1)
+         Buffers: shared hit=1968
+         ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..27484.67 rows=67 width=0) (actual time=0.347..325.945 rows=13 loops=1)
+               Buffers: shared hit=984
+               ->  Seq Scan on temporal_data  (cost=0.00..27484.00 rows=67 width=8) (actual time=0.347..325.937 rows=13 loops=1)
+                     Filter: ((NOT upper_inf(valid_period)) AND (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube))
+                     Rows Removed by Filter: 99987
+                     Buffers: shared hit=984
+         ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..2985.02 rows=102 width=0) (actual time=0.025..13.362 rows=20 loops=1)
+               Buffers: shared hit=984
+               ->  Seq Scan on temporal_data temporal_data_1  (cost=0.00..2984.00 rows=102 width=8) (actual time=0.024..13.356 rows=20 loops=1)
+                     Filter: (upper_inf(valid_period) AND (attr = 10) AND (lower(valid_period) <= '2023-06-01 00:00:00'::timestamp without time zone))
+                     Rows Removed by Filter: 99980
+                     Buffers: shared hit=984
+ Planning Time: 0.230 ms
+ Execution Time: 339.366 ms
+(18 rows)
 

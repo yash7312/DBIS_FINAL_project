@@ -9,7 +9,7 @@ export PATH="${POSTGRES_INSTALLDIR}/bin:${PATH}"
 export PGDATA="${POSTGRES_INSTALLDIR}/data"
 
 
-LOG_DIR="$ROOT/experiment_logs"
+LOG_DIR="$ROOT/logs/experiment_logs"
 mkdir -p "$LOG_DIR"
 
 # Start server only if it is not already running.

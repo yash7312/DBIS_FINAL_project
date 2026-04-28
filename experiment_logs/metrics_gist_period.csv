@@ -1,0 +1,2 @@
+index_config,index_names,index_count,total_index_size_bytes,total_index_size_pretty,total_idx_scan,total_idx_tup_read,total_idx_tup_fetch,n_live_tup,n_dead_tup,n_mod_since_analyze,table_size_bytes,table_size_pretty,snapshot_ts
+gist_period,idx_gist_period | temporal_data_pkey | temporal_gist_idx,3,15745024,15 MB,21,177486,0,100000,0,0,23846912,23 MB,2026-04-28T16:05:52.996080

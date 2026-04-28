@@ -1,0 +1,118 @@
+Experiment: gist_period
+Query A — Attribute + point containment (indexed expression)
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=42379.46..42379.47 rows=1 width=8) (actual time=890.599..890.599 rows=1 loops=1)
+   Buffers: shared hit=1690
+   ->  Seq Scan on temporal_data  (cost=0.00..42379.08 rows=155 width=0) (actual time=15.903..890.505 rows=586 loops=1)
+         Filter: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+         Rows Removed by Filter: 154420
+         Buffers: shared hit=1690
+ Planning:
+   Buffers: shared hit=2
+ Planning Time: 0.165 ms
+ Execution Time: 890.615 ms
+(10 rows)
+
+Query B — Attribute + interval overlap (indexed expression)
+                                                      QUERY PLAN                                                       
+-----------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=42381.01..42381.02 rows=1 width=8) (actual time=908.877..908.877 rows=1 loops=1)
+   Buffers: shared hit=1690
+   ->  Seq Scan on temporal_data  (cost=0.00..42379.08 rows=775 width=0) (actual time=0.183..908.733 rows=975 loops=1)
+         Filter: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+         Rows Removed by Filter: 154031
+         Buffers: shared hit=1690
+ Planning Time: 0.194 ms
+ Execution Time: 908.894 ms
+(8 rows)
+
+Query C — Fetch rows for point containment
+                                                       QUERY PLAN                                                        
+-------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..27341.34 rows=100 width=32) (actual time=14.808..496.945 rows=100 loops=1)
+   Buffers: shared hit=1107
+   ->  Seq Scan on temporal_data  (cost=0.00..42379.08 rows=155 width=32) (actual time=14.807..496.932 rows=100 loops=1)
+         Filter: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+         Rows Removed by Filter: 90562
+         Buffers: shared hit=1107
+ Planning:
+   Buffers: shared hit=11
+ Planning Time: 0.215 ms
+ Execution Time: 496.966 ms
+(10 rows)
+
+Query D — Current rows for one attribute
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=4514.23..4514.24 rows=1 width=8) (actual time=10.957..11.619 rows=1 loops=1)
+   Buffers: shared hit=1718
+   ->  Gather  (cost=4514.12..4514.23 rows=1 width=8) (actual time=10.927..11.614 rows=2 loops=1)
+         Workers Planned: 1
+         Workers Launched: 1
+         Buffers: shared hit=1718
+         ->  Partial Aggregate  (cost=3514.12..3514.13 rows=1 width=8) (actual time=9.146..9.146 rows=1 loops=2)
+               Buffers: shared hit=1718
+               ->  Parallel Seq Scan on temporal_data  (cost=0.00..3513.60 rows=209 width=0) (actual time=1.260..9.119 rows=293 loops=2)
+                     Filter: (upper_inf(valid_period) AND (attr = 10) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+                     Rows Removed by Filter: 77210
+                     Buffers: shared hit=1718
+ Planning Time: 0.112 ms
+ Execution Time: 11.642 ms
+(14 rows)
+
+Query E — Current rows without attribute
+                                                                 QUERY PLAN                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=4311.09..4311.10 rows=1 width=8) (actual time=12.082..12.621 rows=1 loops=1)
+   Buffers: shared hit=1718
+   ->  Gather  (cost=4310.98..4311.09 rows=1 width=8) (actual time=12.052..12.617 rows=2 loops=1)
+         Workers Planned: 1
+         Workers Launched: 1
+         Buffers: shared hit=1718
+         ->  Partial Aggregate  (cost=3310.98..3310.99 rows=1 width=8) (actual time=10.690..10.690 rows=1 loops=2)
+               Buffers: shared hit=1718
+               ->  Parallel Seq Scan on temporal_data  (cost=0.00..3285.65 rows=10131 width=0) (actual time=0.061..9.948 rows=14618 loops=2)
+                     Filter: (upper_inf(valid_period) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+                     Rows Removed by Filter: 62886
+                     Buffers: shared hit=1718
+ Planning Time: 0.049 ms
+ Execution Time: 12.637 ms
+(14 rows)
+
+Query F — Fetch current rows
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..1345.54 rows=100 width=32) (actual time=1.882..11.511 rows=100 loops=1)
+   Buffers: shared hit=1265
+   ->  Seq Scan on temporal_data  (cost=0.00..4790.12 rows=356 width=32) (actual time=1.881..11.502 rows=100 loops=1)
+         Filter: (upper_inf(valid_period) AND (attr = 10) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+         Rows Removed by Filter: 104563
+         Buffers: shared hit=1265
+ Planning Time: 0.049 ms
+ Execution Time: 11.525 ms
+(8 rows)
+
+Query G — True hybrid UNION ALL query
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=47564.74..47564.75 rows=1 width=8) (actual time=711.061..711.062 rows=1 loops=1)
+   Buffers: shared hit=3380
+   ->  Append  (cost=0.00..47563.60 rows=459 width=0) (actual time=14.702..710.999 rows=586 loops=1)
+         Buffers: shared hit=3380
+         ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..42767.62 rows=103 width=0) (actual time=14.701..693.163 rows=98 loops=1)
+               Buffers: shared hit=1690
+               ->  Seq Scan on temporal_data  (cost=0.00..42766.59 rows=103 width=8) (actual time=14.701..693.121 rows=98 loops=1)
+                     Filter: ((NOT upper_inf(valid_period)) AND (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube))
+                     Rows Removed by Filter: 154908
+                     Buffers: shared hit=1690
+         ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..4793.68 rows=356 width=0) (actual time=1.755..17.779 rows=488 loops=1)
+               Buffers: shared hit=1690
+               ->  Seq Scan on temporal_data temporal_data_1  (cost=0.00..4790.12 rows=356 width=8) (actual time=1.754..17.721 rows=488 loops=1)
+                     Filter: (upper_inf(valid_period) AND (attr = 10) AND (lower(valid_period) <= '2023-06-01 00:00:00'::timestamp without time zone))
+                     Rows Removed by Filter: 154518
+                     Buffers: shared hit=1690
+ Planning Time: 0.187 ms
+ Execution Time: 711.082 ms
+(18 rows)
+

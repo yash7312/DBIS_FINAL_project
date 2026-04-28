@@ -494,23 +494,34 @@ range_gist_penalty(PG_FUNCTION_ARGS)
 			}
 			else
 			{
-				if (range_cmp_bounds(typcache, &new_upper, &orig_upper) > 0)
+				int		cmp;
+
+				cmp = range_cmp_bounds(typcache, &new_lower, &orig_lower);
+
+				if (cmp == 0)
+				{
+					/* Identical lower bounds: no widening, so no penalty. */
+					*penalty = 0.0;
+				}
+				else if (has_subtype_diff)
 				{
 					/*
-					 * Get extension of original range using subtype_diff. Use
-					 * constant if subtype_diff unavailable.
+					 * Measure separation between lower bounds so similar current
+					 * rows stay together and older open-ended rows drift apart.
 					 */
-					if (has_subtype_diff)
+					if (cmp < 0)
 						*penalty = call_subtype_diff(typcache,
-													 new_upper.val,
-													 orig_upper.val);
+														 new_lower.val,
+														 orig_lower.val);
 					else
-						*penalty = DEFAULT_SUBTYPE_DIFF_PENALTY;
+						*penalty = call_subtype_diff(typcache,
+														 orig_lower.val,
+														 new_lower.val);
 				}
 				else
 				{
-					/* No extension of original range */
-					*penalty = 0.0;
+					/* Fallback when subtype distance is unavailable. */
+					*penalty = DEFAULT_SUBTYPE_DIFF_PENALTY;
 				}
 			}
 		}
@@ -533,7 +544,9 @@ range_gist_penalty(PG_FUNCTION_ARGS)
 				/*
 				 * (-inf, +inf) range won't be extended by insertion of (x,
 				 * +inf) range. It's a less desirable case than insertion to
-				 * (y, +inf) original range without extension, because in that
+					int		cmp;
+
+					cmp = range_cmp_bounds(typcache, &new_lower, &orig_lower);
 				 * case original range is narrower. But we can't express that
 				 * in single float value.
 				 */

@@ -1,0 +1,129 @@
+Experiment: btree
+Query A — Attribute + point containment (indexed expression)
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=42379.46..42379.47 rows=1 width=8) (actual time=897.401..897.402 rows=1 loops=1)
+   Buffers: shared hit=1690
+   ->  Seq Scan on temporal_data  (cost=0.00..42379.08 rows=155 width=0) (actual time=15.053..897.291 rows=586 loops=1)
+         Filter: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+         Rows Removed by Filter: 154420
+         Buffers: shared hit=1690
+ Planning:
+   Buffers: shared hit=3
+ Planning Time: 0.183 ms
+ Execution Time: 897.417 ms
+(10 rows)
+
+Query B — Attribute + interval overlap (indexed expression)
+                                                      QUERY PLAN                                                       
+-----------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=42381.01..42381.02 rows=1 width=8) (actual time=899.912..899.913 rows=1 loops=1)
+   Buffers: shared hit=1690
+   ->  Seq Scan on temporal_data  (cost=0.00..42379.08 rows=775 width=0) (actual time=0.194..899.736 rows=975 loops=1)
+         Filter: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+         Rows Removed by Filter: 154031
+         Buffers: shared hit=1690
+ Planning Time: 0.238 ms
+ Execution Time: 899.936 ms
+(8 rows)
+
+Query C — Fetch rows for point containment
+                                                       QUERY PLAN                                                        
+-------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..27341.34 rows=100 width=32) (actual time=16.102..537.173 rows=100 loops=1)
+   Buffers: shared hit=1107
+   ->  Seq Scan on temporal_data  (cost=0.00..42379.08 rows=155 width=32) (actual time=16.100..537.157 rows=100 loops=1)
+         Filter: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+         Rows Removed by Filter: 90562
+         Buffers: shared hit=1107
+ Planning:
+   Buffers: shared hit=11
+ Planning Time: 0.209 ms
+ Execution Time: 537.196 ms
+(10 rows)
+
+Query D — Current rows for one attribute
+                                                                QUERY PLAN                                                                
+------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1872.13..1872.14 rows=1 width=8) (actual time=2.325..2.326 rows=1 loops=1)
+   Buffers: shared hit=1358 read=15
+   ->  Bitmap Heap Scan on temporal_data  (cost=79.00..1869.60 rows=1011 width=0) (actual time=0.730..2.281 rows=586 loops=1)
+         Recheck Cond: ((attr = 10) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+         Filter: upper_inf(valid_period)
+         Rows Removed by Filter: 2436
+         Heap Blocks: exact=1358
+         Buffers: shared hit=1358 read=15
+         ->  Bitmap Index Scan on idx_btree_attr_lower  (cost=0.00..78.75 rows=3033 width=0) (actual time=0.319..0.319 rows=3022 loops=1)
+               Index Cond: ((attr = 10) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+               Buffers: shared read=15
+ Planning:
+   Buffers: shared hit=6
+ Planning Time: 0.125 ms
+ Execution Time: 2.345 ms
+(15 rows)
+
+Query E — Current rows without attribute
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=4359.99..4360.00 rows=1 width=8) (actual time=13.680..14.895 rows=1 loops=1)
+   Buffers: shared hit=1718
+   ->  Gather  (cost=4359.88..4359.99 rows=1 width=8) (actual time=13.610..14.887 rows=2 loops=1)
+         Workers Planned: 1
+         Workers Launched: 1
+         Buffers: shared hit=1718
+         ->  Partial Aggregate  (cost=3359.88..3359.89 rows=1 width=8) (actual time=11.759..11.759 rows=1 loops=2)
+               Buffers: shared hit=1718
+               ->  Parallel Seq Scan on temporal_data  (cost=0.00..3285.65 rows=29691 width=0) (actual time=0.068..10.947 rows=14618 loops=2)
+                     Filter: (upper_inf(valid_period) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+                     Rows Removed by Filter: 62886
+                     Buffers: shared hit=1718
+ Planning Time: 0.057 ms
+ Execution Time: 14.923 ms
+(14 rows)
+
+Query F — Fetch current rows
+                                                                QUERY PLAN                                                                
+------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=79.00..256.11 rows=100 width=32) (actual time=0.632..1.598 rows=100 loops=1)
+   Buffers: shared hit=1027
+   ->  Bitmap Heap Scan on temporal_data  (cost=79.00..1869.60 rows=1011 width=32) (actual time=0.632..1.590 rows=100 loops=1)
+         Recheck Cond: ((attr = 10) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+         Filter: upper_inf(valid_period)
+         Rows Removed by Filter: 1983
+         Heap Blocks: exact=1012
+         Buffers: shared hit=1027
+         ->  Bitmap Index Scan on idx_btree_attr_lower  (cost=0.00..78.75 rows=3033 width=0) (actual time=0.251..0.251 rows=3022 loops=1)
+               Index Cond: ((attr = 10) AND (lower(valid_period) <= '2024-01-01 00:00:00'::timestamp without time zone))
+               Buffers: shared hit=15
+ Planning Time: 0.122 ms
+ Execution Time: 1.620 ms
+(13 rows)
+
+Query G — True hybrid UNION ALL query
+                                                                       QUERY PLAN                                                                        
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=44671.89..44671.90 rows=1 width=8) (actual time=732.062..732.064 rows=1 loops=1)
+   Buffers: shared hit=2949
+   ->  Append  (cost=0.00..44669.62 rows=911 width=0) (actual time=15.677..732.001 rows=586 loops=1)
+         Buffers: shared hit=2949
+         ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..42767.62 rows=103 width=0) (actual time=15.677..729.909 rows=98 loops=1)
+               Buffers: shared hit=1690
+               ->  Seq Scan on temporal_data  (cost=0.00..42766.59 rows=103 width=8) (actual time=15.676..729.885 rows=98 loops=1)
+                     Filter: ((NOT upper_inf(valid_period)) AND (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube))
+                     Rows Removed by Filter: 154908
+                     Buffers: shared hit=1690
+         ->  Subquery Scan on "*SELECT* 2"  (cost=64.85..1897.44 rows=808 width=0) (actual time=0.624..2.044 rows=488 loops=1)
+               Buffers: shared hit=1259
+               ->  Bitmap Heap Scan on temporal_data temporal_data_1  (cost=64.85..1889.36 rows=808 width=8) (actual time=0.623..1.994 rows=488 loops=1)
+                     Recheck Cond: ((attr = 10) AND (lower(valid_period) <= '2023-06-01 00:00:00'::timestamp without time zone))
+                     Filter: upper_inf(valid_period)
+                     Rows Removed by Filter: 1867
+                     Heap Blocks: exact=1247
+                     Buffers: shared hit=1259
+                     ->  Bitmap Index Scan on idx_btree_attr_lower  (cost=0.00..64.65 rows=2423 width=0) (actual time=0.243..0.243 rows=2355 loops=1)
+                           Index Cond: ((attr = 10) AND (lower(valid_period) <= '2023-06-01 00:00:00'::timestamp without time zone))
+                           Buffers: shared hit=12
+ Planning Time: 0.180 ms
+ Execution Time: 732.088 ms
+(23 rows)
+
