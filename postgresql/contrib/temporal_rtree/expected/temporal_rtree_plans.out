@@ -1,0 +1,23 @@
+CREATE EXTENSION
+CREATE TABLE
+INSERT 0 4
+                        QUERY PLAN                         
+-----------------------------------------------------------
+ Seq Scan on temporal_data
+   Filter: (valid_period @> now())
+(2 rows)
+
+                              QUERY PLAN                               
+----------------------------------------------------------------------
+ Seq Scan on temporal_data
+   Filter: (valid_period && '["2020-06-01","2020-12-31")'::tsrange)
+(2 rows)
+
+                           QUERY PLAN                            
+-----------------------------------------------------------------
+ Seq Scan on temporal_data  (cost=0.00..35.00 rows=2 width=48)
+   Filter: (valid_period @> now())
+(2 rows)
+
+DROP INDEX
+DROP TABLE

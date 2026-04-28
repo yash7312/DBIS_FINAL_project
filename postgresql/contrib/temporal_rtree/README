@@ -1,0 +1,67 @@
+# Temporal R-tree Access Method (Prototype)
+
+A PostgreSQL extension implementing a new index access method (`temporal_rtree`) optimized for temporal range indexing.
+
+## Overview
+
+The temporal R-tree AM is designed to efficiently index temporal data with support for:
+- Pure temporal (tsrange) queries: containment (`@>`), overlap (`&&`), contains (`<@`), etc.
+- Composite attribute × time indexing for 2D range queries
+- Current vs. history row separation and deferred insertion penalties
+- Concurrent inserts, splits, and scans with proper locking
+- Write-Ahead Logging (WAL) via PostgreSQL's generic WAL API
+- VACUUM and cleanup integration
+
+## File Layout
+
+- `temporal_rtree.h` — Common header with struct definitions (RTreeTemporalBox, page opaque, etc.)
+- `temporal_rtree_handler.c` — AM entry point, handler function, IndexAmRoutine initialization
+- `temporal_rtree_insert.c` — Insert logic and key normalization
+- `temporal_rtree_search.c` — Scan begin/rescan/gettuple/endscan stubs
+- `temporal_rtree_split.c` — In-memory penalty and picksplit algorithms
+- `temporal_rtree_vacuum.c` — VACUUM and cleanup callbacks
+- `temporal_rtree_cost.c` — Query planner cost estimation
+- `temporal_rtree_wal.c` — WAL record generation and replay
+- `temporal_rtree--1.0.sql` — Extension SQL: handler, AM, opfamily, opclass registration
+- `temporal_rtree.control` — Extension metadata
+
+## Build and Install
+
+```bash
+make
+make install
+make installcheck
+```
+
+Requires: PostgreSQL 14+ with development headers.
+
+## Testing
+
+Regression tests are in `sql/` with expected output in `expected/`:
+- `temporal_rtree_smoke` — Basic AM creation and index operations
+- `temporal_rtree_plans` — Planner integration and cost estimation
+
+Isolation tests in `specs/`:
+- `temporal_rtree_concurrent_split` — Concurrent inserts and splits
+
+## Status
+
+This is a **prototype implementation** for Checkpoint C1:
+- ✓ Handler scaffold with IndexAmRoutine
+- ✓ Page and tuple struct design
+- ✓ In-memory split and penalty routines
+- ✓ SQL registration (handler, AM, opfamily, opclass)
+- ✓ Basic regression and isolation tests
+- ○ Full page-level insert/search with buffer manager
+- ○ Concurrent locking and split-follow-right logic
+- ○ Complete WAL integration
+- ○ Planner cost estimation refinement
+- ○ Performance benchmarking
+
+## Future Work
+
+1. Implement full buffer management and page-level insert/search
+2. Add split-follow-right and concurrent scan state management
+3. Implement ambulkdelete and amvacuumcleanup
+4. Register custom WAL resource manager (Phase 2 WAL)
+5. Benchmark Q1–Q7 queries against GiST and B-tree indexes

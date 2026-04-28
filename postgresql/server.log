@@ -1,0 +1,27 @@
+2026-04-28 15:49:50.622 IST [158701] LOG:  starting PostgreSQL 17.9 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-04-28 15:49:50.622 IST [158701] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-04-28 15:49:50.624 IST [158701] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2026-04-28 15:49:50.626 IST [158704] LOG:  database system was shut down at 2026-04-28 15:49:50 IST
+2026-04-28 15:49:50.628 IST [158701] LOG:  database system is ready to accept connections
+2026-04-28 15:49:52.863 IST [158766] ERROR:  syntax error at or near "IS" at character 1269
+2026-04-28 15:49:52.863 IST [158766] STATEMENT:  CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+2026-04-28 15:52:19.275 IST [160530] ERROR:  could not load library "/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/install/lib/temporal_rtree.so": /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/install/lib/temporal_rtree.so: undefined symbol: RelationGetDescr
+2026-04-28 15:52:19.275 IST [160530] STATEMENT:  CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+2026-04-28 15:54:15.523 IST [162291] ERROR:  could not load library "/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/install/lib/temporal_rtree.so": /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/install/lib/temporal_rtree.so: undefined symbol: RelationGetRelationName
+2026-04-28 15:54:15.523 IST [162291] STATEMENT:  CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+2026-04-28 15:54:50.726 IST [158702] LOG:  checkpoint starting: time
+2026-04-28 15:56:29.423 IST [158702] LOG:  checkpoint complete: wrote 988 buffers (6.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=98.673 s, sync=0.011 s, total=98.697 s; sync files=310, longest=0.003 s, average=0.001 s; distance=5128 kB, estimate=5128 kB; lsn=0/19800A8, redo lsn=0/1980018
+2026-04-28 15:56:43.256 IST [163888] ERROR:  index access method handler function 17138 did not return an IndexAmRoutine struct
+2026-04-28 15:56:43.256 IST [163888] STATEMENT:  CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+2026-04-28 15:59:50.523 IST [158702] LOG:  checkpoint starting: time
+2026-04-28 15:59:53.049 IST [158702] LOG:  checkpoint complete: wrote 26 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.507 s, sync=0.009 s, total=2.526 s; sync files=21, longest=0.007 s, average=0.001 s; distance=98 kB, estimate=4625 kB; lsn=0/19988B8, redo lsn=0/1998828
+2026-04-28 15:59:53.330 IST [165573] ERROR:  operator does not exist: tsrange && tsrange
+2026-04-28 15:59:53.330 IST [165573] STATEMENT:  CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+2026-04-28 16:01:57.978 IST [167284] ERROR:  operator does not exist: tsrange && tsrange
+2026-04-28 16:01:57.978 IST [167284] STATEMENT:  CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+2026-04-28 16:03:31.080 IST [168862] ERROR:  relation "temporal_data" does not exist
+2026-04-28 16:03:31.080 IST [168862] STATEMENT:  VACUUM ANALYZE temporal_data;
+2026-04-28 16:04:50.148 IST [158702] LOG:  checkpoint starting: time
+2026-04-28 16:04:54.482 IST [158702] LOG:  checkpoint complete: wrote 44 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.313 s, sync=0.009 s, total=4.334 s; sync files=27, longest=0.007 s, average=0.001 s; distance=192 kB, estimate=4182 kB; lsn=0/19C8A30, redo lsn=0/19C89A0
+2026-04-28 16:09:50.582 IST [158702] LOG:  checkpoint starting: time
+2026-04-28 16:14:20.016 IST [158702] LOG:  checkpoint complete: wrote 3204 buffers (19.6%); 0 WAL file(s) added, 0 removed, 3 recycled; write=269.416 s, sync=0.010 s, total=269.435 s; sync files=66, longest=0.006 s, average=0.001 s; distance=51258 kB, estimate=51258 kB; lsn=0/4BD72D0, redo lsn=0/4BD7240

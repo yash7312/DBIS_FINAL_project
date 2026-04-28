@@ -1,0 +1,4 @@
+comment = 'Temporal R-tree access method (prototype)'
+default_version = '1.0'
+module_pathname = '$libdir/temporal_rtree'
+relocatable = true

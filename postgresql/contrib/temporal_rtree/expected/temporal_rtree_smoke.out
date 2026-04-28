@@ -1,0 +1,26 @@
+CREATE EXTENSION
+              amname            | amtype |                    amhandler                    
+-------------------------------+--------+--------------------------------------------------
+ temporal_rtree                | i      | temporal_rtree_handler(internal)
+(1 row)
+
+       opfname       |     opfnamespace      
+------------------+-----------------------
+ temporal_tsrange_ops | public
+(1 row)
+
+         opcname          |     opcnamespace      |  opcintype   
+------------------------+-----------------------+--------------
+ temporal_tsrange_ops    | public                | tsrange
+(1 row)
+
+CREATE TABLE
+INSERT 0 2
+CREATE INDEX
+            indexname            |                                            indexdef                                             
+------------------------------+---------------------------------------------------------------------------------------------------------------
+ temporal_idx                 | CREATE INDEX temporal_idx ON temporal_data USING temporal_rtree (valid_period)
+(1 row)
+
+DROP INDEX
+DROP TABLE
