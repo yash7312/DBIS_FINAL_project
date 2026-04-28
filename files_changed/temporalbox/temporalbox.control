@@ -1,4 +1,0 @@
-# temporalbox - cube-backed hybrid spatio-temporal helpers
-comment = 'cube-backed hybrid spatio-temporal helpers'
-default_version = '1.0'
-relocatable = true

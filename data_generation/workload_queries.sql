@@ -44,21 +44,38 @@ WHERE valid_period <@ tsrange('2023-01-01','2024-01-01','[)');
 -- Requires temporalbox extension for 2D temporal indexing
 -- ============================================================================
 
--- Query A: temporalbox point containment (attribute + timestamp)
--- Index: idx_hst_gist on temporalbox(attr, valid_period) for history rows
+-- Query A: NEGATIVE CONTROL (whole-table temporalbox predicate)
+-- This intentionally omits NOT upper_inf(valid_period) and may not imply
+-- the history-side partial index predicate.
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT count(*)
 FROM temporal_data
 WHERE temporalbox(attr, valid_period)
       @> temporalbox_point(10, timestamp '2023-06-01');
 
--- Query B: temporalbox range overlap (attribute + time range)
--- Index: idx_hst_gist on temporalbox(attr, valid_period) for history rows
+-- Query B: NEGATIVE CONTROL (whole-table temporalbox overlap)
+-- This intentionally omits NOT upper_inf(valid_period).
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT count(*)
 FROM temporal_data
 WHERE temporalbox(attr, valid_period)
       && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+
+-- Query H: History-only temporalbox point containment (partial-index compatible)
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT count(*)
+FROM temporal_data
+WHERE NOT upper_inf(valid_period)
+  AND temporalbox(attr, valid_period)
+  @> temporalbox_point(10, timestamp '2023-06-01');
+
+-- Query I: History-only temporalbox overlap (partial-index compatible)
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT count(*)
+FROM temporal_data
+WHERE NOT upper_inf(valid_period)
+  AND temporalbox(attr, valid_period)
+  && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
 
 -- Query D: Current rows by attribute and lower bound
 -- Index: idx_current_attr_start on (attr, lower(valid_period)) for current rows only
@@ -82,21 +99,21 @@ WHERE upper_inf(valid_period)
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT count(*)
 FROM (
-    -- Current rows: indexed by idx_current_attr_start (attr, lower)
-    SELECT 1
-    FROM temporal_data
-    WHERE upper_inf(valid_period)
-      AND attr = 10
-      AND lower(valid_period) <= timestamp '2024-01-01'
-
-    UNION ALL
-
     -- History rows: indexed by idx_hst_gist (temporalbox(attr, valid_period))
     SELECT 1
     FROM temporal_data
     WHERE NOT upper_inf(valid_period)
       AND temporalbox(attr, valid_period)
-            @> temporalbox_point(10, timestamp '2024-01-01')
+            @> temporalbox_point(10, timestamp '2023-06-01')
+
+    UNION ALL
+
+    -- Current rows: indexed by idx_current_attr_start (attr, lower)
+    SELECT 1
+    FROM temporal_data
+    WHERE upper_inf(valid_period)
+      AND attr = 10
+      AND lower(valid_period) <= timestamp '2023-06-01'
 ) AS q;
 
 -- ============================================================================

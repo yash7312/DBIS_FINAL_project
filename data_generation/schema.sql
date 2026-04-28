@@ -14,10 +14,6 @@ CREATE TABLE temporal_data (
     created_at   timestamp DEFAULT now()
 );
 
--- Create index on valid_period for GiST (baseline comparison)
-CREATE INDEX temporal_gist_idx 
-    ON temporal_data USING gist (valid_period);
-
 -- Table statistics & partitioning comments
 COMMENT ON TABLE temporal_data IS
     'Benchmarking table for temporal R-tree AM. Rows represent entities with '

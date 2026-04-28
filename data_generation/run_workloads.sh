@@ -58,6 +58,26 @@ run_query() {
         }
 }
 
+reset_secondary_indexes() {
+    psql -d "$DB_NAME" << 'EOF' >/dev/null
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN
+    SELECT indexname
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'temporal_data'
+      AND indexname <> 'temporal_data_pkey'
+  LOOP
+    EXECUTE format('DROP INDEX IF EXISTS %I CASCADE', r.indexname);
+  END LOOP;
+END$$;
+
+VACUUM ANALYZE temporal_data;
+EOF
+}
+
 ################################################################################
 # Configuration 1: No Index (Baseline - Sequential Scan)
 ################################################################################
@@ -75,13 +95,31 @@ Timestamp: $(date)
 -- Disable all indexes and analyze setting
 SET enable_indexscan = off;
 SET enable_bitmapscan = off;
+SET enable_indexonlyscan = off;
 
 EOF
 
 # Q1-Q7 baseline
 psql -d "$DB_NAME" << 'EOF' >> "$CONFIG_FILE" 2>&1
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN
+    SELECT indexname
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'temporal_data'
+      AND indexname <> 'temporal_data_pkey'
+  LOOP
+    EXECUTE format('DROP INDEX IF EXISTS %I CASCADE', r.indexname);
+  END LOOP;
+END$$;
+
+VACUUM ANALYZE temporal_data;
+
 SET enable_indexscan = off;
 SET enable_bitmapscan = off;
+SET enable_indexonlyscan = off;
 
 -- Q1: Past point
 EXPLAIN (ANALYZE, BUFFERS)
@@ -139,7 +177,20 @@ Index: idx_btree (attr, lower(valid_period))
 EOF
 
 psql -d "$DB_NAME" << EOF >> "$CONFIG_FILE" 2>&1
-DROP INDEX IF EXISTS idx_btree CASCADE;
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN
+    SELECT indexname
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'temporal_data'
+      AND indexname <> 'temporal_data_pkey'
+  LOOP
+    EXECUTE format('DROP INDEX IF EXISTS %I CASCADE', r.indexname);
+  END LOOP;
+END$$;
+
 CREATE INDEX idx_btree ON temporal_data (attr, lower(valid_period));
 VACUUM ANALYZE;
 
@@ -199,7 +250,20 @@ Index: idx_gist (valid_period)
 EOF
 
 psql -d "$DB_NAME" << EOF >> "$CONFIG_FILE" 2>&1
-DROP INDEX IF EXISTS idx_btree CASCADE;
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN
+    SELECT indexname
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'temporal_data'
+      AND indexname <> 'temporal_data_pkey'
+  LOOP
+    EXECUTE format('DROP INDEX IF EXISTS %I CASCADE', r.indexname);
+  END LOOP;
+END$$;
+
 CREATE INDEX idx_gist ON temporal_data USING gist (valid_period);
 VACUUM ANALYZE;
 
@@ -275,7 +339,20 @@ FROM (
 EOF
 
 psql -d "$DB_NAME" << EOF >> "$CONFIG_FILE" 2>&1
-DROP INDEX IF EXISTS idx_gist CASCADE;
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN
+    SELECT indexname
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'temporal_data'
+      AND indexname <> 'temporal_data_pkey'
+  LOOP
+    EXECUTE format('DROP INDEX IF EXISTS %I CASCADE', r.indexname);
+  END LOOP;
+END$$;
+
 CREATE INDEX idx_brin ON temporal_data USING brin (valid_period) WITH (pages_per_range=128);
 VACUUM ANALYZE;
 
@@ -338,7 +415,19 @@ Strategy: Decomposed UNION to enable separate index paths
 EOF
 
 psql -d "$DB_NAME" << EOF >> "$CONFIG_FILE" 2>&1
-DROP INDEX IF EXISTS idx_brin CASCADE;
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN
+    SELECT indexname
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'temporal_data'
+      AND indexname <> 'temporal_data_pkey'
+  LOOP
+    EXECUTE format('DROP INDEX IF EXISTS %I CASCADE', r.indexname);
+  END LOOP;
+END$$;
 
 -- Partial indexes for current/history split
 CREATE INDEX idx_current_attr_start ON temporal_data (attr, lower(valid_period))
@@ -408,8 +497,19 @@ Extension: temporal_rtree
 EOF
 
     psql -d "$DB_NAME" << EOF >> "$CONFIG_FILE" 2>&1
-DROP INDEX IF EXISTS idx_hst_gist CASCADE;
-DROP INDEX IF EXISTS idx_current_attr_start CASCADE;
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN
+    SELECT indexname
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'temporal_data'
+      AND indexname <> 'temporal_data_pkey'
+  LOOP
+    EXECUTE format('DROP INDEX IF EXISTS %I CASCADE', r.indexname);
+  END LOOP;
+END$$;
 
 CREATE INDEX idx_rtree ON temporal_data USING temporal_rtree (valid_period);
 VACUUM ANALYZE;

@@ -25,3 +25,4 @@
 2026-04-28 16:04:54.482 IST [158702] LOG:  checkpoint complete: wrote 44 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.313 s, sync=0.009 s, total=4.334 s; sync files=27, longest=0.007 s, average=0.001 s; distance=192 kB, estimate=4182 kB; lsn=0/19C8A30, redo lsn=0/19C89A0
 2026-04-28 16:09:50.582 IST [158702] LOG:  checkpoint starting: time
 2026-04-28 16:14:20.016 IST [158702] LOG:  checkpoint complete: wrote 3204 buffers (19.6%); 0 WAL file(s) added, 0 removed, 3 recycled; write=269.416 s, sync=0.010 s, total=269.435 s; sync files=66, longest=0.006 s, average=0.001 s; distance=51258 kB, estimate=51258 kB; lsn=0/4BD72D0, redo lsn=0/4BD7240
+2026-04-28 21:17:02.394 IST [158702] LOG:  checkpoint starting: time

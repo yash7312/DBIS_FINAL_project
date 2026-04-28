@@ -8,8 +8,8 @@ PGHOST="${PGHOST:-localhost}"
 PGPORT="${PGPORT:-5432}"
 PGUSER="${PGUSER:-postgres}"
 PGDATABASE="${PGDATABASE:-postgres}"
-DATASET_FILE="${1:?ERROR: Usage: load_dataset.sh <sql_file> [--indexes all|gist|temporal_rtree|brin]}"
-INDEX_OPTION="${2:-gist}"
+DATASET_FILE="${1:?ERROR: Usage: load_dataset.sh <sql_file> [--indexes none|all|gist|temporal_rtree|brin]}"
+INDEX_OPTION="${2:-none}"
 
 export PGHOST PGPORT PGUSER PGDATABASE
 
@@ -35,9 +35,6 @@ CREATE TABLE temporal_data (
     payload      text,
     created_at   timestamp DEFAULT now()
 );
-
-CREATE INDEX temporal_gist_idx 
-    ON temporal_data USING gist (valid_period);
 EOF
 
 echo "[+] Schema created"
@@ -55,6 +52,15 @@ row_count=$(psql -t -c "SELECT COUNT(*) FROM temporal_data;")
 echo "[+] Loaded $row_count rows in ${load_time}s"
 
 # Optional: Create indexes
+case "$INDEX_OPTION" in
+    none|all|gist|temporal_rtree|brin)
+        ;;
+    *)
+        echo "ERROR: invalid index option '$INDEX_OPTION' (use one of: none|all|gist|temporal_rtree|brin)" >&2
+        exit 1
+        ;;
+esac
+
 case "$INDEX_OPTION" in
     gist|all)
         echo "[*] Creating GiST index on valid_period..."
@@ -98,6 +104,10 @@ EOF
         echo "[+] BRIN index built in $((end_time - start_time))s"
         ;;
 esac
+
+if [[ "$INDEX_OPTION" == "none" ]]; then
+    echo "[*] No secondary indexes requested (INDEX_OPTION=none)"
+fi
 
 # Display table stats
 echo ""

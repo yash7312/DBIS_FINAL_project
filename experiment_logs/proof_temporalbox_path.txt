@@ -1,0 +1,115 @@
+=== Stage 1: Non-partial diagnostic expression index ===
+psql:proof_temporalbox_path.sql:2: NOTICE:  extension "cube" already exists, skipping
+CREATE EXTENSION
+psql:proof_temporalbox_path.sql:3: NOTICE:  index "idx_temporalbox_all_gist" does not exist, skipping
+DROP INDEX
+CREATE INDEX
+VACUUM
+SET
+                                                                QUERY PLAN                                                                
+------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=329.60..329.61 rows=1 width=8) (actual time=2.833..2.834 rows=1 loops=1)
+   Buffers: shared hit=509
+   ->  Bitmap Heap Scan on temporal_data  (cost=9.05..329.35 rows=100 width=0) (actual time=2.797..2.827 rows=33 loops=1)
+         Recheck Cond: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+         Heap Blocks: exact=23
+         Buffers: shared hit=509
+         ->  Bitmap Index Scan on idx_temporalbox_all_gist  (cost=0.00..9.03 rows=100 width=0) (actual time=2.788..2.788 rows=33 loops=1)
+               Index Cond: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+               Buffers: shared hit=486
+ Planning:
+   Buffers: shared hit=40
+ Planning Time: 0.341 ms
+ Execution Time: 2.869 ms
+(13 rows)
+
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1002.43..1002.44 rows=1 width=8) (actual time=2.913..2.914 rows=1 loops=1)
+   Buffers: shared hit=512
+   ->  Bitmap Heap Scan on temporal_data  (cost=36.16..1001.18 rows=500 width=0) (actual time=2.879..2.907 rows=38 loops=1)
+         Recheck Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+         Heap Blocks: exact=26
+         Buffers: shared hit=512
+         ->  Bitmap Index Scan on idx_temporalbox_all_gist  (cost=0.00..36.03 rows=500 width=0) (actual time=2.871..2.871 rows=38 loops=1)
+               Index Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+               Buffers: shared hit=486
+ Planning:
+   Buffers: shared hit=3
+ Planning Time: 0.156 ms
+ Execution Time: 2.938 ms
+(13 rows)
+
+=== Stage 2: Partial hybrid production indexes + history predicate ===
+DROP INDEX
+DROP INDEX
+DROP INDEX
+DROP INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+VACUUM
+SET
+                                                         QUERY PLAN                                                          
+-----------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=236.60..236.61 rows=1 width=8) (actual time=0.063..0.063 rows=1 loops=1)
+   Buffers: shared hit=18
+   ->  Bitmap Heap Scan on temporal_data  (cost=8.80..236.43 rows=67 width=0) (actual time=0.045..0.058 rows=13 loops=1)
+         Recheck Cond: ((temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube) AND (NOT upper_inf(valid_period)))
+         Heap Blocks: exact=11
+         Buffers: shared hit=18
+         ->  Bitmap Index Scan on idx_hst_gist  (cost=0.00..8.78 rows=67 width=0) (actual time=0.039..0.039 rows=13 loops=1)
+               Index Cond: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+               Buffers: shared hit=7
+ Planning:
+   Buffers: shared hit=22
+ Planning Time: 0.281 ms
+ Execution Time: 0.082 ms
+(13 rows)
+
+                                                                QUERY PLAN                                                                
+------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=803.79..803.80 rows=1 width=8) (actual time=0.061..0.061 rows=1 loops=1)
+   Buffers: shared hit=21
+   ->  Bitmap Heap Scan on temporal_data  (cost=34.86..802.96 rows=333 width=0) (actual time=0.043..0.057 rows=18 loops=1)
+         Recheck Cond: ((temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube) AND (NOT upper_inf(valid_period)))
+         Heap Blocks: exact=14
+         Buffers: shared hit=21
+         ->  Bitmap Index Scan on idx_hst_gist  (cost=0.00..34.78 rows=333 width=0) (actual time=0.037..0.037 rows=18 loops=1)
+               Index Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+               Buffers: shared hit=7
+ Planning Time: 0.143 ms
+ Execution Time: 0.076 ms
+(11 rows)
+
+=== Stage 2b: Canonical decomposed hybrid query ===
+                                                                         QUERY PLAN                                                                          
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=561.67..561.68 rows=1 width=8) (actual time=0.119..0.120 rows=1 loops=1)
+   Buffers: shared hit=35 read=2
+   ->  Append  (cost=8.80..561.23 rows=176 width=0) (actual time=0.039..0.114 rows=33 loops=1)
+         Buffers: shared hit=35 read=2
+         ->  Subquery Scan on "*SELECT* 1"  (cost=8.80..237.10 rows=67 width=0) (actual time=0.039..0.053 rows=13 loops=1)
+               Buffers: shared hit=18
+               ->  Bitmap Heap Scan on temporal_data  (cost=8.80..236.43 rows=67 width=4) (actual time=0.039..0.050 rows=13 loops=1)
+                     Recheck Cond: ((temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube) AND (NOT upper_inf(valid_period)))
+                     Heap Blocks: exact=11
+                     Buffers: shared hit=18
+                     ->  Bitmap Index Scan on idx_hst_gist  (cost=0.00..8.78 rows=67 width=0) (actual time=0.034..0.034 rows=13 loops=1)
+                           Index Cond: (temporalbox(attr, valid_period) @> '(10, 1685577600)'::cube)
+                           Buffers: shared hit=7
+         ->  Subquery Scan on "*SELECT* 2"  (cost=5.41..323.25 rows=109 width=0) (actual time=0.025..0.058 rows=20 loops=1)
+               Buffers: shared hit=17 read=2
+               ->  Bitmap Heap Scan on temporal_data temporal_data_1  (cost=5.41..322.16 rows=109 width=4) (actual time=0.024..0.056 rows=20 loops=1)
+                     Recheck Cond: ((attr = 10) AND (lower(valid_period) <= '2023-06-01 00:00:00'::timestamp without time zone) AND upper_inf(valid_period))
+                     Heap Blocks: exact=17
+                     Buffers: shared hit=17 read=2
+                     ->  Bitmap Index Scan on idx_current_attr_start  (cost=0.00..5.38 rows=109 width=0) (actual time=0.021..0.021 rows=20 loops=1)
+                           Index Cond: ((attr = 10) AND (lower(valid_period) <= '2023-06-01 00:00:00'::timestamp without time zone))
+                           Buffers: shared read=2
+ Planning:
+   Buffers: shared hit=15
+ Planning Time: 0.281 ms
+ Execution Time: 0.142 ms
+(26 rows)
+

@@ -112,12 +112,18 @@ run_query_with_timing() {
     local query="$1"
     local label="$2"
     local output_file="$3"
+    local planner_guc_sql=""
+
+    if [[ "${INDEX_CONFIG:-}" == "no_index" ]]; then
+        planner_guc_sql=$'SET enable_indexscan = off;\nSET enable_bitmapscan = off;\nSET enable_indexonlyscan = off;'
+    fi
     
     echo " $label..." >> "$output_file"
     
     # Capture EXPLAIN and timing
     psql -d "$DB_NAME" > /tmp/query_result.txt 2>&1 << QUERY_END || true
 \\timing on
+$planner_guc_sql
 EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
 $query
 \\timing off
@@ -161,6 +167,26 @@ SELECT
 EOF
 }
 
+reset_secondary_indexes() {
+    psql -d "$DB_NAME" << 'EOF'
+DO $$
+DECLARE r record;
+BEGIN
+  FOR r IN
+    SELECT indexname
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'temporal_data'
+      AND indexname <> 'temporal_data_pkey'
+  LOOP
+    EXECUTE format('DROP INDEX IF EXISTS %I CASCADE', r.indexname);
+  END LOOP;
+END$$;
+
+VACUUM ANALYZE temporal_data;
+EOF
+}
+
 ################################################################################
 # Main Test Loop: Per-Index Configuration
 ################################################################################
@@ -185,43 +211,28 @@ EOF
     setup_query=""
     case "$INDEX_CONFIG" in
         no_index)
-            setup_query="DROP INDEX IF EXISTS idx_test_btree CASCADE; DROP INDEX IF EXISTS idx_test_gist CASCADE; DROP INDEX IF EXISTS idx_test_brin CASCADE; DROP INDEX IF EXISTS idx_test_current CASCADE; DROP INDEX IF EXISTS idx_test_history CASCADE;"
+          setup_query="SET enable_indexscan = off; SET enable_bitmapscan = off; SET enable_indexonlyscan = off;"
             ;;
         btree)
             setup_query="
-DROP INDEX IF EXISTS idx_test_gist CASCADE;
-DROP INDEX IF EXISTS idx_test_brin CASCADE;
-DROP INDEX IF EXISTS idx_test_current CASCADE;
-DROP INDEX IF EXISTS idx_test_history CASCADE;
 CREATE INDEX idx_test_btree ON temporal_data (attr, lower(valid_period));
 VACUUM ANALYZE temporal_data;
 "
             ;;
         gist)
             setup_query="
-DROP INDEX IF EXISTS idx_test_btree CASCADE;
-DROP INDEX IF EXISTS idx_test_brin CASCADE;
-DROP INDEX IF EXISTS idx_test_current CASCADE;
-DROP INDEX IF EXISTS idx_test_history CASCADE;
 CREATE INDEX idx_test_gist ON temporal_data USING gist (valid_period);
 VACUUM ANALYZE temporal_data;
 "
             ;;
         brin)
             setup_query="
-DROP INDEX IF EXISTS idx_test_btree CASCADE;
-DROP INDEX IF EXISTS idx_test_gist CASCADE;
-DROP INDEX IF EXISTS idx_test_current CASCADE;
-DROP INDEX IF EXISTS idx_test_history CASCADE;
 CREATE INDEX idx_test_brin ON temporal_data USING brin (valid_period);
 VACUUM ANALYZE temporal_data;
 "
             ;;
         hybrid)
             setup_query="
-DROP INDEX IF EXISTS idx_test_btree CASCADE;
-DROP INDEX IF EXISTS idx_test_gist CASCADE;
-DROP INDEX IF EXISTS idx_test_brin CASCADE;
 CREATE INDEX idx_test_current ON temporal_data (attr, lower(valid_period))
   WHERE upper_inf(valid_period);
 CREATE INDEX idx_test_history ON temporal_data USING gist (valid_period)
@@ -230,7 +241,8 @@ VACUUM ANALYZE temporal_data;
 "
             ;;
     esac
-    
+
+          reset_secondary_indexes >> "$CONFIG_REPORT" 2>&1
     psql -d "$DB_NAME" -c "$setup_query" >> "$CONFIG_REPORT" 2>&1
     
     ############################################################################

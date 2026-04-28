@@ -29,7 +29,11 @@ PLAN_LINE_RE = re.compile(
 PLANNING_RE = re.compile(r'Planning Time:\s+([0-9.]+) ms')
 EXECUTION_RE = re.compile(r'Execution Time:\s+([0-9.]+) ms')
 BUFFERS_RE = re.compile(r'Buffers:\s+shared hit=([0-9]+)(?:\s+read=([0-9]+))?')
-INDEX_NAME_RE = re.compile(r'(?:using|on)\s+(idx[a-zA-Z0-9_]+)')
+HEAP_FETCHES_RE = re.compile(r'Heap Fetches:\s+([0-9]+)')
+INDEX_NAME_RE = re.compile(
+    r'(?:Index(?: Only)? Scan using|Bitmap Index Scan on)\s+("[^"]+"|[A-Za-z_][A-Za-z0-9_$]*)',
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -223,6 +227,7 @@ def main() -> int:
             buffer_matches = BUFFERS_RE.findall(block_text)
             shared_hit = buffer_matches[-1][0] if buffer_matches else ''
             shared_read = buffer_matches[-1][1] if buffer_matches and buffer_matches[-1][1] else '0' if buffer_matches else ''
+            heap_fetches = extract_last(HEAP_FETCHES_RE, block_text, default='0')
             index_name_match = INDEX_NAME_RE.search(block_text)
             index_name = index_name_match.group(1) if index_name_match else ''
 
@@ -238,6 +243,7 @@ def main() -> int:
                 'execution_ms': execution_ms,
                 'shared_hit': shared_hit,
                 'shared_read': shared_read,
+                'heap_fetches': heap_fetches,
                 'status': classify_status(config, query_label, observed, notes),
                 'notes': notes,
             }
@@ -289,6 +295,7 @@ def main() -> int:
         'execution_ms',
         'shared_hit',
         'shared_read',
+        'heap_fetches',
         'index_names',
         'index_count',
         'total_index_size_bytes',
