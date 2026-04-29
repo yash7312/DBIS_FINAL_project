@@ -8,37 +8,38 @@
 # Environment variables:
 #   PGROOT   - PostgreSQL source/build root (default: $ROOT_DIR/postgresql)
 #   PGDATA   - Data directory (default: $PGROOT/pgdata)
-#   PGPORT   - Server port (default: 5433)
+#   PGPORT   - Server port (default: 5543)
 #
 # Optional overrides:
 #   ROOT_DIR  - Repository root (default: directory of this script)
-#   LOG_DIR   - Experiment log directory (default: $ROOT_DIR/experiment_logs)
+#   LOG_DIR   - Experiment log directory (default: $ROOT_DIR/experiment_logs_c2)
 ################################################################################
 
 set -euo pipefail
 
 ROOT_DIR="${ROOT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 PGROOT="${PGROOT:-$ROOT_DIR/postgresql}"
-PGPORT="${PGPORT:-5433}"
-LOG_DIR="${LOG_DIR:-$ROOT_DIR/experiment_logs}"
+PGPORT="${PGPORT:-5543}"
+LOG_DIR="${LOG_DIR:-$ROOT_DIR/experiment_logs_c2}"
 PG_CONFIG_BIN="$PGROOT/install/bin/pg_config"
 PSQL_BIN="$PGROOT/install/bin/psql"
 PG_CTL_BIN="$PGROOT/install/bin/pg_ctl"
 INITDB_BIN="$PGROOT/install/bin/initdb"
 TIME_BIN="/usr/bin/time"
+INSTALL_CORE="${INSTALL_CORE:-0}"
 
 RUN_USER="${SUDO_USER:-${USER:-$(id -un)}}"
 if [ "${EUID:-$(id -u)}" -eq 0 ] && [ -n "${SUDO_USER:-}" ]; then
-  PGDATA="${PGDATA:-$PGROOT/pgdata-$RUN_USER}"
+  PGDATA="${PGDATA:-$PGROOT/pgdata-c2-$RUN_USER}"
 else
-  PGDATA="${PGDATA:-$PGROOT/pgdata}"
+  PGDATA="${PGDATA:-$PGROOT/pgdata-c2}"
 fi
 
 export PATH="$PGROOT/install/bin:$PATH"
 export LD_LIBRARY_PATH="$PGROOT/install/lib:${LD_LIBRARY_PATH:-}"
 export PGHOST="${PGHOST:-localhost}"
 export PGPORT="$PGPORT"
-export PGUSER="${PGUSER:-postgres}"
+export PGUSER="${PGUSER:-$RUN_USER}"
 
 if [ ! -d "$PGROOT" ]; then
   echo "[!] PGROOT does not exist: $PGROOT"
@@ -61,9 +62,10 @@ run_psql() {
 
 mkdir -p "$LOG_DIR"
 
+RAW_LOG_DIR="$LOG_DIR/benchmark_matrix"
+
+rm -rf "$RAW_LOG_DIR"
 rm -f \
-  "$LOG_DIR"/results_*.txt \
-  "$LOG_DIR"/metrics_*.csv \
   "$LOG_DIR"/wallclock.log \
   "$LOG_DIR"/experiment_metrics.csv \
   "$LOG_DIR"/reproducibility_manifest.txt \
@@ -88,7 +90,7 @@ LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:-}
 Exact build commands:
   cd "$PGROOT"
   make -j"$(nproc)"
-  make install
+  if INSTALL_CORE=1, also make install
 
 Exact extension commands:
   cd "$PGROOT/contrib/temporal_rtree"
@@ -103,13 +105,17 @@ Exact SQL install command:
   psql -p "$PGPORT" -d test -c "CREATE EXTENSION temporal_rtree;"
 
 Benchmark driver:
-  psql -p "$PGPORT" -d test -v log_dir="$LOG_DIR" -f "$ROOT_DIR/run_experiment.sql"
+  bash "$ROOT_DIR/data_generation/run_benchmark_matrix.sh" test "$LOG_DIR/benchmark_dataset.sql" "$RAW_LOG_DIR"
 EOF
 
 echo "[1/6] Rebuilding PostgreSQL core"
 cd "$PGROOT"
 make -j"$(nproc)"
-make install
+if [ "$INSTALL_CORE" = "1" ]; then
+  make install
+else
+  echo "    skipping core install (set INSTALL_CORE=1 to enable privileged install)"
+fi
 
 echo "[2/6] Building temporal_rtree extension"
 cd "$PGROOT/contrib/temporal_rtree"
@@ -148,12 +154,12 @@ run_psql -d test -v ON_ERROR_STOP=1 -f "$DATASET_FILE"
 
 echo "[5/6] Running benchmark matrix driver"
 run_as_bench_user "$TIME_BIN" bash "$ROOT_DIR/data_generation/run_benchmark_matrix.sh" \
-  test "$DATASET_FILE" "$LOG_DIR" \
+  test "$DATASET_FILE" "$RAW_LOG_DIR" \
   > "$WALLCLOCK_FILE" 2>&1
 
 echo "[6/6] Collecting normalized metrics"
 python3 "$ROOT_DIR/data_generation/collect_experiment_metrics.py" \
-    --log-dir "$LOG_DIR" \
+    --log-dir "$RAW_LOG_DIR" \
     --output "$METRICS_FILE"
 
 echo ""
@@ -161,5 +167,5 @@ echo "Benchmark artifacts written to: $LOG_DIR"
 echo "  - $MANIFEST_FILE"
 echo "  - $WALLCLOCK_FILE"
 echo "  - $METRICS_FILE"
-echo "  - results_*.txt"
-echo "  - metrics_*.csv"
+echo "  - $RAW_LOG_DIR/results_*.txt"
+echo "  - $RAW_LOG_DIR/metrics_*.csv"

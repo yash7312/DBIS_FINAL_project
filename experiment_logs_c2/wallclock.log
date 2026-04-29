@@ -1,0 +1,33 @@
+Running truth phase (forced seq scans) -> /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/truth_counts.csv
+ERROR:  syntax error at or near "enable_indexscan"
+LINE 1: enable_indexscan=off
+        ^
+ERROR:  syntax error at or near "enable_indexscan"
+LINE 1: enable_indexscan=off
+        ^
+ERROR:  syntax error at or near "enable_indexscan"
+LINE 1: enable_indexscan=off
+        ^
+ERROR:  syntax error at or near "enable_indexscan"
+LINE 1: enable_indexscan=off
+        ^
+ERROR:  syntax error at or near "enable_indexscan"
+LINE 1: enable_indexscan=off
+        ^
+Truth phase complete. Results: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/truth_counts.csv
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_no_index.txt
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_brin.txt
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_gist_period.txt
+psql:/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_gist_attr_period.txt
+psql:/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_temporal_rtree.txt
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_hst_gist.txt
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_btree.txt
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_hst_gist.txt
+Read-only run complete: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix/read_results_hybrid_current_history.txt
+psql:/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
+psql:/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
+Benchmark matrix complete. Results written to /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_matrix
+2.15user 0.72system 0:59.89elapsed 4%CPU (0avgtext+0avgdata 4292maxresident)k
+48inputs+304outputs (2major+73862minor)pagefaults 0swaps

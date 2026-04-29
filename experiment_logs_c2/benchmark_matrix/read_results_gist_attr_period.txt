@@ -1,0 +1,32 @@
+================================================================================
+READ CONFIG: gist_attr_period
+Timestamp: Wed Apr 29 11:18:47 PM IST 2026
+Dataset: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_dataset.sql
+================================================================================
+
+      indexname       |                                                indexdef                                                
+----------------------+--------------------------------------------------------------------------------------------------------
+ idx_gist_attr_period | CREATE INDEX idx_gist_attr_period ON public.temporal_data USING gist (temporalbox(attr, valid_period))
+ temporal_data_pkey   | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(2 rows)
+
+                                                              QUERY PLAN                                                               
+---------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1002.43..1002.44 rows=1 width=8) (actual time=3.602..3.603 rows=1 loops=1)
+   Buffers: shared hit=514
+   ->  Bitmap Heap Scan on temporal_data  (cost=36.16..1001.18 rows=500 width=0) (actual time=3.514..3.593 rows=38 loops=1)
+         Recheck Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+         Heap Blocks: exact=26
+         Buffers: shared hit=514
+         ->  Bitmap Index Scan on idx_gist_attr_period  (cost=0.00..36.03 rows=500 width=0) (actual time=3.497..3.497 rows=38 loops=1)
+               Index Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+               Buffers: shared hit=488
+ Planning:
+   Buffers: shared hit=186
+ Planning Time: 0.909 ms
+ Execution Time: 3.681 ms
+(13 rows)
+
+
+-- END READ_SELECT
+

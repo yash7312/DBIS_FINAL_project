@@ -25,10 +25,10 @@ The temporal R-tree AM is designed to efficiently index temporal data with suppo
 - `temporal_rtree--1.0.sql` — Extension SQL: handler, AM, opfamily, opclass registration
 - `temporal_rtree.control` — Extension metadata
 
-## Current AM Semantics (Checkpoint C1)
+## Current AM Semantics
 
-This checkpoint documents the exact semantics and limitations of the current implementation.
-**Critical for C1:** The AM semantics are **intentionally stable** (no changes) to separate correctness verification from optimization work.
+This section documents the exact semantics and limitations of the current implementation.
+The AM semantics are intentionally stable so correctness verification stays separate from optimization work.
 
 ### Supported Key Family
 
@@ -122,8 +122,13 @@ Requires: PostgreSQL 14+ with development headers.
 Regression tests are in `sql/` with expected output in `expected/`:
 - `temporal_rtree_smoke.sql` — Extension load, basic indexing operations, correctness gate (counts must match)
 - `temporal_rtree_plans.sql` — Planner forced-index integration (`enable_seqscan=off`) showing Index Scan nodes
+- `temporal_rtree_hooks.sql` — Hook visibility and counter regression for planner/executor activity
+- `temporal_rtree_hook_planner.sql` — Planner hook fires on a temporalbox query
+- `temporal_rtree_hook_executor.sql` — Executor hook fires on INSERT/UPDATE/DELETE on an indexed table
+- `temporal_rtree_hook_presence.sql` — Executor hook recognizes temporal_rtree-indexed relations
+- `temporal_rtree_path_bias.sql` — Planner path steering regression for compatible predicates
 
-#### Hook Smoke Tests (Checkpoint C1)
+#### Hook Regression Tests
 
 Three tiny focused tests to verify hook infrastructure:
 - `temporal_rtree_hook_planner.sql` — Planner hook fires on EXPLAIN(temporalbox query)
@@ -152,7 +157,7 @@ The crash/restart smoke test verifies WAL replay correctness across an immediate
 make crash-restart-check
 ```
 
-This test (in `specs/temporal_rtree_crash_restart.sh`):
+This test (in `temporal_rtree_crash_restart.sh`):
 1. Creates a `temporal_data` table with 2000 rows
 2. Builds a `temporal_rtree` expression index on `temporalbox(attr, valid_period)`
 3. Runs seq-scan and forced-index-scan counts before crash (must match)
@@ -160,7 +165,7 @@ This test (in `specs/temporal_rtree_crash_restart.sh`):
 5. Restarts PostgreSQL and re-runs the query
 6. Verifies counts still match (WAL replay must be correct)
 
-## Hooks and Monitoring (Checkpoint C1)
+## Hooks and Monitoring
 
 The extension registers lightweight hooks for visibility into temporal_rtree usage without changing query semantics:
 
@@ -214,12 +219,12 @@ see hook output at LOG level.
 
 Alternatively, run the manual hook test:
 ```
-psql -d your_test_db -f sql/temporal_rtree_hooks_test.sql
+psql -d your_test_db -f sql/temporal_rtree_hooks.sql
 ```
 
 This script performs a series of tests to verify planner and executor hooks are firing.
 
-## Planner Path Steering (Checkpoint C2)
+## Planner Path Steering
 
 Starting in C2, the extension extends hook capabilities to actively steer the planner toward temporal_rtree paths for compatible queries.
 
@@ -267,7 +272,7 @@ SELECT * FROM temporal_rtree_hook_stats();
 
 ## Status
 
-### Checkpoint C1: Complete
+### Finalized Core AM and Hooks
 - ✓ Handler scaffold with IndexAmRoutine (stable; see Current AM Semantics above)
 - ✓ Page and tuple struct design (stable; no changes in C1)
 - ✓ In-memory split and penalty routines (stable; in-memory only)
@@ -278,9 +283,9 @@ SELECT * FROM temporal_rtree_hook_stats();
 - ✓ GUCs for hook debugging and configuration
 - ✓ **C1 Stability Promise:** Core AM code (handler, build, insert, search, vacuum, WAL) kept stable; no semantics changes
 
-### Checkpoint C2: In Progress
+### Comparative Suite Status
 
-#### TODO one: Planner Path Steering ✓
+#### Planner Path Steering ✓
 - ✓ Extended hooks with `set_rel_pathlist_hook` support
 - ✓ Operator compatibility detection (&&, @>, <@)
 - ✓ Clause analysis for temporal_rtree-eligible predicates (temporalbox expressions)
@@ -296,11 +301,27 @@ SELECT * FROM temporal_rtree_hook_stats();
 - Biasing only applied to tables with temporal_rtree indexes AND compatible predicates
 - Safe fallback: Incompatible queries unaffected; cost biasing silently skipped
 
-#### TODO two and beyond: Pending
+#### Comparative benchmarking and write workloads
 - ○ Full comparative benchmarking (temporal_rtree vs. GiST, BRIN, B-tree, hybrid)
 - ○ Query family cost comparison (plain temporal, composite attr×time, current-side)
 - ○ Performance baseline collection and analysis
 - ○ Cost model refinement based on benchmark results
+
+## Final Reporting Tables
+
+Every benchmark run set should be summarized with two tables.
+
+### Correctness Table
+
+| query name | seq-scan row count | index-scan row count | pass/fail | crash-restart pass/fail |
+|---|---:|---:|---|---|
+| Q1 |  |  |  |  |
+
+### Performance Table
+
+| config | dataset shape | plan node | planning time | execution time | shared hits | shared reads | WAL bytes | index size | notes |
+|---|---|---|---:|---:|---:|---:|---:|---:|---|
+| baseline |  |  |  |  |  |  |  |  |  |
 
 ### Post-C2 Work
 - ○ Full page-level insert/search with buffer manager (async work)

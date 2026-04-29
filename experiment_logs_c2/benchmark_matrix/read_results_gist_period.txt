@@ -1,0 +1,29 @@
+================================================================================
+READ CONFIG: gist_period
+Timestamp: Wed Apr 29 11:18:42 PM IST 2026
+Dataset: /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/experiment_logs_c2/benchmark_dataset.sql
+================================================================================
+
+     indexname      |                                    indexdef                                     
+--------------------+---------------------------------------------------------------------------------
+ idx_gist_period    | CREATE INDEX idx_gist_period ON public.temporal_data USING gist (valid_period)
+ temporal_data_pkey | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(2 rows)
+
+                                                                    QUERY PLAN                                                                    
+--------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=239.50..239.51 rows=1 width=8) (actual time=2.141..2.142 rows=1 loops=1)
+   Buffers: shared hit=67
+   ->  Index Only Scan using idx_gist_period on temporal_data  (cost=0.28..228.60 rows=4361 width=0) (actual time=0.174..1.901 rows=4228 loops=1)
+         Index Cond: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
+         Heap Fetches: 0
+         Buffers: shared hit=67
+ Planning:
+   Buffers: shared hit=82
+ Planning Time: 0.788 ms
+ Execution Time: 2.185 ms
+(10 rows)
+
+
+-- END READ_SELECT
+
