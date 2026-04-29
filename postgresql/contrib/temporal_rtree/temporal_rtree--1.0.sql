@@ -23,3 +23,26 @@ COMMENT ON OPERATOR FAMILY temporal_cube_ops USING temporal_rtree
   IS 'Temporal R-tree access method family for cube';
 COMMENT ON OPERATOR CLASS temporal_cube_ops USING temporal_rtree
   IS 'Temporal R-tree access method for temporal cube boxes';
+
+-- Hook statistics functions (C1 Testing)
+
+CREATE FUNCTION temporal_rtree_hook_reset()
+RETURNS void
+AS 'MODULE_PATHNAME', 'temporal_rtree_hook_reset'
+LANGUAGE C STRICT;
+
+COMMENT ON FUNCTION temporal_rtree_hook_reset()
+  IS 'Reset all temporal_rtree hook hit counters to zero';
+
+CREATE FUNCTION temporal_rtree_hook_stats()
+RETURNS TABLE (
+  planner_hits bigint,
+  planner_rtree_eligible_hits bigint,
+  executor_dml_hits bigint,
+  executor_target_with_rtree_hits bigint
+)
+AS 'MODULE_PATHNAME', 'temporal_rtree_hook_stats'
+LANGUAGE C STRICT;
+
+COMMENT ON FUNCTION temporal_rtree_hook_stats()
+  IS 'Return current hook statistics counters';

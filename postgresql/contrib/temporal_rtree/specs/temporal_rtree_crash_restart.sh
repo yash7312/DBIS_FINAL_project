@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-PGROOT="${PGROOT:-$ROOT_DIR/postgresql}"
+PGROOT="${PGROOT:-$ROOT_DIR}"
 PGDATA="${PGDATA:-$PGROOT/pgdata-crash-restart}"
 PGPORT="${PGPORT:-5540}"
 PSQL_BIN="$PGROOT/install/bin/psql"

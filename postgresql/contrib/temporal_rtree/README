@@ -37,13 +37,95 @@ Requires: PostgreSQL 14+ with development headers.
 
 ## Testing
 
+### Regression Tests
+
 Regression tests are in `sql/` with expected output in `expected/`:
-- `temporal_rtree_smoke` — Basic AM creation and index operations
-- `temporal_rtree_plans` — Planner integration and cost estimation
+- `temporal_rtree_smoke.sql` — Extension load, basic indexing operations, correctness gate (counts must match)
+- `temporal_rtree_plans.sql` — Planner forced-index integration (`enable_seqscan=off`) showing Index Scan nodes
+
+Run regression tests with:
+```bash
+make installcheck
+```
+
+### Isolation Tests
 
 Isolation tests in `specs/`:
-- `temporal_rtree_concurrent_split` — Concurrent inserts and splits
-- `temporal_rtree_crash_restart.sh` — Immediate-shutdown crash/restart recovery check
+- `temporal_rtree_concurrent_split.spec` — Concurrent N-way inserts, updates, deletes with truth count verification
+
+Isolation tests run as part of `make installcheck` and generate expected output to `expected/*.out`.
+
+### Standalone Checks
+
+Run the crash/restart durability check manually with:
+```bash
+make crash-restart-check
+```
+
+This test:
+1. Creates a temporal_data table and builds an index
+2. Runs a query to verify correctness
+3. Immediately kills and restarts PostgreSQL
+4. Re-runs the query and verifies counts match (WAL must have replayed correctly)
+
+## Hooks and Monitoring (Checkpoint C1)
+
+The extension registers lightweight hooks for visibility into temporal_rtree usage without changing query semantics:
+
+### GUCs
+
+- `temporal_rtree.enable_hook_debug` (bool, default=on) — Log planner and executor hook hits
+- `temporal_rtree.force_rtree_paths` (bool, default=off) — Reserved for C2: bias planner toward temporal_rtree (currently no-op)
+- `temporal_rtree.log_dml` (bool, default=on) — Log DML statements on temporal_rtree-indexed tables
+
+### Planner Hook
+
+Fires when PostgreSQL plans a query that:
+- Explicitly uses `temporalbox(...)` expression, OR
+- Targets a relation with a `temporal_rtree` index
+
+Log output (LOG level):
+```
+temporal_rtree planner hook: has_temporalbox=0 has_rtree_idx=1 query: SELECT * FROM temporal_data WHERE ...
+```
+
+### Executor Start Hook
+
+Fires when PostgreSQL executes INSERT/UPDATE/DELETE on a table with a `temporal_rtree` index.
+
+Log output (LOG level):
+```
+temporal_rtree executor hook: INSERT statement on temporal_rtree-indexed relation
+```
+
+### Testing Hooks
+
+Enable verbose logging and run a quick test:
+
+```sql
+SET temporal_rtree.enable_hook_debug = on;
+SET temporal_rtree.log_dml = on;
+
+-- This should trigger both hooks:
+CREATE TABLE test (id int, attr int, valid_period tsrange);
+CREATE INDEX tidx ON test USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+
+-- Planner hook should fire on this SELECT:
+SELECT * FROM test WHERE temporalbox(attr, valid_period) && temporalbox_range(10, '2020-01-01', '2020-12-31');
+
+-- Executor hook should fire on this INSERT:
+INSERT INTO test VALUES (1, 10, tsrange('2020-01-01', '2020-02-01'));
+```
+
+Check the PostgreSQL server log (if running in foreground) or use `pg_current_logfile()` to
+see hook output at LOG level.
+
+Alternatively, run the manual hook test:
+```
+psql -d your_test_db -f sql/temporal_rtree_hooks_test.sql
+```
+
+This script performs a series of tests to verify planner and executor hooks are firing.
 
 ## Status
 
@@ -53,6 +135,8 @@ This is a **prototype implementation** for Checkpoint C1:
 - ✓ In-memory split and penalty routines
 - ✓ SQL registration (handler, AM, opfamily, opclass)
 - ✓ Basic regression and isolation tests
+- ✓ Lightweight hooks for temporal_rtree detection (planner, executor)
+- ✓ GUCs for hook debugging and configuration
 - ○ Full page-level insert/search with buffer manager
 - ○ Concurrent locking and split-follow-right logic
 - ○ Complete WAL integration

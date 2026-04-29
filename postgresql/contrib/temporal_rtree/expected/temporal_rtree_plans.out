@@ -1,23 +1,37 @@
 CREATE EXTENSION
 CREATE TABLE
 INSERT 0 4
-                        QUERY PLAN                         
------------------------------------------------------------
- Seq Scan on temporal_data
-   Filter: (valid_period @> now())
-(2 rows)
+ temporal_rtree_hook_reset 
+---------------------------
 
-                              QUERY PLAN                               
+(1 row)
+
+SET
+SET
+SET
+                              QUERY PLAN                              
 ----------------------------------------------------------------------
- Seq Scan on temporal_data
-   Filter: (valid_period && '["2020-06-01","2020-12-31")'::tsrange)
+ Index Scan using temporal_idx on temporal_data
+   Index Cond: (temporalbox(attr, valid_period) && temporalbox_range(10, '2020-01-01'::timestamp without time zone, '2020-01-04'::timestamp without time zone))
 (2 rows)
 
-                           QUERY PLAN                            
------------------------------------------------------------------
- Seq Scan on temporal_data  (cost=0.00..35.00 rows=2 width=48)
-   Filter: (valid_period @> now())
+ planner_hits | planner_rtree_eligible_hits 
+--------------+-----------------------------
+            1 |                           1
+(1 row)
+
+                              QUERY PLAN                              
+----------------------------------------------------------------------
+ Index Scan using temporal_idx on temporal_data
+   Index Cond: (temporalbox(attr, valid_period) @> temporalbox_point(10, '2020-01-02'::timestamp without time zone))
 (2 rows)
 
+ planner_hits 
+--------------
+            2
+(1 row)
+
+RESET
+RESET
 DROP INDEX
 DROP TABLE

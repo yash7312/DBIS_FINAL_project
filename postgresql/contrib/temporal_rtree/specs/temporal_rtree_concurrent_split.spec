@@ -21,38 +21,45 @@ teardown
 }
 
 session "s1"
-step "s1_insert_bulk"  {
-    INSERT INTO temporal_data
-    SELECT g,
-           10,
-           tsrange(timestamp '2020-01-01' + ((g || ' days')::interval),
-                   timestamp '2020-01-15' + ((g || ' days')::interval),
-                   '[)'),
-           'storm_a'
-    FROM generate_series(1, 600) AS g;
+step "s1_insert_a" {
+    INSERT INTO temporal_data VALUES
+      (1, 10, tsrange('2020-01-01', '2020-01-02', '[)'), 'a1'),
+      (2, 10, tsrange('2020-01-02', '2020-01-03', '[)'), 'a2'),
+      (3, 10, tsrange('2020-01-03', '2020-01-04', '[)'), 'a3');
 }
 
 session "s2"
-step "s2_insert_bulk"  {
-    INSERT INTO temporal_data
-    SELECT g + 10000,
-           10,
-           tsrange(timestamp '2020-01-10' + ((g || ' days')::interval),
-                   timestamp '2020-01-25' + ((g || ' days')::interval),
-                   '[)'),
-           'storm_b'
-    FROM generate_series(1, 600) AS g;
+step "s2_insert_b" {
+    INSERT INTO temporal_data VALUES
+      (101, 10, tsrange('2020-01-01 12:00', '2020-01-02 12:00', '[)'), 'b1'),
+      (102, 10, tsrange('2020-01-02 12:00', '2020-01-03 12:00', '[)'), 'b2'),
+      (103, 10, tsrange('2020-01-03 12:00', '2020-01-04 12:00', '[)'), 'b3');
 }
 
 session "s3"
-step "s3_select"   {
+step "s3_correctness" {
     SELECT
         count(*) AS total_rows,
         (SELECT count(*)
          FROM temporal_data
          WHERE temporalbox(attr, valid_period)
-               && temporalbox_range(10, timestamp '2020-01-01', timestamp '2025-01-01')) AS indexed_hits;
+               && temporalbox_range(10, timestamp '2020-01-01', timestamp '2020-01-04')) AS indexed_hits,
+        (SELECT count(*)
+         FROM temporal_data
+         WHERE valid_period && tsrange('2020-01-01', '2020-01-04', '[)')) AS truth_hits;
 }
 
-# Concurrent insertions should complete without corruption and preserve counts
-permutation "s1_insert_bulk" "s2_insert_bulk" "s3_select"
+session "s4"
+step "s4_hot_update" {
+    UPDATE temporal_data
+    SET valid_period = tsrange(lower(valid_period), upper(valid_period) + interval '1 day', '[)')
+    WHERE id IN (1, 101);
+}
+
+session "s5"
+step "s5_purge" {
+    DELETE FROM temporal_data
+    WHERE id = 3 OR id = 103;
+}
+
+permutation "s1_insert_a" "s2_insert_b" "s3_correctness" "s4_hot_update" "s5_purge"

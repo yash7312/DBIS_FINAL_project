@@ -17,22 +17,45 @@ CREATE EXTENSION
 (1 row)
 
 CREATE TABLE
-INSERT 0 2
+INSERT 0 4
 CREATE INDEX
+ temporal_rtree_hook_reset 
+---------------------------
+
+(1 row)
+
  truth_count 
 -------------
-           2
+           3
 (1 row)
 
 SET
 SET
  indexed_count 
 ---------------
-             2
+             3
 (1 row)
 
 SET
 SET
+ correctness 
+-------------
+ PASS
+(1 row)
+
+ planner_hits | planner_rtree_eligible_hits | executor_dml_hits | executor_target_with_rtree_hits 
+--------------+-----------------------------+-------------------+---------------------------------
+            1 |                           1 |                 0 |                               0
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+DELETE 2
+ planner_hits | planner_rtree_eligible_hits | executor_dml_hits | executor_target_with_rtree_hits 
+--------------+-----------------------------+-------------------+---------------------------------
+            1 |                           1 |                 3 |                               3
+(1 row)
+
             indexname            |                                            indexdef                                             
 ------------------------------+---------------------------------------------------------------------------------------------------------------
  temporal_idx                 | CREATE INDEX temporal_idx ON temporal_data USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops)
