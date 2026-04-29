@@ -39,10 +39,11 @@ RETURNS TABLE (
   planner_hits bigint,
   planner_rtree_eligible_hits bigint,
   executor_dml_hits bigint,
-  executor_target_with_rtree_hits bigint
+  executor_target_with_rtree_hits bigint,
+  path_bias_applied bigint
 )
 AS 'MODULE_PATHNAME', 'temporal_rtree_hook_stats'
 LANGUAGE C STRICT;
 
 COMMENT ON FUNCTION temporal_rtree_hook_stats()
-  IS 'Return current hook statistics counters';
+  IS 'Return current hook statistics counters including path bias applications';

@@ -25,6 +25,86 @@ The temporal R-tree AM is designed to efficiently index temporal data with suppo
 - `temporal_rtree--1.0.sql` — Extension SQL: handler, AM, opfamily, opclass registration
 - `temporal_rtree.control` — Extension metadata
 
+## Current AM Semantics (Checkpoint C1)
+
+This checkpoint documents the exact semantics and limitations of the current implementation.
+**Critical for C1:** The AM semantics are **intentionally stable** (no changes) to separate correctness verification from optimization work.
+
+### Supported Key Family
+
+**Single operator class: `temporal_cube_ops` for `cube` type**
+
+- Opclass name: `temporal_cube_ops`
+- Index type: `temporal_rtree`  
+- Key type: `cube` (PostgreSQL cube extension required)
+- Reason for cube: Temporal queries use composite 2D boxes `cube(attr_min, attr_max, time_min_bound, time_max_bound)`
+
+**Unsupported key families:**
+- `tsrange` directly — Not registered (would require a separate opclass)
+- Composite (attr, tsrange) as individual columns — Not supported (use `temporalbox()` wrapper instead)
+
+### Current SQL Usage
+
+To create a temporal_rtree index on a table with `attr` (int) and `valid_period` (tsrange):
+
+```sql
+CREATE INDEX idx_temporal ON temporal_data
+  USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+```
+
+- **Required function:** `temporalbox(int, tsrange) → cube`
+- **Provided by:** `temporalbox` extension (separate from `temporal_rtree`)
+- **Output:** 4D cube box: `(attr_min, time_lower_bound, attr_max, time_upper_bound)`
+
+### Supported Operators
+
+Operators are defined in the operator class and work on `cube` type:
+
+| Operator | Semantics | Example |
+|----------|-----------|---------|
+| `&&` | Overlap | `temporalbox(10, ts1) && temporalbox_range(10, start, end)` |
+| `@>` | Contains | `temporalbox(10, ts1) @> temporalbox_point(10, ts)` |
+| `<@` | Contained-by | `temporalbox(10, ts1) <@ temporalbox_range(10, start, end)` |
+
+All operators map to the underlying `cube` AM operators (same names, same semantics).
+
+### Current Scan Implementation
+
+**Scan style: Plain `amgettuple`**
+
+- Callback chain: `ambeginscan` → `amrescan` → `amgettuple(ScanDirection)` → `amendscan`
+- Return mode: **Single tuple per call** (not bulk)
+- Bitmap support: `amgetbitmap = NULL` (not implemented; affects planner cost modeling)
+- Ordering support: Not guaranteed (GiST-style unordered scanning)
+- Concurrency mode: Normal locking (no special split-follow-right optimization yet)
+
+**Current behavior:**
+- Each `amgettuple` call returns one tuple or false if no more
+- Index pages are pin-and-lock managed by PostgreSQL's buffer manager
+- Lossy filter application by executor (recheck quals if needed)
+
+### Current WAL Implementation
+
+**WAL style: Generic XLog API with full-image records**
+
+- WAL primitive: `XLogBeginInsert()` + `XLogRegisterData()` + `XLogInsert()`
+- Record types: Custom `RM_TEMPORAL_RTREE_ID` (if registered)
+- Replay logic: Whole-page replacement for simplicity
+- Full-page writes: Enabled (conservative approach; all index page modifications logged in full)
+
+**Current limitations:**
+- No differential logging (always full-image)
+- No split/rebalancing-specific optimizations
+- No custom resource manager registration (uses generic insert)
+
+### Known Limitations
+
+1. **No concurrent split handling:** SplitFollowRight not implemented; excessive locks during splits
+2. **No page-level optimization:** Page picksplit not optimized; balance/penalty routines are in-memory only
+3. **No predicate locking:** `predlocks` disabled (`ampredlocks = false`)
+4. **Limited query support:** Only single-key searches; multi-column composite keys not optimized
+5. **No index-only scans:** `amgetbitmap = NULL` and no visibility tracking; full heap access required
+
 ## Build and Install
 
 ```bash
@@ -43,30 +123,42 @@ Regression tests are in `sql/` with expected output in `expected/`:
 - `temporal_rtree_smoke.sql` — Extension load, basic indexing operations, correctness gate (counts must match)
 - `temporal_rtree_plans.sql` — Planner forced-index integration (`enable_seqscan=off`) showing Index Scan nodes
 
-Run regression tests with:
+#### Hook Smoke Tests (Checkpoint C1)
+
+Three tiny focused tests to verify hook infrastructure:
+- `temporal_rtree_hook_planner.sql` — Planner hook fires on EXPLAIN(temporalbox query)
+- `temporal_rtree_hook_executor.sql` — Executor hook fires on INSERT/UPDATE/DELETE on indexed table
+- `temporal_rtree_hook_presence.sql` — Executor hook recognizes temporal_rtree-indexed relations
+
+Run all regression tests with:
 ```bash
 make installcheck
 ```
+
+This runs `sql/*.sql` tests, compares output with `expected/*.out`, and verifies exact hook counter values.
 
 ### Isolation Tests
 
 Isolation tests in `specs/`:
 - `temporal_rtree_concurrent_split.spec` — Concurrent N-way inserts, updates, deletes with truth count verification
 
-Isolation tests run as part of `make installcheck` and generate expected output to `expected/*.out`.
+Isolation tests run as part of `make installcheck`.
 
-### Standalone Checks
+### Durability Tests
 
-Run the crash/restart durability check manually with:
+The crash/restart smoke test verifies WAL replay correctness across an immediate shutdown:
+
 ```bash
 make crash-restart-check
 ```
 
-This test:
-1. Creates a temporal_data table and builds an index
-2. Runs a query to verify correctness
-3. Immediately kills and restarts PostgreSQL
-4. Re-runs the query and verifies counts match (WAL must have replayed correctly)
+This test (in `specs/temporal_rtree_crash_restart.sh`):
+1. Creates a `temporal_data` table with 2000 rows
+2. Builds a `temporal_rtree` expression index on `temporalbox(attr, valid_period)`
+3. Runs seq-scan and forced-index-scan counts before crash (must match)
+4. Does immediate PostgreSQL shutdown (no clean checkpoint)
+5. Restarts PostgreSQL and re-runs the query
+6. Verifies counts still match (WAL replay must be correct)
 
 ## Hooks and Monitoring (Checkpoint C1)
 
@@ -127,21 +219,95 @@ psql -d your_test_db -f sql/temporal_rtree_hooks_test.sql
 
 This script performs a series of tests to verify planner and executor hooks are firing.
 
+## Planner Path Steering (Checkpoint C2)
+
+Starting in C2, the extension extends hook capabilities to actively steer the planner toward temporal_rtree paths for compatible queries.
+
+### How It Works
+
+When `temporal_rtree.force_rtree_paths = on`:
+
+1. **Hook Installation:** `set_rel_pathlist_hook` inspects paths for each table in the plan
+2. **Predicate Analysis:** Detects compatible restriction clauses with temporalbox expressions and supported operators (&&, @>, <@)
+3. **Index Detection:** Identifies temporal_rtree indexes on the table
+4. **Cost Biasing:** Multiplies the startup and total cost of matching IndexPath by **0.05** (20× cost reduction)
+5. **Selective Application:** Only applies to SELECT/UPDATE/DELETE; INSERT maintains all indexes without path selection
+6. **Observation:** Increments `path_bias_applied` counter (queryable via `temporal_rtree_hook_stats()`)
+
+### GUC Control
+
+```sql
+SET temporal_rtree.force_rtree_paths = on;   -- Enable path biasing (C2 benchmark mode)
+SET temporal_rtree.force_rtree_paths = off;  -- Disable path biasing (natural planner mode, default)
+```
+
+### Example: Comparing Natural vs. Forced Path Choice
+
+```sql
+-- Without forcing: planner chooses naturally based on cost
+SET temporal_rtree.force_rtree_paths = off;
+EXPLAIN SELECT * FROM temporal_data 
+  WHERE temporalbox(attr, valid_period) && temporalbox_range(10, '2020-01-01', '2020-12-31');
+
+-- With forcing: temporal_rtree index is biased cheaper
+SELECT temporal_rtree_hook_reset();
+SET temporal_rtree.force_rtree_paths = on;
+EXPLAIN SELECT * FROM temporal_data 
+  WHERE temporalbox(attr, valid_period) && temporalbox_range(10, '2020-01-01', '2020-12-31');
+
+-- Check statistics: path_bias_applied should now be > 0
+SELECT * FROM temporal_rtree_hook_stats();
+```
+
+### Important Limitations
+
+- **No INSERT path choice:** INSERT always maintains all indexes. The hook observes DML but does not bias insert performance (all indexes are updated).
+- **Compatible predicates only:** Cost biasing only applied when the WHERE clause contains temporalbox expressions with &&, @>, or <@ operators.
+- **Approximate biasing:** The 0.05× factor is conservative for testing. Real cost models may require calibration.
+
 ## Status
 
-This is a **prototype implementation** for Checkpoint C1:
-- ✓ Handler scaffold with IndexAmRoutine
-- ✓ Page and tuple struct design
-- ✓ In-memory split and penalty routines
+### Checkpoint C1: Complete
+- ✓ Handler scaffold with IndexAmRoutine (stable; see Current AM Semantics above)
+- ✓ Page and tuple struct design (stable; no changes in C1)
+- ✓ In-memory split and penalty routines (stable; in-memory only)
 - ✓ SQL registration (handler, AM, opfamily, opclass)
-- ✓ Basic regression and isolation tests
+- ✓ Basic regression and isolation tests with correctness gates
 - ✓ Lightweight hooks for temporal_rtree detection (planner, executor)
+- ✓ SQL-visible hook statistics counters (for regression testing)
 - ✓ GUCs for hook debugging and configuration
-- ○ Full page-level insert/search with buffer manager
-- ○ Concurrent locking and split-follow-right logic
-- ○ Complete WAL integration
-- ○ Planner cost estimation refinement
-- ○ Performance benchmarking
+- ✓ **C1 Stability Promise:** Core AM code (handler, build, insert, search, vacuum, WAL) kept stable; no semantics changes
+
+### Checkpoint C2: In Progress
+
+#### TODO one: Planner Path Steering ✓
+- ✓ Extended hooks with `set_rel_pathlist_hook` support
+- ✓ Operator compatibility detection (&&, @>, <@)
+- ✓ Clause analysis for temporal_rtree-eligible predicates (temporalbox expressions)
+- ✓ Cost biasing: temporal_rtree IndexPath cost *= 0.05 when `force_rtree_paths = on`
+- ✓ New GUC: `temporal_rtree.force_rtree_paths` (bool, default=off) controls path bias
+- ✓ New hook statistic: `path_bias_applied` counter (incremented when cost bias applied)
+- ✓ Test: `temporal_rtree_path_bias.sql` — demonstrates path steering with and without forcing
+- ✓ Applies only to SELECT/UPDATE/DELETE (INSERT maintains all indexes, not a path choice)
+
+**Path Biasing Semantics:**
+- When `force_rtree_paths = off` (default): Planner chooses paths naturally
+- When `force_rtree_paths = on`: Planner biases temporal_rtree paths via 0.05× cost multiplier
+- Biasing only applied to tables with temporal_rtree indexes AND compatible predicates
+- Safe fallback: Incompatible queries unaffected; cost biasing silently skipped
+
+#### TODO two and beyond: Pending
+- ○ Full comparative benchmarking (temporal_rtree vs. GiST, BRIN, B-tree, hybrid)
+- ○ Query family cost comparison (plain temporal, composite attr×time, current-side)
+- ○ Performance baseline collection and analysis
+- ○ Cost model refinement based on benchmark results
+
+### Post-C2 Work
+- ○ Full page-level insert/search with buffer manager (async work)
+- ○ Concurrent locking and split-follow-right logic (concurrency work)
+- ○ Complete WAL integration with custom resource manager (durability enhancement)
+- ○ Index-only scan support and visibility map integration
+- ○ Ambulkdelete and amvacuumcleanup implementation
 
 ## Future Work
 

@@ -1,0 +1,24 @@
+LOAD
+SET
+CREATE TABLE
+CREATE INDEX
+ temporal_rtree_hook_reset 
+---------------------------
+ 
+(1 row)
+
+ planner_hits | planner_rtree_eligible_hits | executor_dml_hits | executor_target_with_rtree_hits 
+--------------+-----------------------------+-------------------+--------------------------------
+            0 |                           0 |                 0 |                              0
+(1 row)
+
+                                      QUERY PLAN                                       
+---------------------------------------------------------------------------------------
+ Index Scan using idx_test_planner_hook on test_planner_hook (cost=0.00..1.00 rows=1)
+   Index Cond: (temporalbox(attr, valid_period) && temporalbox_range(10, '2020-01-01'::timestamp without time zone, '2020-12-31'::timestamp without time zone))
+(2 rows)
+
+ planner_hits | planner_rtree_eligible_hits | executor_dml_hits | executor_target_with_rtree_hits 
+--------------+-----------------------------+-------------------+--------------------------------
+            1 |                           1 |                 0 |                              0
+(1 row)

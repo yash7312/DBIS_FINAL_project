@@ -12,6 +12,9 @@
 #include "fmgr.h"
 #include "optimizer/planner.h"
 #include "optimizer/clauses.h"
+#include "optimizer/pathnode.h"
+#include "optimizer/paths.h"
+#include "optimizer/cost.h"
 #include "tcop/utility.h"
 #include "executor/executor.h"
 #include "utils/guc.h"
@@ -19,10 +22,12 @@
 #include "nodes/nodes.h"
 #include "nodes/primnodes.h"
 #include "nodes/nodeFuncs.h"
+#include "nodes/pathnodes.h"
 #include "catalog/pg_am.h"
 #include "catalog/pg_proc.h"
 #include "catalog/pg_class.h"
 #include "catalog/pg_index.h"
+#include "catalog/pg_operator.h"
 #include "access/relation.h"
 #include "access/htup_details.h"
 #include "access/table.h"
@@ -32,6 +37,7 @@
 /* Hook chain variables */
 static planner_hook_type prev_planner_hook = NULL;
 static ExecutorStart_hook_type prev_ExecutorStart_hook = NULL;
+static set_rel_pathlist_hook_type prev_set_rel_pathlist_hook = NULL;
 
 /* GUC variables */
 static bool trtree_enable_hook_debug = true;
@@ -43,6 +49,7 @@ static uint64 hook_stats_planner_hits = 0;
 static uint64 hook_stats_planner_rtree_eligible_hits = 0;
 static uint64 hook_stats_executor_dml_hits = 0;
 static uint64 hook_stats_executor_target_with_rtree_hits = 0;
+static uint64 hook_stats_path_bias_applied = 0;
 
 /* SQL-visible function prototypes */
 PG_FUNCTION_INFO_V1(temporal_rtree_hook_stats);
@@ -57,6 +64,10 @@ static PlannedStmt *trtree_planner_hook(Query *parse,
 										int cursorOptions,
 										ParamListInfo boundParams);
 static void trtree_executor_start_hook(QueryDesc *queryDesc, int eflags);
+static void trtree_set_rel_pathlist_hook(PlannerInfo *root,
+										  RelOptInfo *rel,
+										  Index rti,
+										  RangeTblEntry *rte);
 
 /* Helper: Check if a relation has a temporal_rtree index */
 static bool
@@ -155,6 +166,154 @@ trtree_contains_temporalbox(Node *node)
 
 	/* Recurse into expression tree */
 	return expression_tree_walker(node, (bool (*)(Node *, void *)) trtree_contains_temporalbox, NULL);
+}
+
+/* Helper: Check if an operator is compatible with temporal_rtree paths (&&, @>, <@) */
+static bool
+trtree_is_compatible_operator(Oid opoid)
+{
+	const char *opname = NULL;
+	HeapTuple	optuple;
+	Form_pg_operator opForm;
+
+	optuple = SearchSysCache1(OPEROID, ObjectIdGetDatum(opoid));
+	if (!HeapTupleIsValid(optuple))
+		return false;
+
+	opForm = (Form_pg_operator) GETSTRUCT(optuple);
+	opname = NameStr(opForm->oprname);
+
+	/* Check for supported operators: &&, @>, <@ */
+	bool result = (strcmp(opname, "&&") == 0 ||
+				   strcmp(opname, "@>") == 0 ||
+				   strcmp(opname, "<@") == 0);
+
+	ReleaseSysCache(optuple);
+	return result;
+}
+
+/* Helper: Check if a clause is compatible with temporal_rtree indexing */
+static bool
+trtree_clause_is_temporal_rtree_compatible(Node *clause)
+{
+	if (clause == NULL)
+		return false;
+
+	/* Look for OpExpr: temporalbox(...) op cube_expr */
+	if (IsA(clause, OpExpr))
+	{
+		OpExpr	   *opexpr = (OpExpr *) clause;
+
+		if (list_length(opexpr->args) == 2)
+		{
+			Node	   *leftarg = linitial(opexpr->args);
+			Node	   *rightarg = lsecond(opexpr->args);
+
+			/* Check if left arg is temporalbox(...) and operator is compatible */
+			if (trtree_contains_temporalbox(leftarg) &&
+				trtree_is_compatible_operator(opexpr->opno))
+				return true;
+
+			/* Also check if right arg is temporalbox(...) */
+			if (trtree_contains_temporalbox(rightarg) &&
+				trtree_is_compatible_operator(opexpr->opno))
+				return true;
+		}
+	}
+
+	/* Recurse for AND clauses */
+	if (IsA(clause, BoolExpr))
+	{
+		BoolExpr   *boolexpr = (BoolExpr *) clause;
+
+		if (boolexpr->boolop == AND_EXPR)
+		{
+			ListCell   *lc;
+
+			foreach(lc, boolexpr->args)
+			{
+				if (trtree_clause_is_temporal_rtree_compatible(lfirst(lc)))
+					return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+/* Helper: Check if any restriction clause is temporal_rtree compatible */
+static bool
+trtree_has_compatible_clauses(RelOptInfo *rel)
+{
+	ListCell   *lc;
+
+	if (rel->baserestrictinfo == NULL)
+		return false;
+
+	foreach(lc, rel->baserestrictinfo)
+	{
+		RestrictInfo *rinfo = (RestrictInfo *) lfirst(lc);
+
+		if (trtree_clause_is_temporal_rtree_compatible((Node *) rinfo->clause))
+			return true;
+	}
+
+	return false;
+}
+
+/* Helper: Get temporal_rtree index OID for a relation, if present */
+static Oid
+trtree_get_rtree_index_oid(Oid relationOid)
+{
+	Relation	rel;
+	List	   *indexOids;
+	ListCell   *lc;
+	Oid			result = InvalidOid;
+
+	rel = table_open(relationOid, AccessShareLock);
+	indexOids = RelationGetIndexList(rel);
+
+	foreach(lc, indexOids)
+	{
+		Oid			indexOid = lfirst_oid(lc);
+		Relation	indexRel;
+		HeapTuple	indexTuple;
+		Oid			amOid;
+
+		indexRel = index_open(indexOid, AccessShareLock);
+		indexTuple = SearchSysCache1(RELOID, ObjectIdGetDatum(indexOid));
+
+		if (HeapTupleIsValid(indexTuple))
+		{
+			Form_pg_class indexClass = (Form_pg_class) GETSTRUCT(indexTuple);
+			amOid = indexClass->relam;
+
+			if (amOid != InvalidOid)
+			{
+				HeapTuple	amTuple = SearchSysCache1(AMOID, ObjectIdGetDatum(amOid));
+				if (HeapTupleIsValid(amTuple))
+				{
+					Form_pg_am amForm = (Form_pg_am) GETSTRUCT(amTuple);
+					if (strcmp(NameStr(amForm->amname), "temporal_rtree") == 0)
+					{
+						result = indexOid;
+						ReleaseSysCache(amTuple);
+						ReleaseSysCache(indexTuple);
+						index_close(indexRel, AccessShareLock);
+						break;
+					}
+					ReleaseSysCache(amTuple);
+				}
+			}
+			ReleaseSysCache(indexTuple);
+		}
+		index_close(indexRel, AccessShareLock);
+	}
+
+	list_free(indexOids);
+	table_close(rel, AccessShareLock);
+
+	return result;
 }
 
 /* Planner hook: log temporal_rtree-eligible queries */
@@ -290,14 +449,86 @@ trtree_executor_start_hook(QueryDesc *queryDesc, int eflags)
 		standard_ExecutorStart(queryDesc, eflags);
 }
 
+/* Set rel pathlist hook: Bias paths toward temporal_rtree when force_rtree_paths is enabled */
+static void
+trtree_set_rel_pathlist_hook(PlannerInfo *root,
+							  RelOptInfo *rel,
+							  Index rti,
+							  RangeTblEntry *rte)
+{
+	Oid			rtree_index_oid;
+	ListCell   *lc;
+	bool		found_matched_path = false;
+
+	/* Call previous hook first */
+	if (prev_set_rel_pathlist_hook)
+		prev_set_rel_pathlist_hook(root, rel, rti, rte);
+
+	/* If forcing disabled, nothing to do */
+	if (!trtree_force_rtree_paths)
+		return;
+
+	/* Only apply biasing for SELECT/UPDATE/DELETE (not INSERT) */
+	if (root->parse->commandType != CMD_SELECT &&
+		root->parse->commandType != CMD_UPDATE &&
+		root->parse->commandType != CMD_DELETE)
+		return;
+
+	/* Check if relation has a temporal_rtree index */
+	if (rte->rtekind != RTE_RELATION || rte->relid == InvalidOid)
+		return;
+
+	rtree_index_oid = trtree_get_rtree_index_oid(rte->relid);
+	if (rtree_index_oid == InvalidOid)
+		return;
+
+	/* Check if there are compatible restriction clauses */
+	if (!trtree_has_compatible_clauses(rel))
+		return;
+
+	/* Bias the cost of temporal_rtree IndexPath downward */
+	foreach(lc, rel->pathlist)
+	{
+		Path	   *path = (Path *) lfirst(lc);
+		IndexPath  *indexpath;
+
+		if (!IsA(path, IndexPath))
+			continue;
+
+		indexpath = (IndexPath *) path;
+
+		/* Check if this index path is for our temporal_rtree index */
+		if (indexpath->indexinfo->indexoid == rtree_index_oid)
+		{
+			/* Apply cost bias: multiply by 0.05 to make temporal_rtree much cheaper */
+			/* This is conservative to test the cost model; adjust as needed */
+			const double COST_BIAS_FACTOR = 0.05;
+
+			indexpath->path.startup_cost *= COST_BIAS_FACTOR;
+			indexpath->path.total_cost *= COST_BIAS_FACTOR;
+
+			found_matched_path = true;
+
+			if (trtree_enable_hook_debug)
+			{
+				ereport(LOG,
+						(errmsg("temporal_rtree set_rel_pathlist: Applied cost bias to temporal_rtree index"),
+						 errdetail("Original cost estimate biased by factor %.2f", COST_BIAS_FACTOR)));
+			}
+
+			hook_stats_path_bias_applied++;
+		}
+	}
+}
+
 /* SQL-visible function: Return hook statistics as a composite type */
 Datum
 temporal_rtree_hook_stats(PG_FUNCTION_ARGS)
 {
 	TupleDesc	tupdesc;
 	HeapTuple	tuple;
-	Datum		values[4];
-	bool		nulls[4] = {false, false, false, false};
+	Datum		values[5];
+	bool		nulls[5] = {false, false, false, false, false};
 	AttInMetadata *attinmeta;
 
 	/* Build tuple descriptor for return type */
@@ -314,6 +545,7 @@ temporal_rtree_hook_stats(PG_FUNCTION_ARGS)
 	values[1] = Int64GetDatum((int64) hook_stats_planner_rtree_eligible_hits);
 	values[2] = Int64GetDatum((int64) hook_stats_executor_dml_hits);
 	values[3] = Int64GetDatum((int64) hook_stats_executor_target_with_rtree_hits);
+	values[4] = Int64GetDatum((int64) hook_stats_path_bias_applied);
 
 	/* Build and return the tuple */
 	tuple = heap_form_tuple(tupdesc, values, nulls);
@@ -328,6 +560,7 @@ temporal_rtree_hook_reset(PG_FUNCTION_ARGS)
 	hook_stats_planner_rtree_eligible_hits = 0;
 	hook_stats_executor_dml_hits = 0;
 	hook_stats_executor_target_with_rtree_hits = 0;
+	hook_stats_path_bias_applied = 0;
 
 	PG_RETURN_VOID();
 }
@@ -371,6 +604,9 @@ _PG_init(void)
 	prev_ExecutorStart_hook = ExecutorStart_hook;
 	ExecutorStart_hook = trtree_executor_start_hook;
 
+	prev_set_rel_pathlist_hook = set_rel_pathlist_hook;
+	set_rel_pathlist_hook = trtree_set_rel_pathlist_hook;
+
 	ereport(LOG,
 			(errmsg("temporal_rtree module initialized with hooks"),
 			 errhint("Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml")));
@@ -383,6 +619,7 @@ _PG_fini(void)
 	/* Restore previous hooks */
 	planner_hook = prev_planner_hook;
 	ExecutorStart_hook = prev_ExecutorStart_hook;
+	set_rel_pathlist_hook = prev_set_rel_pathlist_hook;
 
 	ereport(LOG,
 			(errmsg("temporal_rtree module unloaded; hooks restored")));

@@ -5,7 +5,9 @@ OBJS = temporal_rtree_handler.o temporal_rtree_page.o temporal_rtree_build.o \
        temporal_rtree_hooks.o
 EXTENSION = temporal_rtree
 DATA = temporal_rtree--1.0.sql
-REGRESS = temporal_rtree_smoke temporal_rtree_plans
+REGRESS = temporal_rtree_smoke temporal_rtree_plans \
+          temporal_rtree_hook_planner temporal_rtree_hook_executor temporal_rtree_hook_presence \
+          temporal_rtree_path_bias
 ISOLATION = temporal_rtree_concurrent_split
 PG_CPPFLAGS += -I$(top_srcdir)/contrib/cube
 
