@@ -4,7 +4,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DB_NAME="${1:-temporal_bench}"
 DATASET_FILE="${2:-$SCRIPT_DIR/../experiment_logs/benchmark_dataset.sql}"
-OUTPUT_DIR="${3:-$SCRIPT_DIR/benchmark_matrix_results}"
+OUTPUT_DIR="${3:-$SCRIPT_DIR/../experiment_logs/benchmark_matrix}"
+QUERY_PGOPTIONS=""
 
 export PGHOST="${PGHOST:-localhost}"
 export PGPORT="${PGPORT:-5432}"
@@ -12,6 +13,49 @@ export PGUSER="${PGUSER:-postgres}"
 export PGDATABASE="$DB_NAME"
 
 mkdir -p "$OUTPUT_DIR"
+
+# Output truth file (counts for each query family with forced seq-scan)
+TRUTH_FILE="$OUTPUT_DIR/truth_counts.csv"
+
+truth_phase() {
+    echo "Running truth phase (forced seq scans) -> $TRUTH_FILE"
+    reload_dataset
+    reset_secondary_indexes
+
+    # Force planner to use seq scan
+    local opts='-c enable_indexscan=off -c enable_bitmapscan=off -c enable_indexonlyscan=off'
+
+    cat > "$TRUTH_FILE" <<'CSV'
+family,query_label,count
+CSV
+
+    # Plain temporal family (representative range query)
+    local plain_sql="SELECT count(*) FROM temporal_data WHERE valid_period && tsrange('2023-01-01','2023-06-01','[)';"
+    local c=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$plain_sql") || c=0
+    echo "plain,range,$c" >> "$TRUTH_FILE"
+
+    # Composite attr x time family: temporalbox point and range
+    local comp_point_sql="SELECT count(*) FROM temporal_data WHERE temporalbox(attr, valid_period) @> temporalbox_point(10, timestamp '2023-06-01');"
+    local cp=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$comp_point_sql") || cp=0
+    echo "composite,point,$cp" >> "$TRUTH_FILE"
+
+    local comp_range_sql="SELECT count(*) FROM temporal_data WHERE temporalbox(attr, valid_period) && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');"
+    local cr=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$comp_range_sql") || cr=0
+    echo "composite,range,$cr" >> "$TRUTH_FILE"
+
+    # Current-side family: Query D
+    local current_sql="SELECT count(*) FROM temporal_data WHERE upper_inf(valid_period) AND attr = 10 AND lower(valid_period) <= timestamp '2024-01-01';"
+    local cd=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$current_sql") || cd=0
+    echo "current,D,$cd" >> "$TRUTH_FILE"
+
+    # Hybrid decomposed count (should match sum of history+current)
+    local hybrid_sql="SELECT count(*) FROM (SELECT 1 FROM temporal_data WHERE NOT upper_inf(valid_period) AND temporalbox(attr, valid_period) @> temporalbox_point(10, timestamp '2023-06-01') UNION ALL SELECT 1 FROM temporal_data WHERE upper_inf(valid_period) AND attr = 10 AND lower(valid_period) <= timestamp '2023-06-01') AS q;"
+    local hd=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$hybrid_sql") || hd=0
+    echo "current,hybrid_decomposed,$hd" >> "$TRUTH_FILE"
+
+    echo "Truth phase complete. Results: $TRUTH_FILE"
+}
+
 
 reset_secondary_indexes() {
     psql -v ON_ERROR_STOP=1 -d "$DB_NAME" <<'EOF' >/dev/null
@@ -54,15 +98,12 @@ EOF
 setup_config() {
     local config="$1"
 
+    QUERY_PGOPTIONS=""
     reset_secondary_indexes
 
     case "$config" in
-        none)
-            psql -v ON_ERROR_STOP=1 -d "$DB_NAME" <<'EOF' >/dev/null
-SET enable_indexscan = off;
-SET enable_bitmapscan = off;
-SET enable_indexonlyscan = off;
-EOF
+        no_index)
+            QUERY_PGOPTIONS='-c enable_indexscan=off -c enable_bitmapscan=off -c enable_indexonlyscan=off'
             ;;
         btree)
             psql -v ON_ERROR_STOP=1 -d "$DB_NAME" <<'EOF' >/dev/null
@@ -145,7 +186,7 @@ run_explain_with_wal() {
     local sql_text="$2"
     local output_file="$3"
 
-    psql -v ON_ERROR_STOP=1 -d "$DB_NAME" >> "$output_file" 2>&1 <<ENDSQL
+    env PGOPTIONS="${QUERY_PGOPTIONS:-}" psql -v ON_ERROR_STOP=1 -d "$DB_NAME" >> "$output_file" 2>&1 <<ENDSQL
 EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
 $sql_text;
 ENDSQL
@@ -157,7 +198,7 @@ ENDSQL
 
 run_config() {
     local config="$1"
-    local output_file="$OUTPUT_DIR/${config}.txt"
+    local output_file="$OUTPUT_DIR/results_${config}.txt"
 
     reload_dataset
     setup_config "$config"
@@ -244,8 +285,59 @@ WHERE NOT upper_inf(valid_period)
   AND valid_period && tsrange('2020-01-01','2021-01-01','[)')" "$output_file"
 }
 
+run_read_config() {
+    local config="$1"
+    local output_file="$OUTPUT_DIR/read_results_${config}.txt"
+
+    reload_dataset
+    setup_config "$config"
+
+    {
+        echo "================================================================================"
+        echo "READ CONFIG: $config"
+        echo "Timestamp: $(date)"
+        echo "Dataset: $DATASET_FILE"
+        echo "================================================================================"
+        echo
+    } > "$output_file"
+
+    psql -v ON_ERROR_STOP=1 -d "$DB_NAME" >> "$output_file" 2>&1 <<'EOF'
+SELECT indexname, indexdef
+FROM pg_indexes
+WHERE tablename = 'temporal_data'
+ORDER BY indexname;
+EOF
+
+    run_explain_with_wal "READ_SELECT" "$(select_sql_for_config "$config")" "$output_file"
+    echo "Read-only run complete: $output_file"
+}
+
+################################################################################
+## Run truth phase and grouped read families
+################################################################################
+
+truth_phase
+
+# Plain temporal family: compare none, brin, gist_period
+plain_configs=( no_index brin gist_period )
+for cfg in "${plain_configs[@]}"; do
+    run_read_config "$cfg"
+done
+
+# Composite attr×time family: gist_attr_period, temporal_rtree, hst_gist (history branch)
+composite_configs=( gist_attr_period temporal_rtree hst_gist )
+for cfg in "${composite_configs[@]}"; do
+    run_read_config "$cfg"
+done
+
+# Current-side family: btree, hst_gist, hybrid_current_history
+current_configs=( btree hst_gist hybrid_current_history )
+for cfg in "${current_configs[@]}"; do
+    run_read_config "$cfg"
+done
+
 configs=(
-    none
+    no_index
     btree
     brin
     gist_period

@@ -5,8 +5,9 @@ This parser combines:
 - EXPLAIN (ANALYZE, BUFFERS) text output from results_*.txt
 - maintenance snapshots from metrics_*.csv
 
-It emits one CSV row per query block with the exact fields needed to
-separate success from failure during temporal index evaluation.
+The collector expects the canonical raw logs to live under a dedicated
+benchmark_matrix directory so legacy experiment artifacts do not get mixed
+into a clean run.
 """
 
 from __future__ import annotations
@@ -20,8 +21,9 @@ from typing import Iterable
 
 
 QUERY_LABEL_RE = re.compile(r'^(Q\d+\b.*|Query [A-Z]\b.*|Query HYBRID_DECOMPOSED\b.*)')
+CURRENT_SECTION_RE = re.compile(r'^--\s*(SELECT|INSERT|UPDATE|DELETE)\b')
 PLAN_LINE_RE = re.compile(
-    r'^(?P<indent>\s*)(?P<node>Append|Seq Scan|Index Only Scan|Index Scan|Bitmap Heap Scan|Bitmap Index Scan)\b.*?'
+    r'^(?P<indent>\s*)(?P<node>Append|Aggregate|Seq Scan|Index Only Scan|Index Scan|Bitmap Heap Scan|Bitmap Index Scan|Insert on|Update on|Delete on)\b.*?'
     r'cost=(?P<est_start>[0-9.]+)\.\.(?P<est_end>[0-9.]+)\s+rows=(?P<est_rows>[0-9]+).*?'
     r'actual time=(?P<act_start>[0-9.]+)\.\.(?P<act_end>[0-9.]+)\s+rows=(?P<act_rows>[0-9]+)',
     re.IGNORECASE,
@@ -58,6 +60,30 @@ def normalize_label(label: str) -> str:
     return label.split('—', 1)[0].strip()
 
 
+def normalize_config_name(config: str) -> str:
+    return {
+        'none': 'no_index',
+    }.get(config, config)
+
+
+def benchmark_log_root(log_dir: Path) -> Path:
+    candidate = log_dir / 'benchmark_matrix'
+    return candidate if candidate.is_dir() else log_dir
+
+
+def is_current_log(path: Path) -> bool:
+    if path.name in {'wallclock.log', 'reproducibility_manifest.txt', 'experiment_metrics.csv', 'error_log.txt'}:
+        return False
+
+    try:
+        with path.open() as handle:
+            head = ''.join(handle.readline() for _ in range(4))
+    except OSError:
+        return False
+
+    return 'CONFIG:' in head and '-- SELECT' in path.read_text(errors='ignore')
+
+
 def classify_plan(block_text: str) -> tuple[str, str]:
     lines = block_text.splitlines()
     observed = 'Unknown'
@@ -68,6 +94,12 @@ def classify_plan(block_text: str) -> tuple[str, str]:
             break
 
     if observed == 'Unknown':
+        if 'Insert on' in block_text:
+            observed = 'Insert on'
+        elif 'Update on' in block_text:
+            observed = 'Update on'
+        elif 'Delete on' in block_text:
+            observed = 'Delete on'
         if 'Seq Scan' in block_text:
             observed = 'Seq Scan'
         elif 'Index Only Scan' in block_text:
@@ -139,16 +171,35 @@ def parse_metrics_snapshot(path: Path) -> MetricsSnapshot | None:
 def iter_query_blocks(path: Path) -> Iterable[tuple[str, str]]:
     current_label = None
     current_lines: list[str] = []
+    in_current_section = False
 
     with path.open() as handle:
         for line in handle:
             stripped = line.rstrip('\n')
+            current_match = CURRENT_SECTION_RE.match(stripped)
+            if current_match:
+                if current_label and current_lines:
+                    yield current_label, '\n'.join(current_lines)
+                current_label = current_match.group(1)
+                current_lines = []
+                in_current_section = True
+                continue
+
+            if in_current_section and stripped.startswith('-- END '):
+                if current_label and current_lines:
+                    yield current_label, '\n'.join(current_lines)
+                current_label = None
+                current_lines = []
+                in_current_section = False
+                continue
+
             match = QUERY_LABEL_RE.match(stripped)
             if match:
                 if current_label and current_lines:
                     yield current_label, '\n'.join(current_lines)
                 current_label = normalize_label(match.group(1))
                 current_lines = []
+                in_current_section = False
                 continue
 
             if current_label:
@@ -160,6 +211,9 @@ def iter_query_blocks(path: Path) -> Iterable[tuple[str, str]]:
 
 def expected_plan_family(config: str, query_label: str) -> str:
     base = normalize_label(query_label)
+
+    if base in {'SELECT', 'INSERT', 'UPDATE', 'DELETE'}:
+        return base
 
     if config == 'no_index':
         return 'Seq Scan'
@@ -185,6 +239,12 @@ def expected_plan_family(config: str, query_label: str) -> str:
 def classify_status(config: str, query_label: str, observed: str, notes: str) -> str:
     base = normalize_label(query_label)
 
+    if base in {'INSERT', 'UPDATE', 'DELETE'}:
+        return 'success' if observed else 'failure'
+
+    if base == 'SELECT' and config == 'no_index':
+        return 'success' if observed == 'Seq Scan' else 'failure'
+
     if config == 'no_index':
         return 'success' if observed == 'Seq Scan' else 'failure'
 
@@ -205,17 +265,22 @@ def classify_status(config: str, query_label: str, observed: str, notes: str) ->
 
 def main() -> int:
     parser = argparse.ArgumentParser(description='Collect benchmark metrics into a CSV file.')
-    parser.add_argument('--log-dir', required=True, help='Directory containing results_*.txt and metrics_*.csv')
+    parser.add_argument('--log-dir', required=True, help='Directory containing canonical benchmark_matrix results_*.txt and metrics_*.csv')
     parser.add_argument('--output', required=True, help='Output CSV path')
     args = parser.parse_args()
 
     log_dir = Path(args.log_dir)
     output = Path(args.output)
+    benchmark_dir = benchmark_log_root(log_dir)
 
     rows = []
-    for result_file in sorted(log_dir.glob('results_*.txt')):
-        config = result_file.stem.replace('results_', '')
-        snapshot = parse_metrics_snapshot(log_dir / f'metrics_{config}.csv')
+    candidate_files = []
+    for path in sorted(benchmark_dir.glob('results_*.txt')):
+        candidate_files.append(path)
+
+    for result_file in candidate_files:
+        config = normalize_config_name(result_file.stem.replace('results_', ''))
+        snapshot = parse_metrics_snapshot(benchmark_dir / f'metrics_{config}.csv')
 
         for query_label, block_text in iter_query_blocks(result_file):
             plan_match = PLAN_LINE_RE.search(block_text)

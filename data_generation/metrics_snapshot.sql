@@ -25,6 +25,7 @@ COPY (
     )
     SELECT
         :'current_config' AS index_config,
+        pg_current_wal_insert_lsn() AS current_wal_lsn,
         index_stats.index_names,
         index_stats.index_count,
         index_stats.total_index_size_bytes,
