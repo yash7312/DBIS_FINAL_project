@@ -29,3 +29,17 @@ COMMENT ON OPERATOR FAMILY temporal_tsrange_ops USING temporal_rtree
   IS 'Temporal R-tree access method family for tsrange';
 COMMENT ON OPERATOR CLASS temporal_tsrange_ops USING temporal_rtree
   IS 'Temporal R-tree access method for tsrange (time only)';
+
+CREATE OPERATOR FAMILY temporal_cube_ops USING temporal_rtree;
+
+CREATE OPERATOR CLASS temporal_cube_ops
+DEFAULT FOR TYPE cube USING temporal_rtree
+FAMILY temporal_cube_ops AS
+  OPERATOR 1 && (cube, cube),
+  OPERATOR 2 @> (cube, cube),
+  OPERATOR 3 <@ (cube, cube);
+
+COMMENT ON OPERATOR FAMILY temporal_cube_ops USING temporal_rtree
+  IS 'Temporal R-tree access method family for cube';
+COMMENT ON OPERATOR CLASS temporal_cube_ops USING temporal_rtree
+  IS 'Temporal R-tree access method for temporal cube boxes';

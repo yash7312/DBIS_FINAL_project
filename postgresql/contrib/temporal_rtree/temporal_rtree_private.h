@@ -5,6 +5,7 @@
 #include "access/genam.h"
 #include "access/relscan.h"
 #include "access/sdir.h"
+#include "access/tableam.h"
 #include "storage/bufmgr.h"
 #include "temporal_rtree.h"
 
@@ -33,6 +34,16 @@ typedef struct RTreeScanOpaqueData
 
     bool first_call;          /* true until first gettuple */
     ScanDirection direction;  /* forward or backward */
+
+    RTreeTemporalBox query_box;
+    StrategyNumber strategy;
+    bool have_query;
+
+    ItemPointerData *matches;
+    int nmatches;
+    int matches_size;
+    int next_match;
+    bool matches_built;
 } RTreeScanOpaqueData;
 
 typedef RTreeScanOpaqueData *RTreeScanOpaque;

@@ -26,3 +26,17 @@
 2026-04-28 16:09:50.582 IST [158702] LOG:  checkpoint starting: time
 2026-04-28 16:14:20.016 IST [158702] LOG:  checkpoint complete: wrote 3204 buffers (19.6%); 0 WAL file(s) added, 0 removed, 3 recycled; write=269.416 s, sync=0.010 s, total=269.435 s; sync files=66, longest=0.006 s, average=0.001 s; distance=51258 kB, estimate=51258 kB; lsn=0/4BD72D0, redo lsn=0/4BD7240
 2026-04-28 21:17:02.394 IST [158702] LOG:  checkpoint starting: time
+2026-04-28 21:18:53.693 IST [158702] LOG:  checkpoint complete: wrote 1112 buffers (6.8%); 0 WAL file(s) added, 0 removed, 3 recycled; write=111.290 s, sync=0.004 s, total=111.299 s; sync files=35, longest=0.003 s, average=0.001 s; distance=38866 kB, estimate=50019 kB; lsn=0/71CCEC0, redo lsn=0/71CBE30
+2026-04-29 11:39:22.996 IST [158701] LOG:  received smart shutdown request
+2026-04-29 11:39:22.999 IST [158701] LOG:  background worker "logical replication launcher" (PID 158707) exited with exit code 1
+2026-04-29 11:39:22.999 IST [158702] LOG:  shutting down
+2026-04-29 11:39:23.001 IST [158702] LOG:  checkpoint starting: shutdown immediate
+2026-04-29 11:39:23.012 IST [158702] LOG:  checkpoint complete: wrote 1 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.001 s, total=0.012 s; sync files=1, longest=0.001 s, average=0.001 s; distance=4 kB, estimate=45017 kB; lsn=0/71CCF70, redo lsn=0/71CCF70
+2026-04-29 11:39:23.017 IST [158701] LOG:  database system is shut down
+2026-04-29 12:08:44.723 IST [31055] LOG:  starting PostgreSQL 17.9 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-04-29 12:08:44.723 IST [31055] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-04-29 12:08:44.725 IST [31055] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2026-04-29 12:08:44.728 IST [31060] LOG:  database system was shut down at 2026-04-29 11:39:23 IST
+2026-04-29 12:08:44.731 IST [31055] LOG:  database system is ready to accept connections
+2026-04-29 12:13:44.740 IST [31058] LOG:  checkpoint starting: time
+2026-04-29 12:17:49.176 IST [31058] LOG:  checkpoint complete: wrote 2448 buffers (14.9%); 0 WAL file(s) added, 0 removed, 2 recycled; write=244.423 s, sync=0.002 s, total=244.436 s; sync files=58, longest=0.001 s, average=0.001 s; distance=37634 kB, estimate=37634 kB; lsn=0/968DA60, redo lsn=0/968D9D0

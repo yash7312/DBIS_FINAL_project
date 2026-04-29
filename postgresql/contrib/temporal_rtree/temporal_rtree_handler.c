@@ -15,6 +15,10 @@ extern bool temporal_rtree_insert(Relation rel, Datum *values, bool *isnull,
                                   ItemPointer ht_ctid, Relation heapRel,
                                   IndexUniqueCheck checkUnique,
                                   bool indexUnchanged, IndexInfo *indexInfo);
+extern IndexBuildResult *temporal_rtree_build(Relation heapRelation,
+                                              Relation indexRelation,
+                                              IndexInfo *indexInfo);
+extern void temporal_rtree_buildempty(Relation indexRelation);
 extern IndexScanDesc temporal_rtree_beginscan(Relation r, int nkeys, int norderbys);
 extern bool temporal_rtree_gettuple(IndexScanDesc scan, ScanDirection dir);
 extern void temporal_rtree_rescan(IndexScanDesc scan, ScanKey key, int nkeys, ScanKey orderbys, int norderbys);
@@ -40,8 +44,7 @@ temporal_rtree_handler(PG_FUNCTION_ARGS)
 
     amroutine->type = T_IndexAmRoutine;
 
-    /* Basic capabilities; refine later */
-    amroutine->amstrategies = 0;
+    amroutine->amstrategies = 3;
     amroutine->amsupport = 0;
     amroutine->amcanmulticol = true;
     amroutine->amoptionalkey = true;
@@ -51,9 +54,8 @@ temporal_rtree_handler(PG_FUNCTION_ARGS)
     amroutine->ampredlocks = false;
 
 
-    /* Implementation callbacks: wire to our stubs/implementations */
-    amroutine->ambuild = NULL;
-    amroutine->ambuildempty = NULL;
+    amroutine->ambuild = temporal_rtree_build;
+    amroutine->ambuildempty = temporal_rtree_buildempty;
     amroutine->aminsert = temporal_rtree_insert;
     amroutine->ambulkdelete = temporal_rtree_bulkdelete;
     amroutine->amvacuumcleanup = temporal_rtree_vacuumcleanup;

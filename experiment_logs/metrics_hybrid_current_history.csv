@@ -1,2 +1,2 @@
 index_config,index_names,index_count,total_index_size_bytes,total_index_size_pretty,total_idx_scan,total_idx_tup_read,total_idx_tup_fetch,n_live_tup,n_dead_tup,n_mod_since_analyze,table_size_bytes,table_size_pretty,snapshot_ts
-hybrid_current_history,idx_current_attr_start | idx_current_start | idx_hist_attr_gist | idx_hist_gist | temporal_data_pkey | temporal_gist_idx,6,18472960,18 MB,42,354972,0,100000,0,0,26574848,25 MB,2026-04-28T16:06:01.507798
+hybrid_current_history,idx_current_attr_start | idx_current_start | idx_hist_attr_gist | idx_hist_gist | temporal_data_pkey,5,12083200,12 MB,0,0,0,100000,0,0,20185088,19 MB,2026-04-29T12:09:06.419954
