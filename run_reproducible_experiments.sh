@@ -36,6 +36,9 @@ fi
 
 export PATH="$PGROOT/install/bin:$PATH"
 export LD_LIBRARY_PATH="$PGROOT/install/lib:${LD_LIBRARY_PATH:-}"
+export PGHOST="${PGHOST:-localhost}"
+export PGPORT="$PGPORT"
+export PGUSER="${PGUSER:-postgres}"
 
 if [ ! -d "$PGROOT" ]; then
   echo "[!] PGROOT does not exist: $PGROOT"
@@ -143,9 +146,10 @@ python3 "$ROOT_DIR/data_generation/temporal_generator.py" \
 run_psql -d test -v ON_ERROR_STOP=1 -f "$ROOT_DIR/data_generation/schema.sql"
 run_psql -d test -v ON_ERROR_STOP=1 -f "$DATASET_FILE"
 
-echo "[5/6] Running benchmark driver"
-run_as_bench_user "$TIME_BIN" -v "$PSQL_BIN" -p "$PGPORT" -d test -v ON_ERROR_STOP=1 -v log_dir="$LOG_DIR" -f "$ROOT_DIR/run_experiment.sql" \
-    > "$WALLCLOCK_FILE" 2>&1
+echo "[5/6] Running benchmark matrix driver"
+run_as_bench_user "$TIME_BIN" bash "$ROOT_DIR/data_generation/run_benchmark_matrix.sh" \
+  test "$DATASET_FILE" "$LOG_DIR" \
+  > "$WALLCLOCK_FILE" 2>&1
 
 echo "[6/6] Collecting normalized metrics"
 python3 "$ROOT_DIR/data_generation/collect_experiment_metrics.py" \
