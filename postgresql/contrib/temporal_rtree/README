@@ -43,6 +43,7 @@ Regression tests are in `sql/` with expected output in `expected/`:
 
 Isolation tests in `specs/`:
 - `temporal_rtree_concurrent_split` — Concurrent inserts and splits
+- `temporal_rtree_crash_restart.sh` — Immediate-shutdown crash/restart recovery check
 
 ## Status
 

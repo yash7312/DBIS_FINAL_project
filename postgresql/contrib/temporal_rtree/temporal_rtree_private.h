@@ -13,37 +13,28 @@
  * Scan opaque data: holds page pins, traversal state, and scan context
  * following GiST's GISTScanOpaqueData pattern.
  */
-typedef struct RTreeScanItemData
+typedef struct RTreeScanFrameData
 {
-    OffsetNumber offnum;
-    RTreeTemporalBox box;
-} RTreeScanItemData;
+    BlockNumber blkno;
+    uint16 level;
+    OffsetNumber next_offset;
+} RTreeScanFrameData;
 
 typedef struct RTreeScanOpaqueData
 {
     Buffer cur_buf;           /* current pinned buffer, or InvalidBuffer */
     OffsetNumber cur_offset;  /* last returned tuple offset */
-    uint16 level;             /* current tree level */
     BlockNumber cur_blkno;    /* current block number */
 
-    /* Item queue for deferred traversal (unvisited children) */
-    RTreeScanItemData *items;
-    int nitems;
-    int items_size;           /* allocated size */
-    int next_item;            /* index into items[] */
-
     bool first_call;          /* true until first gettuple */
-    ScanDirection direction;  /* forward or backward */
 
     RTreeTemporalBox query_box;
     StrategyNumber strategy;
     bool have_query;
 
-    ItemPointerData *matches;
-    int nmatches;
-    int matches_size;
-    int next_match;
-    bool matches_built;
+    RTreeScanFrameData *stack;
+    int stack_size;
+    int stack_top;
 } RTreeScanOpaqueData;
 
 typedef RTreeScanOpaqueData *RTreeScanOpaque;

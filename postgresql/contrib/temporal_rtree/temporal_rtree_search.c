@@ -15,12 +15,13 @@
 static bool rtree_parse_query(IndexScanDesc scan, RTreeTemporalBox *query,
                               StrategyNumber *strategy);
 static bool rtree_ensure_query(IndexScanDesc scan, RTreeScanOpaque opaque);
-static void rtree_collect_matches(Relation indexRel, BlockNumber blkno,
-                                  uint16 level, const RTreeTemporalBox *query,
-                                  StrategyNumber strategy,
-                                  ItemPointerData **matches, int *nmatches,
-                                  int *matches_size);
 static RTreeMetaPageData rtree_read_meta(Relation indexRel);
+static void rtree_release_current_page(RTreeScanOpaque opaque);
+static void rtree_stack_reset(RTreeScanOpaque opaque);
+static bool rtree_stack_push(RTreeScanOpaque opaque, BlockNumber blkno,
+                             uint16 level, OffsetNumber next_offset);
+static bool rtree_initialize_scan(IndexScanDesc scan, RTreeScanOpaque opaque);
+static bool rtree_scan_next(IndexScanDesc scan, RTreeScanOpaque opaque);
 
 static RTreeMetaPageData
 rtree_read_meta(Relation indexRel)
@@ -76,59 +77,135 @@ rtree_ensure_query(IndexScanDesc scan, RTreeScanOpaque opaque)
 }
 
 static void
-rtree_collect_matches(Relation indexRel, BlockNumber blkno, uint16 level,
-                      const RTreeTemporalBox *query, StrategyNumber strategy,
-                      ItemPointerData **matches, int *nmatches,
-                      int *matches_size)
+rtree_release_current_page(RTreeScanOpaque opaque)
 {
-    Buffer buf;
-    Page page;
-    OffsetNumber offset;
-    OffsetNumber maxoff;
-
-    buf = ReadBufferExtended(indexRel, MAIN_FORKNUM, blkno, RBM_NORMAL, NULL);
-    LockBuffer(buf, BUFFER_LOCK_SHARE);
-    page = BufferGetPage(buf);
-    maxoff = PageGetMaxOffsetNumber(page);
-
-    for (offset = FirstOffsetNumber; offset <= maxoff; offset++)
+    if (BufferIsValid(opaque->cur_buf))
     {
-        ItemId itemid = PageGetItemId(page, offset);
-        IndexTuple itup;
-        RTreeTemporalBox box;
-        bool leaf = (level == 0);
+        RTREE_UNLOCK(opaque->cur_buf);
+        ReleaseBuffer(opaque->cur_buf);
+        opaque->cur_buf = InvalidBuffer;
+        opaque->cur_blkno = InvalidBlockNumber;
+    }
+}
 
-        if (!ItemIdIsUsed(itemid))
-            continue;
+static void
+rtree_stack_reset(RTreeScanOpaque opaque)
+{
+    opaque->stack_top = 0;
+}
 
-        itup = (IndexTuple) PageGetItem(page, itemid);
-        if (!rtree_index_tuple_box(indexRel, itup, &box))
-            continue;
+static bool
+rtree_stack_push(RTreeScanOpaque opaque, BlockNumber blkno, uint16 level,
+                 OffsetNumber next_offset)
+{
+    if (opaque->stack_top >= opaque->stack_size)
+    {
+        int new_size = Max(opaque->stack_size * 2, 16);
+        opaque->stack = (RTreeScanFrameData *) repalloc(opaque->stack,
+                                                        sizeof(RTreeScanFrameData) * new_size);
+        opaque->stack_size = new_size;
+    }
 
-        if (leaf)
+    opaque->stack[opaque->stack_top].blkno = blkno;
+    opaque->stack[opaque->stack_top].level = level;
+    opaque->stack[opaque->stack_top].next_offset = next_offset;
+    opaque->stack_top++;
+    return true;
+}
+
+static bool
+rtree_initialize_scan(IndexScanDesc scan, RTreeScanOpaque opaque)
+{
+    RTreeMetaPageData meta;
+
+    if (!rtree_ensure_query(scan, opaque))
+        return false;
+
+    meta = rtree_read_meta(scan->indexRelation);
+    if (meta.magic != TRTREE_META_MAGIC)
+        return false;
+
+    rtree_stack_reset(opaque);
+    rtree_release_current_page(opaque);
+    opaque->first_call = false;
+
+    if (meta.root == InvalidBlockNumber)
+        return false;
+
+    return rtree_stack_push(opaque, meta.root, meta.root_level, FirstOffsetNumber);
+}
+
+static bool
+rtree_scan_next(IndexScanDesc scan, RTreeScanOpaque opaque)
+{
+    Relation indexRel = scan->indexRelation;
+    Page page;
+    OffsetNumber maxoff;
+    OffsetNumber offset;
+
+    while (opaque->stack_top > 0)
+    {
+        RTreeScanFrameData *frame = &opaque->stack[opaque->stack_top - 1];
+
+        if (!BufferIsValid(opaque->cur_buf) || opaque->cur_blkno != frame->blkno)
         {
-            if (rtree_box_matches_strategy(&box, query, strategy))
+            rtree_release_current_page(opaque);
+            opaque->cur_buf = ReadBufferExtended(indexRel, MAIN_FORKNUM,
+                                                 frame->blkno, RBM_NORMAL, NULL);
+            RTREE_LOCK_FOR_READ(opaque->cur_buf);
+            opaque->cur_blkno = frame->blkno;
+        }
+
+        page = BufferGetPage(opaque->cur_buf);
+        maxoff = PageGetMaxOffsetNumber(page);
+
+        for (offset = frame->next_offset; offset <= maxoff; offset++)
+        {
+            ItemId itemid = PageGetItemId(page, offset);
+            IndexTuple itup;
+            RTreeTemporalBox box;
+
+            if (!ItemIdIsUsed(itemid))
+                continue;
+
+            itup = (IndexTuple) PageGetItem(page, itemid);
+            if (!rtree_index_tuple_box(indexRel, itup, &box))
+                continue;
+
+            if (frame->level == 0)
             {
-                if (*nmatches >= *matches_size)
+                if (rtree_box_matches_strategy(&box, &opaque->query_box,
+                                               opaque->strategy))
                 {
-                    *matches_size *= 2;
-                    *matches = repalloc(*matches, sizeof(ItemPointerData) * (*matches_size));
+                    frame->next_offset = offset + 1;
+                    opaque->cur_offset = offset;
+                    scan->xs_heaptid = itup->t_tid;
+                    scan->xs_recheck = false;
+                    return true;
                 }
-                (*matches)[*nmatches] = itup->t_tid;
-                (*nmatches)++;
+
+                continue;
+            }
+
+            if (rtree_box_overlaps(&box, &opaque->query_box))
+            {
+                BlockNumber childblk = ItemPointerGetBlockNumber(&itup->t_tid);
+
+                frame->next_offset = offset + 1;
+                rtree_release_current_page(opaque);
+                rtree_stack_push(opaque, childblk, frame->level - 1, FirstOffsetNumber);
+                break;
             }
         }
-        else if (rtree_box_overlaps(&box, query))
-        {
-            BlockNumber childblk = ItemPointerGetBlockNumber(&itup->t_tid);
 
-            rtree_collect_matches(indexRel, childblk, level - 1, query, strategy,
-                                  matches, nmatches, matches_size);
+        if (offset > maxoff)
+        {
+            rtree_release_current_page(opaque);
+            opaque->stack_top--;
         }
     }
 
-    LockBuffer(buf, BUFFER_LOCK_UNLOCK);
-    ReleaseBuffer(buf);
+    return false;
 }
 
 IndexScanDesc
@@ -137,27 +214,19 @@ temporal_rtree_beginscan(Relation r, int nkeys, int norderbys)
     IndexScanDesc scan = RelationGetIndexScan(r, nkeys, norderbys);
     RTreeScanOpaque opaque;
 
-    opaque = (RTreeScanOpaque) palloc(sizeof(RTreeScanOpaqueData));
+    opaque = (RTreeScanOpaque) palloc0(sizeof(RTreeScanOpaqueData));
     opaque->cur_buf = InvalidBuffer;
     opaque->cur_offset = InvalidOffsetNumber;
-    opaque->level = 0;
     opaque->cur_blkno = InvalidBlockNumber;
-    opaque->items = (RTreeScanItemData *) palloc(sizeof(RTreeScanItemData) * 16);
-    opaque->nitems = 0;
-    opaque->items_size = 16;
-    opaque->next_item = 0;
     opaque->first_call = true;
-    opaque->direction = ForwardScanDirection;
     opaque->have_query = false;
-    opaque->matches = NULL;
-    opaque->nmatches = 0;
-    opaque->matches_size = 32;
-    opaque->next_match = 0;
-    opaque->matches_built = false;
+    opaque->stack_size = 16;
+    opaque->stack_top = 0;
+    opaque->stack = (RTreeScanFrameData *) palloc0(sizeof(RTreeScanFrameData) * opaque->stack_size);
 
     scan->opaque = opaque;
 
-    elog(DEBUG1, "temporal_rtree: beginscan initialized with buffer pin management");
+    elog(DEBUG1, "temporal_rtree: beginscan initialized with stack-driven cursor scan");
     return scan;
 }
 
@@ -165,33 +234,20 @@ bool
 temporal_rtree_gettuple(IndexScanDesc scan, ScanDirection dir)
 {
     RTreeScanOpaque opaque = (RTreeScanOpaque) scan->opaque;
-    RTreeMetaPageData meta;
 
     if (opaque == NULL)
         return false;
 
-    if (!opaque->matches_built)
-    {
-        if (opaque->matches == NULL)
-            opaque->matches = (ItemPointerData *) palloc(sizeof(ItemPointerData) * opaque->matches_size);
-
-        meta = rtree_read_meta(scan->indexRelation);
-        if (meta.magic != TRTREE_META_MAGIC || !rtree_ensure_query(scan, opaque))
-            return false;
-
-        rtree_collect_matches(scan->indexRelation, meta.root, meta.root_level,
-                              &opaque->query_box, opaque->strategy,
-                              &opaque->matches, &opaque->nmatches,
-                              &opaque->matches_size);
-        opaque->matches_built = true;
-    }
-
-    if (opaque->next_match >= opaque->nmatches)
+    if (!ScanDirectionIsForward(dir))
         return false;
 
-    scan->xs_heaptid = opaque->matches[opaque->next_match++];
-    scan->xs_recheck = true;
-    return true;
+    if (opaque->first_call)
+    {
+        if (!rtree_initialize_scan(scan, opaque))
+            return false;
+    }
+
+    return rtree_scan_next(scan, opaque);
 }
 
 void
@@ -202,23 +258,11 @@ temporal_rtree_rescan(IndexScanDesc scan, ScanKey key, int nkeys, ScanKey orderb
     if (opaque == NULL)
         return;
 
-    /* Reset traversal state */
+    rtree_release_current_page(opaque);
+    rtree_stack_reset(opaque);
     opaque->first_call = true;
-    opaque->next_item = 0;
-    opaque->nitems = 0;
-    opaque->nmatches = 0;
-    opaque->next_match = 0;
-    opaque->matches_built = false;
-
-    opaque->have_query = rtree_ensure_query(scan, opaque);
-
-    /* Release any held buffer */
-    if (BufferIsValid(opaque->cur_buf))
-    {
-        RTREE_UNLOCK(opaque->cur_buf);
-        ReleaseBuffer(opaque->cur_buf);
-        opaque->cur_buf = InvalidBuffer;
-    }
+    opaque->have_query = false;
+    opaque->cur_offset = InvalidOffsetNumber;
 }
 
 void
@@ -229,17 +273,9 @@ temporal_rtree_endscan(IndexScanDesc scan)
     if (opaque == NULL)
         return;
 
-    /* Release buffer and free scan state */
-    if (BufferIsValid(opaque->cur_buf))
-    {
-        RTREE_UNLOCK(opaque->cur_buf);
-        ReleaseBuffer(opaque->cur_buf);
-    }
-
-    if (opaque->items != NULL)
-        pfree(opaque->items);
-    if (opaque->matches != NULL)
-        pfree(opaque->matches);
+    rtree_release_current_page(opaque);
+    if (opaque->stack != NULL)
+        pfree(opaque->stack);
     pfree(opaque);
     scan->opaque = NULL;
 }
