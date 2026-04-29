@@ -1,0 +1,7 @@
+# using postmaster on localhost, port 5433
+not ok 1     - temporal_rtree_smoke                       32 ms
+not ok 2     - temporal_rtree_plans                        9 ms
+1..2
+# 2 of 2 tests failed.
+# The differences that caused some tests to fail can be viewed in the file "/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/regression.diffs".
+# A copy of the test summary that you see above is saved in the file "/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/regression.out".

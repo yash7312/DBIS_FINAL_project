@@ -1,0 +1,191 @@
+diff -U3 /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/expected/temporal_rtree_smoke.out /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/results/temporal_rtree_smoke.out
+--- /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/expected/temporal_rtree_smoke.out	2026-04-29 19:01:50.679431908 +0530
++++ /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/results/temporal_rtree_smoke.out	2026-04-29 19:24:37.524830160 +0530
+@@ -1,42 +1,83 @@
+-CREATE EXTENSION
+-CREATE EXTENSION
+-CREATE EXTENSION
+-              amname            | amtype |                    amhandler                    
+--------------------------------+--------+--------------------------------------------------
+- temporal_rtree                | i      | temporal_rtree_handler(internal)
+-(1 row)
+-
+-       opfname       |     opfnamespace      
+-------------------+-----------------------
+- temporal_cube_ops  | public
+-(1 row)
+-
+-         opcname          |     opcnamespace      |  opcintype   
+-------------------------+-----------------------+--------------
+- temporal_cube_ops      | public                | cube
+-(1 row)
+-
+-CREATE TABLE
+-INSERT 0 2
+-CREATE INDEX
++-- Smoke test: verify extension loads and the cube-based temporalbox path works
++CREATE EXTENSION IF NOT EXISTS cube;
++CREATE EXTENSION IF NOT EXISTS temporalbox;
++CREATE EXTENSION IF NOT EXISTS temporal_rtree;
++-- Check that the access method exists
++SELECT amname, amtype, amhandler::regprocedure
++FROM pg_am
++WHERE amname = 'temporal_rtree';
++     amname     | amtype |            amhandler             
++----------------+--------+----------------------------------
++ temporal_rtree | i      | temporal_rtree_handler(internal)
++(1 row)
++
++-- Check operator family
++SELECT opfname, opfnamespace::regnamespace
++FROM pg_opfamily
++WHERE opfname = 'temporal_cube_ops';
++      opfname      | opfnamespace 
++-------------------+--------------
++ temporal_cube_ops | public
++(1 row)
++
++-- Check operator class
++SELECT opcname, opcnamespace::regnamespace, opcintype::regtype
++FROM pg_opclass
++WHERE opcname = 'temporal_cube_ops';
++      opcname      | opcnamespace | opcintype 
++-------------------+--------------+-----------
++ temporal_cube_ops | public       | cube
++(1 row)
++
++-- Create a simple test table
++CREATE TABLE temporal_data (
++    id int PRIMARY KEY,
++    attr int NOT NULL,
++    valid_period tsrange NOT NULL,
++    data text
++);
++-- Insert test data
++INSERT INTO temporal_data VALUES
++  (1, 10, tsrange(now(), now() + interval '1 day'), 'current'),
++  (2, 10, tsrange('2020-01-01', '2021-01-01'), 'history');
++ERROR:  function tsrange(timestamp with time zone, timestamp with time zone) does not exist
++LINE 2:   (1, 10, tsrange(now(), now() + interval '1 day'), 'current...
++                  ^
++HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
++-- Attempt to create an index using the new AM
++CREATE INDEX temporal_idx ON temporal_data USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
++-- Post-build verification: compare seq-scan truth count to forced custom-index count
++SELECT count(*) AS truth_count
++FROM temporal_data
++WHERE temporalbox(attr, valid_period)
++  && temporalbox_range(10, timestamp '2019-01-01', timestamp '2025-01-01');
+  truth_count 
+ -------------
+-           2
++           0
+ (1 row)
+ 
+-SET
+-SET
++SET enable_seqscan = off;
++SET enable_bitmapscan = off;
++SELECT count(*) AS indexed_count
++FROM temporal_data
++WHERE temporalbox(attr, valid_period)
++  && temporalbox_range(10, timestamp '2019-01-01', timestamp '2025-01-01');
+  indexed_count 
+ ---------------
+-             2
+-(1 row)
+-
+-SET
+-SET
+-            indexname            |                                            indexdef                                             
+-------------------------------+---------------------------------------------------------------------------------------------------------------
+- temporal_idx                 | CREATE INDEX temporal_idx ON temporal_data USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops)
++             0
+ (1 row)
+ 
+-DROP INDEX
+-DROP TABLE
+\ No newline at end of file
++SET enable_seqscan = on;
++SET enable_bitmapscan = on;
++-- Verifying index was created
++SELECT indexname, indexdef
++FROM pg_indexes
++WHERE indexname = 'temporal_idx';
++  indexname   |                                                 indexdef                                                 
++--------------+----------------------------------------------------------------------------------------------------------
++ temporal_idx | CREATE INDEX temporal_idx ON public.temporal_data USING temporal_rtree (temporalbox(attr, valid_period))
++(1 row)
++
++-- Cleanup
++DROP INDEX temporal_idx;
++DROP TABLE temporal_data;
+diff -U3 /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/expected/temporal_rtree_plans.out /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/results/temporal_rtree_plans.out
+--- /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/expected/temporal_rtree_plans.out	2026-04-28 14:01:34.357265119 +0530
++++ /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/contrib/temporal_rtree/results/temporal_rtree_plans.out	2026-04-29 19:24:37.538584102 +0530
+@@ -1,23 +1,45 @@
+-CREATE EXTENSION
+-CREATE TABLE
+-INSERT 0 4
+-                        QUERY PLAN                         
+------------------------------------------------------------
++-- Test planner integration with temporal_rtree AM
++CREATE EXTENSION IF NOT EXISTS temporal_rtree;
++NOTICE:  extension "temporal_rtree" already exists, skipping
++CREATE TABLE temporal_data (
++    id int PRIMARY KEY,
++    valid_period tsrange NOT NULL,
++    attr int,
++    data text
++);
++INSERT INTO temporal_data VALUES
++  (1, tsrange(now(), NULL), 10, 'current'),
++  (2, tsrange('2020-01-01', '2021-01-01'), 20, 'history'),
++  (3, tsrange(now(), NULL), 30, 'current2'),
++  (4, tsrange('2019-01-01', '2020-01-01'), 40, 'old history');
++ERROR:  function tsrange(timestamp with time zone, unknown) does not exist
++LINE 2:   (1, tsrange(now(), NULL), 10, 'current'),
++              ^
++HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
++CREATE INDEX temporal_idx ON temporal_data USING temporal_rtree (valid_period);
++ERROR:  data type tsrange has no default operator class for access method "temporal_rtree"
++HINT:  You must specify an operator class for the index or define a default operator class for the data type.
++-- Run a simple query and show the plan (with enable_seqscan off to force index usage)
++EXPLAIN (COSTS OFF) SELECT * FROM temporal_data WHERE valid_period @> now();
++ERROR:  operator does not exist: tsrange @> timestamp with time zone
++LINE 1: ...FF) SELECT * FROM temporal_data WHERE valid_period @> now();
++                                                              ^
++HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
++-- Simple query: overlaps
++EXPLAIN (COSTS OFF) SELECT * FROM temporal_data WHERE valid_period && tsrange('2020-06-01', '2020-12-31');
++                                           QUERY PLAN                                           
++------------------------------------------------------------------------------------------------
+  Seq Scan on temporal_data
+-   Filter: (valid_period @> now())
++   Filter: (valid_period && '["Mon Jun 01 00:00:00 2020","Thu Dec 31 00:00:00 2020")'::tsrange)
+ (2 rows)
+ 
+-                              QUERY PLAN                               
+-----------------------------------------------------------------------
+- Seq Scan on temporal_data
+-   Filter: (valid_period && '["2020-06-01","2020-12-31")'::tsrange)
+-(2 rows)
+-
+-                           QUERY PLAN                            
+------------------------------------------------------------------
+- Seq Scan on temporal_data  (cost=0.00..35.00 rows=2 width=48)
+-   Filter: (valid_period @> now())
+-(2 rows)
+-
+-DROP INDEX
+-DROP TABLE
++-- Test plan with planner costs
++EXPLAIN SELECT * FROM temporal_data WHERE valid_period @> now();
++ERROR:  operator does not exist: tsrange @> timestamp with time zone
++LINE 1: ...AIN SELECT * FROM temporal_data WHERE valid_period @> now();
++                                                              ^
++HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
++-- Cleanup
++DROP INDEX temporal_idx;
++ERROR:  index "temporal_idx" does not exist
++DROP TABLE temporal_data;

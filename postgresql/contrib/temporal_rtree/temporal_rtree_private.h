@@ -44,9 +44,23 @@ typedef RTreeScanOpaqueData *RTreeScanOpaque;
 #define RTREE_LOCK_FOR_WRITE(buf) LockBuffer((buf), BUFFER_LOCK_EXCLUSIVE)
 #define RTREE_UNLOCK(buf)         LockBuffer((buf), BUFFER_LOCK_UNLOCK)
 
+typedef struct RTreeVacuumStateData
+{
+    IndexVacuumInfo *info;
+    IndexBulkDeleteResult *stats;
+    IndexBulkDeleteCallback callback;
+    void *callback_state;
+} RTreeVacuumStateData;
+
+typedef RTreeVacuumStateData *RTreeVacuumState;
+
 /* WAL record helpers (GenericXLog wrappers) */
 extern void rtree_wal_insert(Relation rel, Buffer buf, OffsetNumber offset, RTreeTemporalBox *box, ItemPointer tid);
 extern void rtree_wal_split(Relation rel, Buffer left_buf, Buffer right_buf, BlockNumber right_link);
 extern void rtree_wal_vacuum(Relation rel, Buffer buf, OffsetNumber *dead_offsets, int ndead);
+
+extern bool rtree_vacuum_shrink_root(Relation rel, BlockNumber rootblk,
+                                     uint16 root_level,
+                                     IndexBulkDeleteResult *stats);
 
 #endif /* TEMPORAL_RTREE_PRIVATE_H */

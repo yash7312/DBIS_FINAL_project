@@ -1,0 +1,45 @@
+-- Test planner integration with temporal_rtree AM
+CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+NOTICE:  extension "temporal_rtree" already exists, skipping
+CREATE TABLE temporal_data (
+    id int PRIMARY KEY,
+    valid_period tsrange NOT NULL,
+    attr int,
+    data text
+);
+INSERT INTO temporal_data VALUES
+  (1, tsrange(now(), NULL), 10, 'current'),
+  (2, tsrange('2020-01-01', '2021-01-01'), 20, 'history'),
+  (3, tsrange(now(), NULL), 30, 'current2'),
+  (4, tsrange('2019-01-01', '2020-01-01'), 40, 'old history');
+ERROR:  function tsrange(timestamp with time zone, unknown) does not exist
+LINE 2:   (1, tsrange(now(), NULL), 10, 'current'),
+              ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+CREATE INDEX temporal_idx ON temporal_data USING temporal_rtree (valid_period);
+ERROR:  data type tsrange has no default operator class for access method "temporal_rtree"
+HINT:  You must specify an operator class for the index or define a default operator class for the data type.
+-- Run a simple query and show the plan (with enable_seqscan off to force index usage)
+EXPLAIN (COSTS OFF) SELECT * FROM temporal_data WHERE valid_period @> now();
+ERROR:  operator does not exist: tsrange @> timestamp with time zone
+LINE 1: ...FF) SELECT * FROM temporal_data WHERE valid_period @> now();
+                                                              ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+-- Simple query: overlaps
+EXPLAIN (COSTS OFF) SELECT * FROM temporal_data WHERE valid_period && tsrange('2020-06-01', '2020-12-31');
+                                           QUERY PLAN                                           
+------------------------------------------------------------------------------------------------
+ Seq Scan on temporal_data
+   Filter: (valid_period && '["Mon Jun 01 00:00:00 2020","Thu Dec 31 00:00:00 2020")'::tsrange)
+(2 rows)
+
+-- Test plan with planner costs
+EXPLAIN SELECT * FROM temporal_data WHERE valid_period @> now();
+ERROR:  operator does not exist: tsrange @> timestamp with time zone
+LINE 1: ...AIN SELECT * FROM temporal_data WHERE valid_period @> now();
+                                                              ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+-- Cleanup
+DROP INDEX temporal_idx;
+ERROR:  index "temporal_idx" does not exist
+DROP TABLE temporal_data;

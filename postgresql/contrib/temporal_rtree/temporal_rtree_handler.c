@@ -49,8 +49,8 @@ temporal_rtree_handler(PG_FUNCTION_ARGS)
     amroutine->amcanmulticol = true;
     amroutine->amoptionalkey = true;
     amroutine->amsearchnulls = true;
-    amroutine->amcanparallel = true;
-    amroutine->amcanbuildparallel = true;
+    amroutine->amcanparallel = false;
+    amroutine->amcanbuildparallel = false;
     amroutine->ampredlocks = false;
 
 
