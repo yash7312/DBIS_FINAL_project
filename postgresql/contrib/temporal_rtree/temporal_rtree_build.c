@@ -6,6 +6,7 @@
 #include "access/relscan.h"
 #include "access/tableam.h"
 #include "catalog/index.h"
+#include "miscadmin.h"
 #include "storage/bufmgr.h"
 #include "temporal_rtree.h"
 #include "temporal_rtree_private.h"

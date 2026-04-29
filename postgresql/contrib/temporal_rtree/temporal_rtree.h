@@ -2,11 +2,18 @@
 #define TEMPORAL_RTREE_H
 
 #include "postgres.h"
-#include "access/rel.h"
+#include "access/amapi.h"
+#include "access/genam.h"
 #include "access/itup.h"
+#include "access/relscan.h"
+#include "access/skey.h"
 #include "access/stratnum.h"
+#include "catalog/index.h"
+#include "nodes/pathnodes.h"
 #include "storage/bufpage.h"
-#include "cubedata.h"
+#include "utils/rel.h"
+#include "utils/varlena.h"
+#include "../cube/cubedata.h"
 
 /* Flags for bounds */
 #define TRTREE_FLAG_EMPTY      0x0001
@@ -82,5 +89,29 @@ extern void rtree_init_datapage(Page page, uint16 flags, uint16 level);
 extern bool rtree_index_tuple_box(Relation indexRel, IndexTuple itup, RTreeTemporalBox *box);
 extern IndexTuple rtree_form_tuple(Relation indexRel, const RTreeTemporalBox *box, ItemPointer heap_tid);
 extern RTreeTemporalBox rtree_page_mbr(Relation indexRel, Page page, bool leaf);
+
+extern IndexBuildResult *temporal_rtree_build(Relation heapRelation,
+                                              Relation indexRelation,
+                                              IndexInfo *indexInfo);
+extern void temporal_rtree_buildempty(Relation indexRelation);
+extern bool temporal_rtree_insert(Relation rel, Datum *values, bool *isnull,
+                                  ItemPointer ht_ctid, Relation heapRel,
+                                  IndexUniqueCheck checkUnique,
+                                  bool indexUnchanged, IndexInfo *indexInfo);
+extern IndexScanDesc temporal_rtree_beginscan(Relation r, int nkeys, int norderbys);
+extern bool temporal_rtree_gettuple(IndexScanDesc scan, ScanDirection dir);
+extern void temporal_rtree_rescan(IndexScanDesc scan, ScanKey key, int nkeys,
+                                  ScanKey orderbys, int norderbys);
+extern void temporal_rtree_endscan(IndexScanDesc scan);
+extern IndexBulkDeleteResult *temporal_rtree_bulkdelete(IndexVacuumInfo *info,
+                                                        IndexBulkDeleteResult *stats,
+                                                        IndexBulkDeleteCallback callback,
+                                                        void *callback_state);
+extern IndexBulkDeleteResult *temporal_rtree_vacuumcleanup(IndexVacuumInfo *info,
+                                                           IndexBulkDeleteResult *stats);
+extern void temporal_rtree_costestimate(PlannerInfo *root, IndexPath *path,
+                                        double loop_count, Cost *indexStartupCost,
+                                        Cost *indexTotalCost, Selectivity *indexSelectivity,
+                                        double *indexCorrelation, double *indexPages);
 
 #endif /* TEMPORAL_RTREE_H */

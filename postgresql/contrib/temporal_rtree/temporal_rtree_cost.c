@@ -1,27 +1,12 @@
 #include "postgres.h"
 #include "fmgr.h"
 #include "access/amapi.h"
-#include "access/sysattr.h"
+#include "temporal_rtree.h"
 #include "nodes/pathnodes.h"
 #include "optimizer/optimizer.h"
-#include "optimizer/pathnode.h"
-#include "storage/bufmgr.h"
+#include <math.h>
 #include "utils/elog.h"
-#include "utils/rel.h"
 
-/*
- * amcostestimate: estimate cost of an index scan.
- *
- * This is a placeholder that follows the documented signature:
- * void (*amcostestimate) (PlannerInfo *root, IndexPath *path,
- *                         double loop_count, Cost *indexStartupCost,
- *                         Cost *indexTotalCost, Selectivity *indexSelectivity,
- *                         double *indexCorrelation, double *indexPages)
- *
- * For now we return conservative estimates; a full implementation would
- * compute selectivity from statistics, estimate tree height, and account
- * for current vs. history clustering.
- */
 void
 temporal_rtree_costestimate(PlannerInfo *root,
                             IndexPath *path,
@@ -32,31 +17,39 @@ temporal_rtree_costestimate(PlannerInfo *root,
                             double *indexCorrelation,
                             double *indexPages)
 {
-    double        pages;
-    Relation      index_rel;
-    double        tuples;
+    double pages;
+    double tuples;
+    double clause_factor;
+    double selectivity;
+    double tuples_fetched;
+    int nclauses;
 
-    /* Get relation size estimates */
-    index_rel = relation_open(path->indexinfo->indexoid, AccessShareLock);
-    pages = RelationGetNumberOfBlocks(index_rel) * 1.0;
-    relation_close(index_rel, AccessShareLock);
+    (void) root;
+    (void) loop_count;
 
-    /* Conservative placeholder: assume ~10% selectivity for temporal predicates */
-    *indexSelectivity = 0.10;
+    pages = Max(path->indexinfo->pages, 1.0);
+    tuples = Max(path->indexinfo->tuples, 1.0);
+    nclauses = list_length(path->indexclauses);
 
-    /* Assume sequential scan of ~half the index to find matches */
-    *indexPages = Max(pages * 0.5, 1.0);
+    clause_factor = 1.0 + (double) nclauses;
+    selectivity = 0.35 / clause_factor;
+    if (selectivity < 0.01)
+        selectivity = 0.01;
+    if (selectivity > 0.35)
+        selectivity = 0.35;
 
-    /* Startup cost: opening index */
-    *indexStartupCost = 100.0;
+    tuples_fetched = tuples * selectivity;
+    *indexSelectivity = selectivity;
 
-    /* Total cost: index pages + CPU per tuple */
+    *indexPages = Max(1.0, Min(pages, pages * selectivity + sqrt(pages)));
+
+    *indexStartupCost = 5.0 + (double) nclauses * 2.0;
     *indexTotalCost = *indexStartupCost +
-        (*indexPages * random_page_cost) +
-        ((*indexPages * 10) * cpu_index_tuple_cost);
+        (*indexPages * random_page_cost * 0.35) +
+        (tuples_fetched * cpu_index_tuple_cost);
 
-    *indexCorrelation = 0.0;  /* assume worst case */
+    *indexCorrelation = 0.0;
 
-    elog(DEBUG1, "temporal_rtree_costestimate: pages=%.0f, cost=%.2f",
-         *indexPages, *indexTotalCost);
+    elog(DEBUG1, "temporal_rtree_costestimate: pages=%.0f tuples=%.0f clauses=%d cost=%.2f",
+         *indexPages, tuples, nclauses, *indexTotalCost);
 }

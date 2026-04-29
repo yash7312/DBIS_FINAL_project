@@ -1,6 +1,5 @@
 #include "postgres.h"
 
-#include "access/rel.h"
 #include "access/itup.h"
 #include "access/stratnum.h"
 #include "storage/bufpage.h"

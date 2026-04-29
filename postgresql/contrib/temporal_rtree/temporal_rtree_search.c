@@ -14,6 +14,7 @@
 
 static bool rtree_parse_query(IndexScanDesc scan, RTreeTemporalBox *query,
                               StrategyNumber *strategy);
+static bool rtree_ensure_query(IndexScanDesc scan, RTreeScanOpaque opaque);
 static void rtree_collect_matches(Relation indexRel, BlockNumber blkno,
                                   uint16 level, const RTreeTemporalBox *query,
                                   StrategyNumber strategy,
@@ -59,6 +60,19 @@ rtree_parse_query(IndexScanDesc scan, RTreeTemporalBox *query, StrategyNumber *s
     }
 
     return false;
+}
+
+static bool
+rtree_ensure_query(IndexScanDesc scan, RTreeScanOpaque opaque)
+{
+    if (opaque->have_query)
+        return true;
+
+    if (!rtree_parse_query(scan, &opaque->query_box, &opaque->strategy))
+        return false;
+
+    opaque->have_query = true;
+    return true;
 }
 
 static void
@@ -162,7 +176,7 @@ temporal_rtree_gettuple(IndexScanDesc scan, ScanDirection dir)
             opaque->matches = (ItemPointerData *) palloc(sizeof(ItemPointerData) * opaque->matches_size);
 
         meta = rtree_read_meta(scan->indexRelation);
-        if (meta.magic != TRTREE_META_MAGIC || !opaque->have_query)
+        if (meta.magic != TRTREE_META_MAGIC || !rtree_ensure_query(scan, opaque))
             return false;
 
         rtree_collect_matches(scan->indexRelation, meta.root, meta.root_level,
@@ -196,10 +210,7 @@ temporal_rtree_rescan(IndexScanDesc scan, ScanKey key, int nkeys, ScanKey orderb
     opaque->next_match = 0;
     opaque->matches_built = false;
 
-    if (rtree_parse_query(scan, &opaque->query_box, &opaque->strategy))
-        opaque->have_query = true;
-    else
-        opaque->have_query = false;
+    opaque->have_query = rtree_ensure_query(scan, opaque);
 
     /* Release any held buffer */
     if (BufferIsValid(opaque->cur_buf))

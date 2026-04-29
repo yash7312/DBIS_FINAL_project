@@ -17,13 +17,9 @@ CREATE OPERATOR FAMILY temporal_tsrange_ops USING temporal_rtree;
 CREATE OPERATOR CLASS temporal_tsrange_ops
 DEFAULT FOR TYPE tsrange USING temporal_rtree
 FAMILY temporal_tsrange_ops AS
-  OPERATOR 3 && (anyrange, anyrange),
-  OPERATOR 7 @> (anyrange, anyrange),
-  OPERATOR 8 <@ (anyrange, anyrange),
-  OPERATOR 20 << (anyrange, anyrange),
-  OPERATOR 21 >> (anyrange, anyrange),
-  OPERATOR 22 &< (anyrange, anyrange),
-  OPERATOR 23 &> (anyrange, anyrange);
+  OPERATOR 1 && (anyrange, anyrange),
+  OPERATOR 2 @> (anyrange, anyrange),
+  OPERATOR 3 <@ (anyrange, anyrange);
 
 COMMENT ON OPERATOR FAMILY temporal_tsrange_ops USING temporal_rtree
   IS 'Temporal R-tree access method family for tsrange';

@@ -5,6 +5,7 @@
 #include "access/itup.h"
 #include "access/reloptions.h"
 #include "catalog/index.h"
+#include "miscadmin.h"
 #include "storage/bufpage.h"
 #include "storage/bufmgr.h"
 #include "nodes/execnodes.h"
