@@ -1,6 +1,6 @@
 ================================================================================
 CONFIG: hst_gist
-Timestamp: Thu Apr 30 11:21:36 AM IST 2026
+Timestamp: Thu Apr 30 11:37:39 AM IST 2026
 Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
 ================================================================================
 
@@ -15,16 +15,16 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 -- SELECT
                                                       QUERY PLAN                                                       
 -----------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=2244.83..2244.84 rows=1 width=8) (actual time=20.106..20.106 rows=1 loops=1)
+ Aggregate  (cost=2244.97..2244.98 rows=1 width=8) (actual time=19.677..19.678 rows=1 loops=1)
    Buffers: shared hit=984
-   ->  Seq Scan on temporal_data  (cost=0.00..2234.00 rows=4333 width=0) (actual time=0.008..19.854 rows=4228 loops=1)
+   ->  Seq Scan on temporal_data  (cost=0.00..2234.00 rows=4389 width=0) (actual time=0.006..19.429 rows=4228 loops=1)
          Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
          Rows Removed by Filter: 95772
          Buffers: shared hit=984
  Planning:
-   Buffers: shared hit=81
- Planning Time: 0.458 ms
- Execution Time: 20.145 ms
+   Buffers: shared hit=80
+ Planning Time: 0.418 ms
+ Execution Time: 19.735 ms
 (10 rows)
 
 
@@ -38,16 +38,16 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 
                                                               QUERY PLAN                                                              
 --------------------------------------------------------------------------------------------------------------------------------------
- Insert on temporal_data  (cost=0.00..600.00 rows=0 width=0) (actual time=190.201..190.202 rows=0 loops=1)
-   Buffers: shared hit=70377 dirtied=263 written=263
-   ->  Subquery Scan on "*SELECT*"  (cost=0.00..600.00 rows=10000 width=84) (actual time=1.111..30.252 rows=10000 loops=1)
+ Insert on temporal_data  (cost=0.00..600.00 rows=0 width=0) (actual time=174.736..174.737 rows=0 loops=1)
+   Buffers: shared hit=70378 dirtied=249 written=249
+   ->  Subquery Scan on "*SELECT*"  (cost=0.00..600.00 rows=10000 width=84) (actual time=0.978..31.008 rows=10000 loops=1)
          Buffers: shared hit=10020
-         ->  Function Scan on generate_series  (cost=0.00..525.00 rows=10000 width=68) (actual time=1.048..19.093 rows=10000 loops=1)
+         ->  Function Scan on generate_series  (cost=0.00..525.00 rows=10000 width=68) (actual time=0.897..19.624 rows=10000 loops=1)
                Buffers: shared hit=8
  Planning:
    Buffers: shared hit=27
- Planning Time: 0.244 ms
- Execution Time: 190.356 ms
+ Planning Time: 0.239 ms
+ Execution Time: 174.876 ms
 (10 rows)
 
 
@@ -56,16 +56,16 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 -- UPDATE
                                                                         QUERY PLAN                                                                         
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
- Update on temporal_data  (cost=0.00..3680.67 rows=0 width=0) (actual time=134.702..134.703 rows=0 loops=1)
+ Update on temporal_data  (cost=0.00..3680.68 rows=0 width=0) (actual time=110.146..110.147 rows=0 loops=1)
    Buffers: shared hit=38227 dirtied=73 written=73
-   ->  Seq Scan on temporal_data  (cost=0.00..3680.67 rows=1253 width=38) (actual time=0.035..20.652 rows=4025 loops=1)
+   ->  Seq Scan on temporal_data  (cost=0.00..3680.68 rows=1256 width=38) (actual time=0.037..20.368 rows=4025 loops=1)
          Filter: (upper_inf(valid_period) AND (attr >= 1) AND (attr <= 10) AND (lower(valid_period) < '2030-12-31 00:00:00'::timestamp without time zone))
          Rows Removed by Filter: 105975
          Buffers: shared hit=1123
  Planning:
-   Buffers: shared hit=77
- Planning Time: 0.286 ms
- Execution Time: 134.843 ms
+   Buffers: shared hit=78
+ Planning Time: 0.324 ms
+ Execution Time: 110.271 ms
 (10 rows)
 
 
@@ -76,14 +76,14 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 ----------------------------------------------------------------------------------------------------------------------------------
  Delete on temporal_data  (cost=0.28..8.30 rows=0 width=0) (actual time=0.027..0.028 rows=0 loops=1)
    Buffers: shared hit=1
-   ->  Index Scan using idx_hst_gist on temporal_data  (cost=0.28..8.30 rows=1 width=6) (actual time=0.027..0.027 rows=0 loops=1)
+   ->  Index Scan using idx_hst_gist on temporal_data  (cost=0.28..8.30 rows=1 width=6) (actual time=0.026..0.026 rows=0 loops=1)
          Index Cond: (valid_period && '["2020-01-01 00:00:00","2021-01-01 00:00:00")'::tsrange)
          Filter: (NOT upper_inf(valid_period))
          Buffers: shared hit=1
  Planning:
-   Buffers: shared hit=80
- Planning Time: 0.578 ms
- Execution Time: 0.073 ms
+   Buffers: shared hit=81
+ Planning Time: 0.511 ms
+ Execution Time: 0.089 ms
 (10 rows)
 
 

@@ -1,2 +1,2 @@
 index_config,index_names,index_count,total_index_size_bytes,total_index_size_pretty,total_idx_scan,total_idx_tup_read,total_idx_tup_fetch,n_live_tup,n_dead_tup,n_mod_since_analyze,table_size_bytes,table_size_pretty,snapshot_ts
-gist_period,idx_gist_period; temporal_data_pkey,2,9355264,9136 kB,0,0,0,100000,0,0,17457152,17 MB,2026-04-30T11:21:29.144458
+gist_period,idx_gist_period; temporal_data_pkey,2,9379840,9160 kB,0,0,0,100000,0,0,17481728,17 MB,2026-04-30T11:37:32.629941

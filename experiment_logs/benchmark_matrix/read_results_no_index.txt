@@ -1,6 +1,6 @@
 ================================================================================
 READ CONFIG: no_index
-Timestamp: Thu Apr 30 11:20:59 AM IST 2026
+Timestamp: Thu Apr 30 11:37:04 AM IST 2026
 Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
 ================================================================================
 
@@ -11,16 +11,16 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 
                                                       QUERY PLAN                                                       
 -----------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=2244.47..2244.48 rows=1 width=8) (actual time=19.667..19.671 rows=1 loops=1)
+ Aggregate  (cost=2244.46..2244.47 rows=1 width=8) (actual time=20.724..20.725 rows=1 loops=1)
    Buffers: shared hit=984
-   ->  Seq Scan on temporal_data  (cost=0.00..2234.00 rows=4189 width=0) (actual time=0.008..19.420 rows=4228 loops=1)
+   ->  Seq Scan on temporal_data  (cost=0.00..2234.00 rows=4184 width=0) (actual time=0.008..20.456 rows=4228 loops=1)
          Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
          Rows Removed by Filter: 95772
          Buffers: shared hit=984
  Planning:
    Buffers: shared hit=59
- Planning Time: 0.375 ms
- Execution Time: 19.719 ms
+ Planning Time: 0.356 ms
+ Execution Time: 20.764 ms
 (10 rows)
 
 
