@@ -10,26 +10,6 @@ LANGUAGE C STRICT;
 -- Register the access method
 CREATE ACCESS METHOD temporal_rtree TYPE INDEX HANDLER temporal_rtree_handler;
 
--- Operator family for temporal range indexing
-CREATE OPERATOR FAMILY temporal_tsrange_ops USING temporal_rtree;
-
--- Operator class for tsrange (time only)
-CREATE OPERATOR CLASS temporal_tsrange_ops
-DEFAULT FOR TYPE tsrange USING temporal_rtree
-FAMILY temporal_tsrange_ops AS
-  OPERATOR 3 && (anyrange, anyrange),
-  OPERATOR 7 @> (anyrange, anyrange),
-  OPERATOR 8 <@ (anyrange, anyrange),
-  OPERATOR 20 << (anyrange, anyrange),
-  OPERATOR 21 >> (anyrange, anyrange),
-  OPERATOR 22 &< (anyrange, anyrange),
-  OPERATOR 23 &> (anyrange, anyrange);
-
-COMMENT ON OPERATOR FAMILY temporal_tsrange_ops USING temporal_rtree
-  IS 'Temporal R-tree access method family for tsrange';
-COMMENT ON OPERATOR CLASS temporal_tsrange_ops USING temporal_rtree
-  IS 'Temporal R-tree access method for tsrange (time only)';
-
 CREATE OPERATOR FAMILY temporal_cube_ops USING temporal_rtree;
 
 CREATE OPERATOR CLASS temporal_cube_ops
@@ -43,3 +23,27 @@ COMMENT ON OPERATOR FAMILY temporal_cube_ops USING temporal_rtree
   IS 'Temporal R-tree access method family for cube';
 COMMENT ON OPERATOR CLASS temporal_cube_ops USING temporal_rtree
   IS 'Temporal R-tree access method for temporal cube boxes';
+
+-- Hook statistics functions (C1 Testing)
+
+CREATE FUNCTION temporal_rtree_hook_reset()
+RETURNS void
+AS 'MODULE_PATHNAME', 'temporal_rtree_hook_reset'
+LANGUAGE C STRICT;
+
+COMMENT ON FUNCTION temporal_rtree_hook_reset()
+  IS 'Reset all temporal_rtree hook hit counters to zero';
+
+CREATE FUNCTION temporal_rtree_hook_stats()
+RETURNS TABLE (
+  planner_hits bigint,
+  planner_rtree_eligible_hits bigint,
+  executor_dml_hits bigint,
+  executor_target_with_rtree_hits bigint,
+  path_bias_applied bigint
+)
+AS 'MODULE_PATHNAME', 'temporal_rtree_hook_stats'
+LANGUAGE C STRICT;
+
+COMMENT ON FUNCTION temporal_rtree_hook_stats()
+  IS 'Return current hook statistics counters including path bias applications';

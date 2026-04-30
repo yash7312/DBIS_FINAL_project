@@ -12,7 +12,7 @@
 #
 # Optional overrides:
 #   ROOT_DIR  - Repository root (default: directory of this script)
-#   LOG_DIR   - Experiment log directory (default: $ROOT_DIR/experiment_logs_c2)
+#   LOG_DIR   - Experiment log directory (default: $ROOT_DIR/experiment_logs)
 ################################################################################
 
 set -euo pipefail
@@ -20,7 +20,7 @@ set -euo pipefail
 ROOT_DIR="${ROOT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 PGROOT="${PGROOT:-$ROOT_DIR/postgresql}"
 PGPORT="${PGPORT:-5543}"
-LOG_DIR="${LOG_DIR:-$ROOT_DIR/experiment_logs_c2}"
+LOG_DIR="${LOG_DIR:-$ROOT_DIR/experiment_logs}"
 PG_CONFIG_BIN="$PGROOT/install/bin/pg_config"
 PSQL_BIN="$PGROOT/install/bin/psql"
 PG_CTL_BIN="$PGROOT/install/bin/pg_ctl"

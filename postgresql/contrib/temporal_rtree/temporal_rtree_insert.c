@@ -14,6 +14,11 @@
 #include "temporal_rtree.h"
 #include "temporal_rtree_private.h"
 
+#include <float.h>
+
+/* Normalized penalty helper (forward declare or include from split.c) */
+extern double tr_penalty_normalized(const RTreeTemporalBox *child, const RTreeTemporalBox *newb);
+
 extern void temporal_rtree_buildempty(Relation indexRelation);
 
 typedef struct RTreeInsertResult
@@ -27,6 +32,63 @@ typedef struct RTreeInsertResult
 static RTreeInsertResult rtree_insert_page(Relation rel, BlockNumber blkno,
                                            uint16 level, IndexTuple itup,
                                            const RTreeTemporalBox *box);
+static BlockNumber choose_subtree_insert(Relation rel, Page page, const RTreeTemporalBox *newbox);
+
+static BlockNumber
+choose_subtree_insert(Relation rel, Page page, const RTreeTemporalBox *newbox)
+{
+    OffsetNumber offset;
+    OffsetNumber maxoff = PageGetMaxOffsetNumber(page);
+    BlockNumber best_child = InvalidBlockNumber;
+    double best_penalty = DBL_MAX;
+    bool new_is_current = (newbox->flags & TRTREE_FLAG_UPPER_INF) != 0;
+
+    for (offset = FirstOffsetNumber; offset <= maxoff; offset++)
+    {
+        ItemId itemid = PageGetItemId(page, offset);
+        IndexTuple itup;
+        RTreeTemporalBox child_box;
+        double penalty;
+        BlockNumber child_blkno;
+        bool child_is_current;
+
+        if (!ItemIdIsUsed(itemid))
+            continue;
+
+        itup = (IndexTuple) PageGetItem(page, itemid);
+        child_blkno = ItemPointerGetBlockNumber(&itup->t_tid);
+
+        if (!rtree_index_tuple_box(rel, itup, &child_box))
+            continue;
+
+        child_is_current = (child_box.flags & TRTREE_FLAG_UPPER_INF) != 0;
+
+        /* Use normalized penalty */
+        penalty = tr_penalty_normalized(&child_box, newbox);
+
+        /* Prefer inserting into same "side" (current vs history) */
+        if (child_is_current == new_is_current)
+            penalty *= 0.8; /* reward same-family */
+        else
+            penalty *= 1.2; /* penalize mixing families */
+
+        if (penalty < best_penalty)
+        {
+            best_penalty = penalty;
+            best_child = child_blkno;
+        }
+    }
+
+    /* Fallback: pick first child if nothing chosen */
+    if (best_child == InvalidBlockNumber && maxoff >= FirstOffsetNumber)
+    {
+        ItemId itemid = PageGetItemId(page, FirstOffsetNumber);
+        IndexTuple itup = (IndexTuple) PageGetItem(page, itemid);
+        best_child = ItemPointerGetBlockNumber(&itup->t_tid);
+    }
+
+    return best_child;
+}
 static RTreeInsertResult rtree_insert_leaf(Relation rel, Buffer buf,
                                            IndexTuple itup,
                                            const RTreeTemporalBox *box);
@@ -44,6 +106,7 @@ static RTreeInsertResult rtree_split_page(Relation rel, Buffer buf,
 static void rtree_root_promote(Relation rel, BlockNumber leftblk,
                                const RTreeInsertResult *split,
                                uint16 old_level, BlockNumber *new_rootblk);
+
 
 static RTreeTemporalBox
 rtree_page_tuple_box(Relation rel, Page page, OffsetNumber offnum)
@@ -222,39 +285,39 @@ rtree_insert_page(Relation rel, BlockNumber blkno, uint16 level, IndexTuple itup
         OffsetNumber maxoff = PageGetMaxOffsetNumber(page);
         OffsetNumber bestoff = InvalidOffsetNumber;
         BlockNumber childblk = InvalidBlockNumber;
-        double bestpenalty = 0.0;
         RTreeTemporalBox bestbox;
-        bool first = true;
 
-        for (offset = FirstOffsetNumber; offset <= maxoff; offset++)
-        {
-            ItemId itemid = PageGetItemId(page, offset);
-            IndexTuple childitup;
-            RTreeTemporalBox childbox;
-            double penalty;
-
-            if (!ItemIdIsUsed(itemid))
-                continue;
-
-            childitup = (IndexTuple) PageGetItem(page, itemid);
-            if (!rtree_index_tuple_box(rel, childitup, &childbox))
-                continue;
-
-            penalty = tr_penalty(&childbox, box, 1.0, 1.0);
-            if (first || penalty < bestpenalty)
-            {
-                first = false;
-                bestpenalty = penalty;
-                bestoff = offset;
-                bestbox = childbox;
-                childblk = ItemPointerGetBlockNumber(&childitup->t_tid);
-            }
-        }
+        /* Choose child using normalized penalty and temporal-side awareness */
+        childblk = choose_subtree_insert(rel, page, box);
 
         if (!BlockNumberIsValid(childblk))
         {
             UnlockReleaseBuffer(buf);
             ereport(ERROR, (errmsg("temporal_rtree: internal page without downlinks")));
+        }
+
+        /* Find the offset for the selected child block */
+        for (offset = FirstOffsetNumber; offset <= maxoff; offset++)
+        {
+            ItemId itemid = PageGetItemId(page, offset);
+            IndexTuple childitup;
+
+            if (!ItemIdIsUsed(itemid))
+                continue;
+
+            childitup = (IndexTuple) PageGetItem(page, itemid);
+            if (ItemPointerGetBlockNumber(&childitup->t_tid) == childblk)
+            {
+                bestoff = offset;
+                rtree_index_tuple_box(rel, childitup, &bestbox);
+                break;
+            }
+        }
+
+        if (bestoff == InvalidOffsetNumber)
+        {
+            UnlockReleaseBuffer(buf);
+            ereport(ERROR, (errmsg("temporal_rtree: could not locate chosen child on page")));
         }
 
         {

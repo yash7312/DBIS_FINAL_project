@@ -32,7 +32,7 @@
 #define BLCKSZ 8192
 
 /* Saved arguments from configure */
-#define CONFIGURE_ARGS " '--prefix=/home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/install' '--enable-debug' '--without-icu'"
+#define CONFIGURE_ARGS " '--prefix=/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/install' '--enable-debug' '--without-icu'"
 
 /* Define to the default TCP port number on which the server listens and to
    which clients will try to connect. This can be overridden at run-time, but

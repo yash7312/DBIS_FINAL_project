@@ -63,8 +63,8 @@ endif
 endif
 else # not PGXS
 vpath_build = no
-abs_top_builddir = /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql
-abs_top_srcdir = /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql
+abs_top_builddir = /home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql
+abs_top_srcdir = /home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql
 
 ifneq ($(vpath_build),yes)
 top_srcdir = $(top_builddir)
@@ -94,7 +94,7 @@ ifndef PGXS
 # Note that prefix, exec_prefix, and datarootdir aren't defined in a PGXS build;
 # makefiles may only use the derived variables such as bindir.
 
-prefix := /home/yash7312/Desktop/Sem6/DBIS/LAB/DBIS_project/postgresql/install
+prefix := /home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/install
 exec_prefix := ${prefix}
 datarootdir := ${prefix}/share
 

@@ -1,0 +1,1 @@
+/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/install/bin/postgres "-D" "/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/pgdata-c2" "-p" "5543"

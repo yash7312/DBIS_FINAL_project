@@ -40,3 +40,1168 @@
 2026-04-29 12:08:44.731 IST [31055] LOG:  database system is ready to accept connections
 2026-04-29 12:13:44.740 IST [31058] LOG:  checkpoint starting: time
 2026-04-29 12:17:49.176 IST [31058] LOG:  checkpoint complete: wrote 2448 buffers (14.9%); 0 WAL file(s) added, 0 removed, 2 recycled; write=244.423 s, sync=0.002 s, total=244.436 s; sync files=58, longest=0.001 s, average=0.001 s; distance=37634 kB, estimate=37634 kB; lsn=0/968DA60, redo lsn=0/968D9D0
+2026-04-30 00:14:31.726 IST [326169] FATAL:  data directory "/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/install/data" has invalid permissions
+2026-04-30 00:14:31.726 IST [326169] DETAIL:  Permissions should be u=rwx (0700) or u=rwx,g=rx (0750).
+2026-04-30 00:17:10.231 IST [327944] FATAL:  data directory "/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/install/data" has invalid permissions
+2026-04-30 00:17:10.231 IST [327944] DETAIL:  Permissions should be u=rwx (0700) or u=rwx,g=rx (0750).
+2026-04-30 00:18:47.214 IST [329288] FATAL:  data directory "/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/install/data" has invalid permissions
+2026-04-30 00:18:47.214 IST [329288] DETAIL:  Permissions should be u=rwx (0700) or u=rwx,g=rx (0750).
+2026-04-30 00:19:25.556 IST [330137] FATAL:  data directory "/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/install/data" has invalid permissions
+2026-04-30 00:19:25.556 IST [330137] DETAIL:  Permissions should be u=rwx (0700) or u=rwx,g=rx (0750).
+2026-04-30 00:23:10.647 IST [8595] LOG:  starting PostgreSQL 17.9 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-04-30 00:23:10.647 IST [8595] LOG:  listening on IPv4 address "127.0.0.1", port 5543
+2026-04-30 00:23:10.649 IST [8595] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5543"
+2026-04-30 00:23:10.651 IST [8598] LOG:  database system was shut down at 2026-04-30 00:23:10 IST
+2026-04-30 00:23:10.653 IST [8595] LOG:  database system is ready to accept connections
+2026-04-30 00:23:12.791 IST [8661] ERROR:  could not access file "$libdir/cube": No such file or directory
+2026-04-30 00:23:12.791 IST [8661] STATEMENT:  CREATE EXTENSION IF NOT EXISTS cube;
+2026-04-30 00:27:03.100 IST [11815] ERROR:  could not access file "$libdir/cube": No such file or directory
+2026-04-30 00:27:03.100 IST [11815] STATEMENT:  CREATE EXTENSION IF NOT EXISTS cube;
+2026-04-30 00:28:10.751 IST [8596] LOG:  checkpoint starting: time
+2026-04-30 00:29:44.082 IST [8596] LOG:  checkpoint complete: wrote 934 buffers (5.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=93.303 s, sync=0.016 s, total=93.332 s; sync files=310, longest=0.006 s, average=0.001 s; distance=4290 kB, estimate=4290 kB; lsn=0/18AE6D8, redo lsn=0/18AE648
+2026-04-30 00:34:23.593 IST [16927] ERROR:  could not access file "$libdir/btree_gist": No such file or directory
+2026-04-30 00:34:23.593 IST [16927] STATEMENT:  CREATE EXTENSION IF NOT EXISTS btree_gist;
+2026-04-30 00:34:56.527 IST [18038] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:34:56.527 IST [18038] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:34:56.527 IST [18038] STATEMENT:  CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+2026-04-30 00:34:59.431 IST [18154] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:34:59.431 IST [18154] STATEMENT:  enable_indexscan=off
+2026-04-30 00:34:59.435 IST [18156] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:34:59.435 IST [18156] STATEMENT:  enable_indexscan=off
+2026-04-30 00:34:59.438 IST [18158] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:34:59.438 IST [18158] STATEMENT:  enable_indexscan=off
+2026-04-30 00:34:59.442 IST [18160] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:34:59.442 IST [18160] STATEMENT:  enable_indexscan=off
+2026-04-30 00:34:59.446 IST [18162] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:34:59.446 IST [18162] STATEMENT:  enable_indexscan=off
+2026-04-30 00:35:06.129 IST [18347] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:06.129 IST [18347] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:06.129 IST [18347] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:35:10.200 IST [18434] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:10.200 IST [18434] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:10.200 IST [18434] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:35:10.206 IST [18436] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:10.206 IST [18436] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:10.206 IST [18436] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 00:35:12.107 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:35:14.051 IST [8596] LOG:  checkpoint complete: wrote 4988 buffers (30.4%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.884 s, sync=0.011 s, total=1.953 s; sync files=126, longest=0.007 s, average=0.001 s; distance=535879 kB, estimate=535879 kB; lsn=0/40EA0948, redo lsn=0/22400340
+2026-04-30 00:35:14.132 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:35:14.132 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:35:14.132 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:35:15.976 IST [18510] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:15.976 IST [18510] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:15.976 IST [18510] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 00:35:15.983 IST [18514] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:15.983 IST [18514] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:15.983 IST [18514] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 00:35:15.989 IST [18517] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:15.989 IST [18517] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:15.989 IST [18517] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 00:35:19.844 IST [8596] LOG:  checkpoint complete: wrote 2590 buffers (15.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=5.669 s, sync=0.014 s, total=5.712 s; sync files=22, longest=0.002 s, average=0.001 s; distance=540707 kB, estimate=540707 kB; lsn=0/61000488, redo lsn=0/43409120
+2026-04-30 00:35:24.178 IST [8596] LOG:  checkpoints are occurring too frequently (10 seconds apart)
+2026-04-30 00:35:24.178 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:35:24.178 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:35:32.101 IST [18974] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:32.101 IST [18974] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:32.101 IST [18974] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:35:41.022 IST [19207] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:41.022 IST [19207] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:41.022 IST [19207] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:35:41.027 IST [19209] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:41.027 IST [19209] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:41.027 IST [19209] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 00:35:42.484 IST [8596] LOG:  checkpoint complete: wrote 67 buffers (0.4%); 0 WAL file(s) added, 1 removed, 32 recycled; write=18.236 s, sync=0.021 s, total=18.306 s; sync files=95, longest=0.006 s, average=0.001 s; distance=536575 kB, estimate=540294 kB; lsn=0/833DF2A8, redo lsn=0/64008D30
+2026-04-30 00:35:42.557 IST [8596] LOG:  checkpoints are occurring too frequently (18 seconds apart)
+2026-04-30 00:35:42.557 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:35:42.557 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:35:44.267 IST [8596] LOG:  checkpoint complete: wrote 4583 buffers (28.0%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.655 s, sync=0.008 s, total=1.711 s; sync files=61, longest=0.006 s, average=0.001 s; distance=544725 kB, estimate=544725 kB; lsn=0/A4C2D508, redo lsn=0/853FE458
+2026-04-30 00:35:44.301 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:35:44.301 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:35:44.301 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:35:46.253 IST [19276] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:46.253 IST [19276] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:46.253 IST [19276] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 00:35:46.263 IST [19278] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:46.263 IST [19278] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:46.263 IST [19278] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 00:35:46.270 IST [19282] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:46.270 IST [19282] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:46.270 IST [19282] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 00:35:46.275 IST [19284] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:46.275 IST [19284] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:46.275 IST [19284] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 00:35:46.283 IST [19286] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:46.283 IST [19286] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:46.283 IST [19286] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 00:35:46.429 IST [8596] LOG:  checkpoint complete: wrote 2815 buffers (17.2%); 0 WAL file(s) added, 1 removed, 32 recycled; write=2.077 s, sync=0.009 s, total=2.128 s; sync files=3, longest=0.005 s, average=0.003 s; distance=540693 kB, estimate=544322 kB; lsn=0/C586EC50, redo lsn=0/A6403B40
+2026-04-30 00:35:46.509 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:35:46.509 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:35:46.509 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:35:47.049 IST [19295] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:47.049 IST [19295] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:47.049 IST [19295] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 00:35:47.050 IST [19295] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 00:35:47.050 IST [19295] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 00:35:47.687 IST [19297] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:35:47.687 IST [19297] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:35:47.687 IST [19297] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 00:35:47.687 IST [19297] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 00:35:47.687 IST [19297] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 00:36:10.922 IST [19522] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:36:10.922 IST [19522] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:39:41.806 IST [21736] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:39:41.806 IST [21736] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:39:41.806 IST [21736] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 00:39:44.426 IST [21792] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:39:44.426 IST [21792] STATEMENT:  enable_indexscan=off
+2026-04-30 00:39:44.431 IST [21794] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:39:44.431 IST [21794] STATEMENT:  enable_indexscan=off
+2026-04-30 00:39:44.435 IST [21796] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:39:44.435 IST [21796] STATEMENT:  enable_indexscan=off
+2026-04-30 00:39:44.439 IST [21798] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:39:44.439 IST [21798] STATEMENT:  enable_indexscan=off
+2026-04-30 00:39:44.442 IST [21800] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:39:44.442 IST [21800] STATEMENT:  enable_indexscan=off
+2026-04-30 00:39:51.024 IST [22021] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:39:51.024 IST [22021] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:39:51.024 IST [22021] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:39:54.953 IST [22083] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:39:54.953 IST [22083] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:39:54.953 IST [22083] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:39:54.958 IST [22085] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:39:54.958 IST [22085] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:39:54.958 IST [22085] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 00:39:55.902 IST [8596] LOG:  checkpoint complete: wrote 7442 buffers (45.4%); 0 WAL file(s) added, 1 removed, 32 recycled; write=249.334 s, sync=0.022 s, total=249.393 s; sync files=56, longest=0.005 s, average=0.001 s; distance=540689 kB, estimate=543959 kB; lsn=0/E65C5220, redo lsn=0/C7408330
+2026-04-30 00:39:55.999 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:39:57.696 IST [8596] LOG:  checkpoint complete: wrote 3849 buffers (23.5%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.654 s, sync=0.009 s, total=1.698 s; sync files=62, longest=0.005 s, average=0.001 s; distance=540674 kB, estimate=543630 kB; lsn=1/63DF3E8, redo lsn=0/E8408E18
+2026-04-30 00:39:57.823 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:39:57.823 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:39:57.823 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:39:59.540 IST [8596] LOG:  checkpoint complete: wrote 2980 buffers (18.2%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.660 s, sync=0.006 s, total=1.718 s; sync files=1, longest=0.006 s, average=0.006 s; distance=540685 kB, estimate=543336 kB; lsn=1/280FEAA8, redo lsn=1/940C538
+2026-04-30 00:39:59.625 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:39:59.625 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:39:59.625 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:40:00.247 IST [22151] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:00.247 IST [22151] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:00.247 IST [22151] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 00:40:00.253 IST [22155] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:00.253 IST [22155] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:00.253 IST [22155] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 00:40:00.259 IST [22158] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:00.259 IST [22158] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:00.259 IST [22158] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 00:40:16.374 IST [22638] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:16.374 IST [22638] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:16.374 IST [22638] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:40:25.466 IST [22849] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:25.466 IST [22849] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:25.466 IST [22849] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:40:25.471 IST [22851] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:25.471 IST [22851] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:25.471 IST [22851] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 00:40:26.313 IST [8596] LOG:  checkpoint complete: wrote 546 buffers (3.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=26.568 s, sync=0.054 s, total=26.688 s; sync files=88, longest=0.011 s, average=0.001 s; distance=540646 kB, estimate=543067 kB; lsn=1/489403F8, redo lsn=1/2A405E90
+2026-04-30 00:40:26.501 IST [8596] LOG:  checkpoints are occurring too frequently (27 seconds apart)
+2026-04-30 00:40:26.501 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:40:26.501 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:40:28.332 IST [8596] LOG:  checkpoint complete: wrote 3656 buffers (22.3%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.768 s, sync=0.017 s, total=1.831 s; sync files=72, longest=0.014 s, average=0.001 s; distance=540698 kB, estimate=542830 kB; lsn=1/6A403370, redo lsn=1/4B40C870
+2026-04-30 00:40:28.393 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:40:28.393 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:40:28.394 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:40:30.096 IST [8596] LOG:  checkpoint complete: wrote 3054 buffers (18.6%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.657 s, sync=0.005 s, total=1.703 s; sync files=1, longest=0.005 s, average=0.005 s; distance=540633 kB, estimate=542610 kB; lsn=1/8B751068, redo lsn=1/6C402EE0
+2026-04-30 00:40:30.163 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:40:30.163 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:40:30.163 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:40:30.940 IST [22924] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:30.940 IST [22924] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:30.940 IST [22924] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 00:40:30.950 IST [22926] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:30.950 IST [22926] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:30.950 IST [22926] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 00:40:30.957 IST [22930] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:30.957 IST [22930] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:30.957 IST [22930] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 00:40:30.961 IST [22932] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:30.961 IST [22932] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:30.961 IST [22932] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 00:40:30.970 IST [22934] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:30.970 IST [22934] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:30.970 IST [22934] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 00:40:31.807 IST [22970] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:31.807 IST [22970] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:31.807 IST [22970] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 00:40:31.808 IST [22970] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 00:40:31.808 IST [22970] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 00:40:32.443 IST [22972] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:40:32.443 IST [22972] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:40:32.443 IST [22972] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 00:40:32.443 IST [22972] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 00:40:32.443 IST [22972] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 00:41:10.999 IST [23349] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:41:10.999 IST [23349] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:41:51.241 IST [8596] LOG:  checkpoint complete: wrote 3141 buffers (19.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=81.026 s, sync=0.008 s, total=81.078 s; sync files=4, longest=0.006 s, average=0.002 s; distance=540659 kB, estimate=542415 kB; lsn=1/A38A9C90, redo lsn=1/8D3FFB60
+2026-04-30 00:44:05.892 IST [25416] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:05.892 IST [25416] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:05.892 IST [25416] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 00:44:08.517 IST [25528] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:44:08.517 IST [25528] STATEMENT:  enable_indexscan=off
+2026-04-30 00:44:08.520 IST [25530] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:44:08.520 IST [25530] STATEMENT:  enable_indexscan=off
+2026-04-30 00:44:08.524 IST [25532] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:44:08.524 IST [25532] STATEMENT:  enable_indexscan=off
+2026-04-30 00:44:08.528 IST [25534] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:44:08.528 IST [25534] STATEMENT:  enable_indexscan=off
+2026-04-30 00:44:08.531 IST [25536] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:44:08.531 IST [25536] STATEMENT:  enable_indexscan=off
+2026-04-30 00:44:15.256 IST [25711] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:15.256 IST [25711] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:15.256 IST [25711] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:44:19.425 IST [25802] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:19.425 IST [25802] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:19.425 IST [25802] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:44:19.431 IST [25804] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:19.431 IST [25804] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:19.431 IST [25804] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 00:44:19.671 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:44:21.648 IST [8596] LOG:  checkpoint complete: wrote 1924 buffers (11.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.929 s, sync=0.011 s, total=1.977 s; sync files=102, longest=0.007 s, average=0.001 s; distance=540756 kB, estimate=542249 kB; lsn=1/CC3F5448, redo lsn=1/AE414CE0
+2026-04-30 00:44:21.813 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:44:21.813 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:44:21.813 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:44:23.611 IST [8596] LOG:  checkpoint complete: wrote 4025 buffers (24.6%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.756 s, sync=0.006 s, total=1.799 s; sync files=1, longest=0.006 s, average=0.006 s; distance=540600 kB, estimate=542084 kB; lsn=1/EDEB8018, redo lsn=1/CF402D70
+2026-04-30 00:44:23.737 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:44:23.737 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:44:23.737 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:44:25.070 IST [25886] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:25.070 IST [25886] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:25.070 IST [25886] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 00:44:25.077 IST [25890] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:25.077 IST [25890] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:25.077 IST [25890] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 00:44:25.083 IST [25893] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:25.083 IST [25893] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:25.083 IST [25893] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 00:44:41.497 IST [26354] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:41.497 IST [26354] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:41.497 IST [26354] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:44:47.373 IST [8596] LOG:  checkpoint complete: wrote 1490 buffers (9.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=23.592 s, sync=0.012 s, total=23.636 s; sync files=71, longest=0.002 s, average=0.001 s; distance=540664 kB, estimate=541942 kB; lsn=2/E039378, redo lsn=1/F0400E78
+2026-04-30 00:44:50.705 IST [26586] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:50.705 IST [26586] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:50.705 IST [26586] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:44:50.710 IST [26588] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:50.710 IST [26588] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:50.710 IST [26588] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 00:44:50.783 IST [8596] LOG:  checkpoints are occurring too frequently (27 seconds apart)
+2026-04-30 00:44:50.783 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:44:50.783 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:44:52.864 IST [8596] LOG:  checkpoint complete: wrote 1571 buffers (9.6%); 0 WAL file(s) added, 1 removed, 32 recycled; write=2.019 s, sync=0.012 s, total=2.081 s; sync files=66, longest=0.008 s, average=0.001 s; distance=540775 kB, estimate=541825 kB; lsn=2/300C59A8, redo lsn=2/1141AB88
+2026-04-30 00:44:52.944 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:44:52.944 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:44:52.944 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:44:54.559 IST [8596] LOG:  checkpoint complete: wrote 4076 buffers (24.9%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.569 s, sync=0.005 s, total=1.615 s; sync files=1, longest=0.005 s, average=0.005 s; distance=540567 kB, estimate=541700 kB; lsn=2/51067170, redo lsn=2/324007E8
+2026-04-30 00:44:54.676 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:44:54.676 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:44:54.676 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:44:56.129 IST [26655] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:56.129 IST [26655] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:56.129 IST [26655] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 00:44:56.138 IST [26657] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:56.138 IST [26657] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:56.138 IST [26657] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 00:44:56.145 IST [26661] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:56.145 IST [26661] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:56.145 IST [26661] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 00:44:56.150 IST [26663] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:56.150 IST [26663] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:56.150 IST [26663] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 00:44:56.158 IST [26665] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:56.158 IST [26665] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:56.158 IST [26665] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 00:44:56.920 IST [26674] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:56.920 IST [26674] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:56.920 IST [26674] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 00:44:56.920 IST [26674] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 00:44:56.920 IST [26674] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 00:44:57.295 IST [8596] LOG:  checkpoint complete: wrote 2748 buffers (16.8%); 0 WAL file(s) added, 1 removed, 32 recycled; write=2.566 s, sync=0.010 s, total=2.619 s; sync files=3, longest=0.008 s, average=0.004 s; distance=540708 kB, estimate=541600 kB; lsn=2/72323A68, redo lsn=2/53409970
+2026-04-30 00:44:57.504 IST [8596] LOG:  checkpoints are occurring too frequently (3 seconds apart)
+2026-04-30 00:44:57.504 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:44:57.504 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:44:57.510 IST [26676] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:44:57.510 IST [26676] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:44:57.510 IST [26676] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 00:44:57.510 IST [26676] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 00:44:57.510 IST [26676] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 00:45:11.079 IST [26872] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:45:11.079 IST [26872] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:49:27.035 IST [8596] LOG:  checkpoint complete: wrote 11805 buffers (72.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=269.487 s, sync=0.009 s, total=269.532 s; sync files=16, longest=0.007 s, average=0.001 s; distance=540399 kB, estimate=541480 kB; lsn=2/74A14440, redo lsn=2/743C5838
+2026-04-30 00:50:35.993 IST [31338] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:50:35.993 IST [31338] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:50:35.993 IST [31338] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 00:50:38.612 IST [31394] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:50:38.612 IST [31394] STATEMENT:  enable_indexscan=off
+2026-04-30 00:50:38.616 IST [31396] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:50:38.616 IST [31396] STATEMENT:  enable_indexscan=off
+2026-04-30 00:50:38.620 IST [31398] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:50:38.620 IST [31398] STATEMENT:  enable_indexscan=off
+2026-04-30 00:50:38.624 IST [31400] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:50:38.624 IST [31400] STATEMENT:  enable_indexscan=off
+2026-04-30 00:50:38.628 IST [31402] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 00:50:38.628 IST [31402] STATEMENT:  enable_indexscan=off
+2026-04-30 00:50:45.129 IST [31622] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:50:45.129 IST [31622] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:50:45.129 IST [31622] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:50:49.348 IST [31682] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:50:49.348 IST [31682] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:50:49.348 IST [31682] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:50:49.355 IST [31684] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:50:49.355 IST [31684] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:50:49.355 IST [31684] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 00:50:51.089 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:50:52.815 IST [8596] LOG:  checkpoint complete: wrote 4864 buffers (29.7%); 0 WAL file(s) added, 2 removed, 31 recycled; write=1.669 s, sync=0.011 s, total=1.726 s; sync files=102, longest=0.006 s, average=0.001 s; distance=541120 kB, estimate=541444 kB; lsn=2/B52169C8, redo lsn=2/95435B68
+2026-04-30 00:50:52.847 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 00:50:52.847 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:50:52.847 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:50:54.728 IST [31750] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:50:54.728 IST [31750] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:50:54.728 IST [31750] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 00:50:54.734 IST [31754] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:50:54.734 IST [31754] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:50:54.734 IST [31754] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 00:50:54.740 IST [31757] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:50:54.740 IST [31757] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:50:54.740 IST [31757] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 00:50:58.558 IST [8596] LOG:  checkpoint complete: wrote 2589 buffers (15.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=5.673 s, sync=0.010 s, total=5.711 s; sync files=19, longest=0.002 s, average=0.001 s; distance=540481 kB, estimate=541348 kB; lsn=2/D3FF1598, redo lsn=2/B6405FA8
+2026-04-30 00:51:02.995 IST [8596] LOG:  checkpoints are occurring too frequently (10 seconds apart)
+2026-04-30 00:51:02.995 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:51:02.995 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:51:10.971 IST [32232] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:10.971 IST [32232] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:10.971 IST [32232] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:51:20.208 IST [32444] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:20.208 IST [32444] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:20.208 IST [32444] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 00:51:20.214 IST [32446] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:20.214 IST [32446] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:20.214 IST [32446] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 00:51:21.711 IST [8596] LOG:  checkpoint complete: wrote 72 buffers (0.4%); 0 WAL file(s) added, 0 removed, 33 recycled; write=18.638 s, sync=0.033 s, total=18.717 s; sync files=94, longest=0.014 s, average=0.001 s; distance=536719 kB, estimate=540885 kB; lsn=2/F58BD908, redo lsn=2/D7029C50
+2026-04-30 00:51:21.827 IST [8596] LOG:  checkpoints are occurring too frequently (19 seconds apart)
+2026-04-30 00:51:21.827 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:51:21.827 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:51:23.537 IST [8596] LOG:  checkpoint complete: wrote 4639 buffers (28.3%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.655 s, sync=0.012 s, total=1.710 s; sync files=71, longest=0.005 s, average=0.001 s; distance=544633 kB, estimate=544633 kB; lsn=3/175DE158, redo lsn=2/F8408270
+2026-04-30 00:51:23.595 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:51:23.595 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:51:23.595 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:51:25.583 IST [32542] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:25.583 IST [32542] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:25.583 IST [32542] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 00:51:25.594 IST [32544] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:25.594 IST [32544] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:25.594 IST [32544] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 00:51:25.601 IST [32548] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:25.601 IST [32548] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:25.601 IST [32548] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 00:51:25.606 IST [32550] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:25.606 IST [32550] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:25.606 IST [32550] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 00:51:25.614 IST [32552] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:25.614 IST [32552] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:25.614 IST [32552] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 00:51:25.710 IST [8596] LOG:  checkpoint complete: wrote 2815 buffers (17.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=2.065 s, sync=0.008 s, total=2.116 s; sync files=3, longest=0.005 s, average=0.003 s; distance=540653 kB, estimate=544235 kB; lsn=3/37D7DE78, redo lsn=3/194037D0
+2026-04-30 00:51:25.836 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 00:51:25.836 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 00:51:25.836 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 00:51:26.415 IST [32561] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:26.415 IST [32561] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:26.415 IST [32561] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 00:51:26.416 IST [32561] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 00:51:26.416 IST [32561] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 00:51:27.051 IST [32563] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:51:27.051 IST [32563] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:51:27.051 IST [32563] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 00:51:27.052 IST [32563] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 00:51:27.052 IST [32563] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 00:52:11.206 IST [32961] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 00:52:11.206 IST [32961] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 00:55:55.074 IST [8596] LOG:  checkpoint complete: wrote 8500 buffers (51.9%); 0 WAL file(s) added, 0 removed, 33 recycled; write=269.202 s, sync=0.009 s, total=269.239 s; sync files=16, longest=0.006 s, average=0.001 s; distance=540675 kB, estimate=543879 kB; lsn=3/45CEF5A8, redo lsn=3/3A4045F0
+2026-04-30 02:24:40.957 IST [80708] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:24:40.957 IST [80708] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:24:40.957 IST [80708] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 02:24:44.187 IST [80763] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:24:44.187 IST [80763] STATEMENT:  enable_indexscan=off
+2026-04-30 02:24:44.193 IST [80765] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:24:44.193 IST [80765] STATEMENT:  enable_indexscan=off
+2026-04-30 02:24:44.199 IST [80767] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:24:44.199 IST [80767] STATEMENT:  enable_indexscan=off
+2026-04-30 02:24:44.204 IST [80769] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:24:44.204 IST [80769] STATEMENT:  enable_indexscan=off
+2026-04-30 02:24:44.210 IST [80771] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:24:44.210 IST [80771] STATEMENT:  enable_indexscan=off
+2026-04-30 02:24:52.447 IST [81002] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:24:52.447 IST [81002] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:24:52.447 IST [81002] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 02:24:57.519 IST [81096] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:24:57.519 IST [81096] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:24:57.519 IST [81096] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 02:24:57.526 IST [81098] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:24:57.526 IST [81098] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:24:57.526 IST [81098] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 02:25:03.672 IST [81173] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:03.672 IST [81173] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:03.672 IST [81173] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 02:25:03.683 IST [81177] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:03.683 IST [81177] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:03.683 IST [81177] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 02:25:03.691 IST [81180] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:03.691 IST [81180] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:03.691 IST [81180] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 02:25:19.323 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 02:25:26.629 IST [81920] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:26.629 IST [81920] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:26.629 IST [81920] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 02:25:38.684 IST [82150] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:38.684 IST [82150] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:38.684 IST [82150] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 02:25:38.691 IST [82152] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:38.691 IST [82152] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:38.691 IST [82152] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 02:25:45.649 IST [82272] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:45.649 IST [82272] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:45.649 IST [82272] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 02:25:45.662 IST [82274] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:45.662 IST [82274] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:45.662 IST [82274] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 02:25:45.674 IST [82278] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:45.674 IST [82278] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:45.674 IST [82278] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 02:25:45.680 IST [82280] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:45.680 IST [82280] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:45.680 IST [82280] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 02:25:45.688 IST [82282] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:45.688 IST [82282] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:45.688 IST [82282] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 02:25:46.685 IST [82293] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:46.685 IST [82293] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:46.685 IST [82293] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 02:25:46.686 IST [82293] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 02:25:46.686 IST [82293] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 02:25:47.439 IST [82302] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:25:47.439 IST [82302] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:25:47.439 IST [82302] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 02:25:47.441 IST [82302] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 02:25:47.441 IST [82302] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 02:26:04.371 IST [82964] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:04.371 IST [82964] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:04.371 IST [82964] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 02:26:07.659 IST [83037] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:26:07.659 IST [83037] STATEMENT:  enable_indexscan=off
+2026-04-30 02:26:07.665 IST [83039] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:26:07.665 IST [83039] STATEMENT:  enable_indexscan=off
+2026-04-30 02:26:07.670 IST [83041] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:26:07.670 IST [83041] STATEMENT:  enable_indexscan=off
+2026-04-30 02:26:07.676 IST [83043] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:26:07.676 IST [83043] STATEMENT:  enable_indexscan=off
+2026-04-30 02:26:07.681 IST [83045] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 02:26:07.681 IST [83045] STATEMENT:  enable_indexscan=off
+2026-04-30 02:26:12.929 IST [83196] LOG:  skipping analyze of "temporal_data" --- lock not available
+2026-04-30 02:26:16.044 IST [83276] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:16.044 IST [83276] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:16.044 IST [83276] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 02:26:21.092 IST [83369] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:21.092 IST [83369] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:21.092 IST [83369] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 02:26:21.100 IST [83371] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:21.100 IST [83371] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:21.100 IST [83371] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 02:26:21.102 IST [8596] LOG:  checkpoint complete: wrote 159 buffers (1.0%); 0 WAL file(s) added, 0 removed, 33 recycled; write=61.726 s, sync=0.023 s, total=61.779 s; sync files=218, longest=0.006 s, average=0.001 s; distance=536601 kB, estimate=543151 kB; lsn=3/72A94770, redo lsn=3/5B00ABF8
+2026-04-30 02:26:27.713 IST [83450] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:27.713 IST [83450] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:27.713 IST [83450] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 02:26:27.724 IST [83454] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:27.724 IST [83454] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:27.724 IST [83454] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 02:26:27.732 IST [83457] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:27.732 IST [83457] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:27.732 IST [83457] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 02:26:35.006 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 02:26:47.950 IST [83962] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:47.950 IST [83962] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:47.950 IST [83962] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 02:26:59.412 IST [84207] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:59.412 IST [84207] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:59.412 IST [84207] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 02:26:59.419 IST [84209] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:26:59.419 IST [84209] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:26:59.419 IST [84209] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 02:27:06.352 IST [84315] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:27:06.352 IST [84315] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:27:06.352 IST [84315] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 02:27:06.367 IST [84317] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:27:06.367 IST [84317] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:27:06.367 IST [84317] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 02:27:06.377 IST [84321] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:27:06.377 IST [84321] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:27:06.377 IST [84321] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 02:27:06.384 IST [84323] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:27:06.384 IST [84323] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:27:06.384 IST [84323] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 02:27:06.395 IST [84325] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:27:06.395 IST [84325] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:27:06.395 IST [84325] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 02:27:07.443 IST [84334] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:27:07.443 IST [84334] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:27:07.443 IST [84334] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 02:27:07.444 IST [84334] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 02:27:07.444 IST [84334] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 02:27:08.126 IST [84343] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:27:08.126 IST [84343] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:27:08.126 IST [84343] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 02:27:08.126 IST [84343] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 02:27:08.126 IST [84343] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 02:27:13.024 IST [84423] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 02:27:13.024 IST [84423] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 02:27:30.488 IST [8596] LOG:  checkpoint complete: wrote 148 buffers (0.9%); 0 WAL file(s) added, 0 removed, 33 recycled; write=55.407 s, sync=0.050 s, total=55.482 s; sync files=142, longest=0.031 s, average=0.001 s; distance=540663 kB, estimate=542902 kB; lsn=3/8FAE5A50, redo lsn=3/7C008A08
+2026-04-30 10:03:56.448 IST [92143] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:03:56.448 IST [92143] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:03:56.448 IST [92143] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 10:03:59.533 IST [92197] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:03:59.533 IST [92197] STATEMENT:  enable_indexscan=off
+2026-04-30 10:03:59.538 IST [92199] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:03:59.538 IST [92199] STATEMENT:  enable_indexscan=off
+2026-04-30 10:03:59.543 IST [92201] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:03:59.543 IST [92201] STATEMENT:  enable_indexscan=off
+2026-04-30 10:03:59.547 IST [92203] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:03:59.547 IST [92203] STATEMENT:  enable_indexscan=off
+2026-04-30 10:03:59.551 IST [92205] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:03:59.551 IST [92205] STATEMENT:  enable_indexscan=off
+2026-04-30 10:04:05.665 IST [8596] LOG:  checkpoint starting: time
+2026-04-30 10:04:07.222 IST [92429] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:07.222 IST [92429] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:07.222 IST [92429] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 10:04:11.642 IST [92515] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:11.642 IST [92515] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:11.642 IST [92515] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 10:04:11.648 IST [92517] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:11.648 IST [92517] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:11.648 IST [92517] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 10:04:13.939 IST [8596] LOG:  checkpoint complete: wrote 165 buffers (1.0%); 0 WAL file(s) added, 0 removed, 25 recycled; write=8.223 s, sync=0.018 s, total=8.274 s; sync files=107, longest=0.008 s, average=0.001 s; distance=411349 kB, estimate=529747 kB; lsn=3/B43C19A0, redo lsn=3/951BE180
+2026-04-30 10:04:14.046 IST [8596] LOG:  checkpoints are occurring too frequently (9 seconds apart)
+2026-04-30 10:04:14.046 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:04:14.046 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:04:15.991 IST [8596] LOG:  checkpoint complete: wrote 5252 buffers (32.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.893 s, sync=0.012 s, total=1.945 s; sync files=53, longest=0.009 s, average=0.001 s; distance=543008 kB, estimate=543008 kB; lsn=3/D4AE1F58, redo lsn=3/B64061A0
+2026-04-30 10:04:16.079 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 10:04:16.079 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:04:16.079 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:04:17.937 IST [92595] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:17.937 IST [92595] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:17.937 IST [92595] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 10:04:17.946 IST [92599] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:17.946 IST [92599] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:17.946 IST [92599] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 10:04:17.953 IST [92602] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:17.953 IST [92602] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:17.953 IST [92602] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 10:04:31.799 IST [8596] LOG:  checkpoint complete: wrote 1901 buffers (11.6%); 0 WAL file(s) added, 0 removed, 33 recycled; write=15.677 s, sync=0.010 s, total=15.720 s; sync files=47, longest=0.003 s, average=0.001 s; distance=540681 kB, estimate=542775 kB; lsn=3/F505CCC0, redo lsn=3/D7408670
+2026-04-30 10:04:36.328 IST [93089] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:36.328 IST [93089] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:36.328 IST [93089] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 10:04:39.688 IST [8596] LOG:  checkpoints are occurring too frequently (23 seconds apart)
+2026-04-30 10:04:39.688 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:04:39.688 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:04:46.897 IST [93324] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:46.897 IST [93324] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:46.897 IST [93324] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 10:04:46.903 IST [93326] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:46.903 IST [93326] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:46.903 IST [93326] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 10:04:48.877 IST [8596] LOG:  checkpoint complete: wrote 132 buffers (0.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=9.125 s, sync=0.028 s, total=9.190 s; sync files=93, longest=0.012 s, average=0.001 s; distance=536659 kB, estimate=542163 kB; lsn=4/1645C678, redo lsn=3/F801D300
+2026-04-30 10:04:49.031 IST [8596] LOG:  checkpoints are occurring too frequently (10 seconds apart)
+2026-04-30 10:04:49.031 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:04:49.031 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:04:50.935 IST [8596] LOG:  checkpoint complete: wrote 5082 buffers (31.0%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.862 s, sync=0.007 s, total=1.904 s; sync files=61, longest=0.006 s, average=0.001 s; distance=544658 kB, estimate=544658 kB; lsn=4/3716B600, redo lsn=4/19401B48
+2026-04-30 10:04:51.078 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 10:04:51.078 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:04:51.078 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:04:53.189 IST [93404] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:53.189 IST [93404] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:53.189 IST [93404] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 10:04:53.201 IST [93406] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:53.201 IST [93406] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:53.201 IST [93406] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 10:04:53.210 IST [93410] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:53.210 IST [93410] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:53.210 IST [93410] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 10:04:53.214 IST [93412] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:53.214 IST [93412] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:53.214 IST [93412] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 10:04:53.222 IST [93414] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:53.222 IST [93414] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:53.222 IST [93414] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 10:04:53.919 IST [8596] LOG:  checkpoint complete: wrote 2765 buffers (16.9%); 0 WAL file(s) added, 1 removed, 32 recycled; write=2.769 s, sync=0.011 s, total=2.842 s; sync files=3, longest=0.009 s, average=0.004 s; distance=540662 kB, estimate=544258 kB; lsn=4/591664D8, redo lsn=4/3A3FF3F8
+2026-04-30 10:04:54.111 IST [8596] LOG:  checkpoints are occurring too frequently (3 seconds apart)
+2026-04-30 10:04:54.111 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:04:54.111 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:04:54.181 IST [93431] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:54.181 IST [93431] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:54.181 IST [93431] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 10:04:54.182 IST [93431] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 10:04:54.182 IST [93431] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 10:04:54.923 IST [93433] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:04:54.923 IST [93433] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:04:54.923 IST [93433] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 10:04:54.924 IST [93433] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 10:04:54.924 IST [93433] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 10:05:23.122 IST [93698] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:05:23.122 IST [93698] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:09:24.049 IST [8596] LOG:  checkpoint complete: wrote 9484 buffers (57.9%); 0 WAL file(s) added, 0 removed, 33 recycled; write=269.905 s, sync=0.008 s, total=269.939 s; sync files=14, longest=0.006 s, average=0.001 s; distance=540669 kB, estimate=543899 kB; lsn=4/61258A58, redo lsn=4/5B3FEAD8
+2026-04-30 10:19:58.239 IST [102866] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:19:58.239 IST [102866] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:19:58.239 IST [102866] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 10:20:01.430 IST [102943] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:20:01.430 IST [102943] STATEMENT:  enable_indexscan=off
+2026-04-30 10:20:01.436 IST [102945] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:20:01.436 IST [102945] STATEMENT:  enable_indexscan=off
+2026-04-30 10:20:01.442 IST [102947] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:20:01.442 IST [102947] STATEMENT:  enable_indexscan=off
+2026-04-30 10:20:01.447 IST [102949] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:20:01.447 IST [102949] STATEMENT:  enable_indexscan=off
+2026-04-30 10:20:01.453 IST [102951] ERROR:  syntax error at or near "enable_indexscan" at character 1
+2026-04-30 10:20:01.453 IST [102951] STATEMENT:  enable_indexscan=off
+2026-04-30 10:20:09.311 IST [103178] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:09.311 IST [103178] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:09.311 IST [103178] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 10:20:13.759 IST [103261] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:13.759 IST [103261] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:13.759 IST [103261] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 10:20:13.765 IST [103263] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:13.765 IST [103263] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:13.765 IST [103263] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 10:20:14.754 IST [8596] LOG:  checkpoints are occurring too frequently (20 seconds apart)
+2026-04-30 10:20:14.754 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:20:14.754 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:20:16.462 IST [8596] LOG:  checkpoint complete: wrote 2202 buffers (13.4%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.667 s, sync=0.006 s, total=1.709 s; sync files=104, longest=0.002 s, average=0.001 s; distance=540774 kB, estimate=543587 kB; lsn=4/9A32FE08, redo lsn=4/7C418540
+2026-04-30 10:20:16.608 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 10:20:16.608 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:20:16.608 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:20:18.103 IST [103328] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:18.103 IST [103328] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:18.103 IST [103328] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 10:20:18.111 IST [103332] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:18.111 IST [103332] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:18.111 IST [103332] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 10:20:18.119 IST [103335] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:18.119 IST [103335] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:18.119 IST [103335] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 10:20:23.404 IST [103460] LOG:  skipping analyze of "temporal_data" --- lock not available
+2026-04-30 10:20:30.928 IST [8596] LOG:  checkpoint complete: wrote 370 buffers (2.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=14.288 s, sync=0.008 s, total=14.321 s; sync files=45, longest=0.002 s, average=0.001 s; distance=540595 kB, estimate=543287 kB; lsn=4/BB044140, redo lsn=4/9D4054D0
+2026-04-30 10:20:36.156 IST [8596] LOG:  checkpoints are occurring too frequently (20 seconds apart)
+2026-04-30 10:20:36.156 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:20:36.156 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:20:36.552 IST [103798] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:36.552 IST [103798] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:36.552 IST [103798] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 10:20:46.595 IST [104033] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:46.595 IST [104033] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:46.595 IST [104033] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 10:20:46.602 IST [104035] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:46.602 IST [104035] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:46.602 IST [104035] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 10:20:48.133 IST [8596] LOG:  checkpoint complete: wrote 118 buffers (0.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=11.926 s, sync=0.018 s, total=11.977 s; sync files=79, longest=0.003 s, average=0.001 s; distance=536610 kB, estimate=542620 kB; lsn=4/DC601ED8, redo lsn=4/BE00DF18
+2026-04-30 10:20:48.249 IST [8596] LOG:  checkpoints are occurring too frequently (12 seconds apart)
+2026-04-30 10:20:48.249 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:20:48.249 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:20:49.843 IST [8596] LOG:  checkpoint complete: wrote 2263 buffers (13.8%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.547 s, sync=0.016 s, total=1.595 s; sync files=60, longest=0.013 s, average=0.001 s; distance=544713 kB, estimate=544713 kB; lsn=4/FE41A880, redo lsn=4/DF4003C8
+2026-04-30 10:20:49.915 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 10:20:49.915 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 10:20:49.915 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 10:20:50.925 IST [104093] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:50.925 IST [104093] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:50.925 IST [104093] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 10:20:50.936 IST [104095] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:50.936 IST [104095] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:50.936 IST [104095] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 10:20:50.945 IST [104099] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:50.945 IST [104099] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:50.945 IST [104099] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 10:20:50.950 IST [104101] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:50.950 IST [104101] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:50.950 IST [104101] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 10:20:50.959 IST [104103] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:50.959 IST [104103] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:50.959 IST [104103] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 10:20:51.394 IST [104112] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:51.394 IST [104112] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:51.394 IST [104112] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 10:20:51.394 IST [104112] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 10:20:51.394 IST [104112] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 10:20:51.633 IST [104114] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:20:51.633 IST [104114] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:20:51.633 IST [104114] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 10:20:51.633 IST [104114] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 10:20:51.633 IST [104114] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 10:21:02.111 IST [8596] LOG:  checkpoint complete: wrote 490 buffers (3.0%); 0 WAL file(s) added, 0 removed, 33 recycled; write=12.159 s, sync=0.011 s, total=12.196 s; sync files=4, longest=0.007 s, average=0.003 s; distance=540673 kB, estimate=544309 kB; lsn=5/17A612B0, redo lsn=5/400A58
+2026-04-30 10:21:23.419 IST [104435] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 10:21:23.419 IST [104435] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 10:25:49.211 IST [8596] LOG:  checkpoint starting: time
+2026-04-30 10:30:03.022 IST [8596] LOG:  checkpoint complete: wrote 2534 buffers (15.5%); 0 WAL file(s) added, 0 removed, 23 recycled; write=253.751 s, sync=0.009 s, total=253.812 s; sync files=30, longest=0.006 s, average=0.001 s; distance=383738 kB, estimate=528252 kB; lsn=5/17ABF670, redo lsn=5/17ABF5E0
