@@ -1,0 +1,34 @@
+================================================================================
+READ CONFIG: no_index
+Timestamp: Thu Apr 30 11:44:43 AM IST 2026
+Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
+================================================================================
+
+     indexname      |                                    indexdef                                     
+--------------------+---------------------------------------------------------------------------------
+ temporal_data_pkey | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(1 row)
+
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=5462.26..5462.27 rows=1 width=8) (actual time=25.919..26.537 rows=1 loops=1)
+   Buffers: shared hit=2634
+   ->  Gather  (cost=5462.15..5462.26 rows=1 width=8) (actual time=25.705..26.531 rows=2 loops=1)
+         Workers Planned: 1
+         Workers Launched: 1
+         Buffers: shared hit=2634
+         ->  Partial Aggregate  (cost=4462.15..4462.16 rows=1 width=8) (actual time=24.266..24.266 rows=1 loops=2)
+               Buffers: shared hit=2634
+               ->  Parallel Seq Scan on temporal_data  (cost=0.00..4447.24 rows=5966 width=0) (actual time=0.051..23.969 rows=5210 loops=2)
+                     Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
+                     Rows Removed by Filter: 119790
+                     Buffers: shared hit=2634
+ Planning:
+   Buffers: shared hit=62
+ Planning Time: 0.370 ms
+ Execution Time: 26.592 ms
+(16 rows)
+
+
+-- END READ_SELECT
+

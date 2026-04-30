@@ -1,0 +1,94 @@
+================================================================================
+CONFIG: gist_attr_period
+Timestamp: Thu Apr 30 11:43:24 AM IST 2026
+Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
+================================================================================
+
+-- Indexes present
+      indexname       |                                                indexdef                                                
+----------------------+--------------------------------------------------------------------------------------------------------
+ idx_gist_attr_period | CREATE INDEX idx_gist_attr_period ON public.temporal_data USING gist (temporalbox(attr, valid_period))
+ temporal_data_pkey   | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(2 rows)
+
+
+-- SELECT
+                                                              QUERY PLAN                                                               
+---------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1002.43..1002.44 rows=1 width=8) (actual time=4.194..4.194 rows=1 loops=1)
+   Buffers: shared hit=534
+   ->  Bitmap Heap Scan on temporal_data  (cost=36.16..1001.18 rows=500 width=0) (actual time=4.119..4.187 rows=38 loops=1)
+         Recheck Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+         Heap Blocks: exact=26
+         Buffers: shared hit=534
+         ->  Bitmap Index Scan on idx_gist_attr_period  (cost=0.00..36.03 rows=500 width=0) (actual time=4.103..4.103 rows=38 loops=1)
+               Index Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+               Buffers: shared hit=508
+ Planning:
+   Buffers: shared hit=185
+ Planning Time: 1.129 ms
+ Execution Time: 4.320 ms
+(13 rows)
+
+
+-- END SELECT
+
+-- INSERT
+ setval 
+--------
+ 100001
+(1 row)
+
+                                                              QUERY PLAN                                                              
+--------------------------------------------------------------------------------------------------------------------------------------
+ Insert on temporal_data  (cost=0.00..600.00 rows=0 width=0) (actual time=371.052..371.052 rows=0 loops=1)
+   Buffers: shared hit=70477 dirtied=301 written=301
+   ->  Subquery Scan on "*SELECT*"  (cost=0.00..600.00 rows=10000 width=84) (actual time=0.706..30.485 rows=10000 loops=1)
+         Buffers: shared hit=10020
+         ->  Function Scan on generate_series  (cost=0.00..525.00 rows=10000 width=68) (actual time=0.654..19.155 rows=10000 loops=1)
+               Buffers: shared hit=8
+ Planning:
+   Buffers: shared hit=27
+ Planning Time: 0.228 ms
+ Execution Time: 371.181 ms
+(10 rows)
+
+
+-- END INSERT
+
+-- UPDATE
+                                                                        QUERY PLAN                                                                         
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+ Update on temporal_data  (cost=0.00..3680.59 rows=0 width=0) (actual time=191.350..191.350 rows=0 loops=1)
+   Buffers: shared hit=38245 dirtied=101 written=101
+   ->  Seq Scan on temporal_data  (cost=0.00..3680.59 rows=1238 width=38) (actual time=0.033..21.526 rows=4025 loops=1)
+         Filter: (upper_inf(valid_period) AND (attr >= 1) AND (attr <= 10) AND (lower(valid_period) < '2030-12-31 00:00:00'::timestamp without time zone))
+         Rows Removed by Filter: 105975
+         Buffers: shared hit=1123
+ Planning:
+   Buffers: shared hit=162
+ Planning Time: 0.489 ms
+ Execution Time: 191.397 ms
+(10 rows)
+
+
+-- END UPDATE
+
+-- DELETE
+                                                           QUERY PLAN                                                           
+--------------------------------------------------------------------------------------------------------------------------------
+ Delete on temporal_data  (cost=0.00..2925.77 rows=0 width=0) (actual time=26.743..26.744 rows=0 loops=1)
+   Buffers: shared hit=1159
+   ->  Seq Scan on temporal_data  (cost=0.00..2925.77 rows=1 width=6) (actual time=26.741..26.742 rows=0 loops=1)
+         Filter: ((NOT upper_inf(valid_period)) AND (valid_period && '["2020-01-01 00:00:00","2021-01-01 00:00:00")'::tsrange))
+         Rows Removed by Filter: 110000
+         Buffers: shared hit=1159
+ Planning:
+   Buffers: shared hit=176
+ Planning Time: 0.650 ms
+ Execution Time: 26.787 ms
+(10 rows)
+
+
+-- END DELETE
+

@@ -1,0 +1,101 @@
+================================================================================
+CONFIG: hybrid_current_history
+Timestamp: Thu Apr 30 11:46:06 AM IST 2026
+Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
+================================================================================
+
+-- Indexes present
+       indexname        |                                                             indexdef                                                              
+------------------------+-----------------------------------------------------------------------------------------------------------------------------------
+ idx_current_attr_start | CREATE INDEX idx_current_attr_start ON public.temporal_data USING btree (attr, lower(valid_period)) WHERE upper_inf(valid_period)
+ idx_hst_gist           | CREATE INDEX idx_hst_gist ON public.temporal_data USING gist (valid_period) WHERE (NOT upper_inf(valid_period))
+ temporal_data_pkey     | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(3 rows)
+
+
+-- SELECT
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=5462.85..5462.86 rows=1 width=8) (actual time=24.501..25.116 rows=1 loops=1)
+   Buffers: shared hit=2634
+   ->  Gather  (cost=5462.74..5462.85 rows=1 width=8) (actual time=24.301..25.111 rows=2 loops=1)
+         Workers Planned: 1
+         Workers Launched: 1
+         Buffers: shared hit=2634
+         ->  Partial Aggregate  (cost=4462.74..4462.75 rows=1 width=8) (actual time=23.155..23.155 rows=1 loops=2)
+               Buffers: shared hit=2634
+               ->  Parallel Seq Scan on temporal_data  (cost=0.00..4447.24 rows=6201 width=0) (actual time=0.172..22.873 rows=5210 loops=2)
+                     Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
+                     Rows Removed by Filter: 119790
+                     Buffers: shared hit=2634
+ Planning:
+   Buffers: shared hit=111
+ Planning Time: 0.641 ms
+ Execution Time: 25.156 ms
+(16 rows)
+
+
+-- END SELECT
+
+-- INSERT
+ setval 
+--------
+ 250001
+(1 row)
+
+                                                              QUERY PLAN                                                              
+--------------------------------------------------------------------------------------------------------------------------------------
+ Insert on temporal_data  (cost=0.00..600.00 rows=0 width=0) (actual time=137.242..137.243 rows=0 loops=1)
+   Buffers: shared hit=60549 dirtied=247 written=247
+   ->  Subquery Scan on "*SELECT*"  (cost=0.00..600.00 rows=10000 width=84) (actual time=1.069..29.088 rows=10000 loops=1)
+         Buffers: shared hit=10020
+         ->  Function Scan on generate_series  (cost=0.00..525.00 rows=10000 width=68) (actual time=0.992..18.506 rows=10000 loops=1)
+               Buffers: shared hit=8
+ Planning:
+   Buffers: shared hit=27
+ Planning Time: 0.250 ms
+ Execution Time: 137.371 ms
+(10 rows)
+
+
+-- END INSERT
+
+-- UPDATE
+                                                                           QUERY PLAN                                                                            
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Update on temporal_data  (cost=236.86..3168.27 rows=0 width=0) (actual time=271.194..271.196 rows=0 loops=1)
+   Buffers: shared hit=103672 read=47 dirtied=194 written=194
+   ->  Bitmap Heap Scan on temporal_data  (cost=236.86..3168.27 rows=2873 width=38) (actual time=2.027..11.048 rows=9924 loops=1)
+         Recheck Cond: ((attr >= 1) AND (attr <= 10) AND (lower(valid_period) < '2030-12-31 00:00:00'::timestamp without time zone) AND upper_inf(valid_period))
+         Heap Blocks: exact=2105
+         Buffers: shared hit=2110 read=47
+         ->  Bitmap Index Scan on idx_current_attr_start  (cost=0.00..236.14 rows=2873 width=0) (actual time=1.568..1.568 rows=9924 loops=1)
+               Index Cond: ((attr >= 1) AND (attr <= 10) AND (lower(valid_period) < '2030-12-31 00:00:00'::timestamp without time zone))
+               Buffers: shared read=47
+ Planning:
+   Buffers: shared hit=117
+ Planning Time: 0.614 ms
+ Execution Time: 271.315 ms
+(13 rows)
+
+
+-- END UPDATE
+
+-- DELETE
+                                                            QUERY PLAN                                                            
+----------------------------------------------------------------------------------------------------------------------------------
+ Delete on temporal_data  (cost=0.28..8.30 rows=0 width=0) (actual time=0.040..0.041 rows=0 loops=1)
+   Buffers: shared hit=1
+   ->  Index Scan using idx_hst_gist on temporal_data  (cost=0.28..8.30 rows=1 width=6) (actual time=0.040..0.040 rows=0 loops=1)
+         Index Cond: (valid_period && '["2020-01-01 00:00:00","2021-01-01 00:00:00")'::tsrange)
+         Filter: (NOT upper_inf(valid_period))
+         Buffers: shared hit=1
+ Planning:
+   Buffers: shared hit=109
+ Planning Time: 0.613 ms
+ Execution Time: 0.100 ms
+(10 rows)
+
+
+-- END DELETE
+

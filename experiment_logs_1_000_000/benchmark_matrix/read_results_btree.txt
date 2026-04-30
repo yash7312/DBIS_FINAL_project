@@ -1,0 +1,35 @@
+================================================================================
+READ CONFIG: btree
+Timestamp: Thu Apr 30 11:50:42 AM IST 2026
+Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
+================================================================================
+
+     indexname      |                                        indexdef                                        
+--------------------+----------------------------------------------------------------------------------------
+ idx_btree          | CREATE INDEX idx_btree ON public.temporal_data USING btree (attr, lower(valid_period))
+ temporal_data_pkey | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(2 rows)
+
+                                                                  QUERY PLAN                                                                   
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=16985.00..16985.01 rows=1 width=8) (actual time=71.553..72.986 rows=1 loops=1)
+   Buffers: shared hit=10783
+   ->  Gather  (cost=16984.79..16985.00 rows=2 width=8) (actual time=71.353..72.979 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=10783
+         ->  Partial Aggregate  (cost=15984.79..15984.80 rows=1 width=8) (actual time=69.778..69.779 rows=1 loops=3)
+               Buffers: shared hit=10783
+               ->  Parallel Seq Scan on temporal_data  (cost=0.00..15941.33 rows=17381 width=0) (actual time=0.266..68.947 rows=13791 loops=3)
+                     Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
+                     Rows Removed by Filter: 319542
+                     Buffers: shared hit=10783
+ Planning:
+   Buffers: shared hit=92
+ Planning Time: 0.439 ms
+ Execution Time: 73.030 ms
+(16 rows)
+
+
+-- END READ_SELECT
+

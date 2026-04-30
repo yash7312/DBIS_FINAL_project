@@ -1,0 +1,36 @@
+================================================================================
+READ CONFIG: hybrid_current_history
+Timestamp: Thu Apr 30 11:45:30 AM IST 2026
+Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
+================================================================================
+
+       indexname        |                                                             indexdef                                                              
+------------------------+-----------------------------------------------------------------------------------------------------------------------------------
+ idx_current_attr_start | CREATE INDEX idx_current_attr_start ON public.temporal_data USING btree (attr, lower(valid_period)) WHERE upper_inf(valid_period)
+ idx_hst_gist           | CREATE INDEX idx_hst_gist ON public.temporal_data USING gist (valid_period) WHERE (NOT upper_inf(valid_period))
+ temporal_data_pkey     | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(3 rows)
+
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=5463.02..5463.03 rows=1 width=8) (actual time=26.510..27.112 rows=1 loops=1)
+   Buffers: shared hit=2634
+   ->  Gather  (cost=5462.91..5463.02 rows=1 width=8) (actual time=26.176..27.106 rows=2 loops=1)
+         Workers Planned: 1
+         Workers Launched: 1
+         Buffers: shared hit=2634
+         ->  Partial Aggregate  (cost=4462.91..4462.92 rows=1 width=8) (actual time=24.792..24.793 rows=1 loops=2)
+               Buffers: shared hit=2634
+               ->  Parallel Seq Scan on temporal_data  (cost=0.00..4447.24 rows=6269 width=0) (actual time=0.100..24.494 rows=5210 loops=2)
+                     Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
+                     Rows Removed by Filter: 119790
+                     Buffers: shared hit=2634
+ Planning:
+   Buffers: shared hit=113
+ Planning Time: 0.589 ms
+ Execution Time: 27.171 ms
+(16 rows)
+
+
+-- END READ_SELECT
+
