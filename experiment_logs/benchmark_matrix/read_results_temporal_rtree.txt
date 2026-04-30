@@ -1,0 +1,28 @@
+================================================================================
+READ CONFIG: temporal_rtree
+Timestamp: Thu Apr 30 01:55:18 PM IST 2026
+Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
+================================================================================
+
+       indexname       |                                                     indexdef                                                      
+-----------------------+-------------------------------------------------------------------------------------------------------------------
+ idx_rtree_temporalbox | CREATE INDEX idx_rtree_temporalbox ON public.temporal_data USING temporal_rtree (temporalbox(attr, valid_period))
+ temporal_data_pkey    | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(2 rows)
+
+                                                                   QUERY PLAN                                                                    
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1658.00..1658.01 rows=1 width=8) (actual time=7.065..7.066 rows=1 loops=1)
+   Buffers: shared hit=5958
+   ->  Index Scan using idx_rtree_temporalbox on temporal_data  (cost=0.00..1656.75 rows=500 width=0) (actual time=0.396..7.050 rows=50 loops=1)
+         Index Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
+         Buffers: shared hit=5958
+ Planning:
+   Buffers: shared hit=186 dirtied=1
+ Planning Time: 1.227 ms
+ Execution Time: 7.128 ms
+(9 rows)
+
+
+-- END READ_SELECT
+

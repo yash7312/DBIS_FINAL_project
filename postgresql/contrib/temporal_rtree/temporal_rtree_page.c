@@ -43,20 +43,52 @@ rtree_cube_to_box(const NDBOX *cube)
 {
     RTreeTemporalBox box;
     int dim;
+    double attr_lo_d;
+    double attr_hi_d;
+    double lower_d;
+    double upper_d;
 
     MemSet(&box, 0, sizeof(box));
     dim = DIM(cube);
     box.dims = (dim >= 2) ? 2 : 1;
-    box.attr_lo = (int32) llround(LL_COORD(cube, 0));
-    box.attr_hi = (int32) llround(IS_POINT(cube) ? LL_COORD(cube, 0) : UR_COORD(cube, 0));
-    box.lower_us = (int64) llround((dim >= 2) ? LL_COORD(cube, 1) : LL_COORD(cube, 0));
-    box.upper_us = (int64) llround((dim >= 2) ? (IS_POINT(cube) ? LL_COORD(cube, 1) : UR_COORD(cube, 1)) : box.lower_us);
     box.flags = 0;
+
+    attr_lo_d = LL_COORD(cube, 0);
+    attr_hi_d = IS_POINT(cube) ? LL_COORD(cube, 0) : UR_COORD(cube, 0);
+
+    lower_d = (dim >= 2) ? LL_COORD(cube, 1) : LL_COORD(cube, 0);
+    upper_d = (dim >= 2)
+        ? (IS_POINT(cube) ? LL_COORD(cube, 1) : UR_COORD(cube, 1))
+        : lower_d;
+
+    box.attr_lo = (int32) llround(attr_lo_d);
+    box.attr_hi = (int32) llround(attr_hi_d);
+
+    if (isinf(lower_d) && lower_d < 0)
+    {
+        box.lower_us = PG_INT64_MIN;
+        box.flags |= TRTREE_FLAG_LOWER_INF;
+    }
+    else
+    {
+        box.lower_us = (int64) llround(lower_d);
+    }
+
+    if (isinf(upper_d) && upper_d > 0)
+    {
+        box.upper_us = PG_INT64_MAX;
+        box.flags |= TRTREE_FLAG_UPPER_INF;
+    }
+    else
+    {
+        box.upper_us = (int64) llround(upper_d);
+    }
 
     if (box.lower_us == PG_INT64_MIN)
         box.flags |= TRTREE_FLAG_LOWER_INF;
     if (box.upper_us == PG_INT64_MAX)
         box.flags |= TRTREE_FLAG_UPPER_INF;
+
     return box;
 }
 

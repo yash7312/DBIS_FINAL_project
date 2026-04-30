@@ -43,6 +43,9 @@ static bool
 rtree_parse_query(IndexScanDesc scan, RTreeTemporalBox *query, StrategyNumber *strategy)
 {
     int i;
+    // elog(NOTICE,
+    //  "temporal_rtree parse: numberOfKeys=%d",
+    //  scan->numberOfKeys);
 
     for (i = 0; i < scan->numberOfKeys; i++)
     {
@@ -54,6 +57,12 @@ rtree_parse_query(IndexScanDesc scan, RTreeTemporalBox *query, StrategyNumber *s
         if (key->sk_strategy < TRTREE_STRATEGY_OVERLAP ||
             key->sk_strategy > TRTREE_STRATEGY_CONTAINED)
             continue;
+        
+        // elog(NOTICE,
+        //     "temporal_rtree parse key: i=%d strategy=%d flags=%d",
+        //     i,
+        //     key->sk_strategy,
+        //     key->sk_flags);
 
         *query = rtree_cube_to_box(DatumGetNDBOXP(key->sk_argument));
         *strategy = key->sk_strategy;
@@ -119,11 +128,21 @@ rtree_initialize_scan(IndexScanDesc scan, RTreeScanOpaque opaque)
     RTreeMetaPageData meta;
 
     if (!rtree_ensure_query(scan, opaque))
+    {
+        // elog(NOTICE, "temporal_rtree: no usable scan key found");
         return false;
+    }
 
     meta = rtree_read_meta(scan->indexRelation);
+
     if (meta.magic != TRTREE_META_MAGIC)
+    {
+        // elog(NOTICE,
+        //      "temporal_rtree: bad meta magic=%u expected=%u",
+        //      meta.magic,
+        //      TRTREE_META_MAGIC);
         return false;
+    }
 
     rtree_stack_reset(opaque);
     rtree_release_current_page(opaque);
@@ -158,6 +177,12 @@ rtree_scan_next(IndexScanDesc scan, RTreeScanOpaque opaque)
 
         page = BufferGetPage(opaque->cur_buf);
         maxoff = PageGetMaxOffsetNumber(page);
+        // elog(NOTICE,
+        //     "rtree scan page: blk=%u level=%u next_offset=%u maxoff=%u",
+        //     frame->blkno,
+        //     frame->level,
+        //     frame->next_offset,
+        //     maxoff);
 
         for (offset = frame->next_offset; offset <= maxoff; offset++)
         {
@@ -170,24 +195,51 @@ rtree_scan_next(IndexScanDesc scan, RTreeScanOpaque opaque)
 
             itup = (IndexTuple) PageGetItem(page, itemid);
             if (!rtree_index_tuple_box(indexRel, itup, &box))
+            {
+                // elog(NOTICE,
+                //     "rtree scan: could not extract box at blk=%u off=%u level=%u",
+                //     frame->blkno,
+                //     offset,
+                //     frame->level);
                 continue;
+            }
 
             if (frame->level == 0)
             {
+                /*
+                * Correctness-safe leaf filtering:
+                * We still set xs_recheck=true so executor verifies the original SQL qual.
+                * This prevents false positives while avoiding the huge cost of returning
+                * every leaf tuple.
+                */
                 if (rtree_box_matches_strategy(&box, &opaque->query_box,
-                                               opaque->strategy))
+                                            opaque->strategy))
                 {
                     frame->next_offset = offset + 1;
                     opaque->cur_offset = offset;
                     scan->xs_heaptid = itup->t_tid;
-                    scan->xs_recheck = false;
+
+                    /*
+                    * Keep true for now. After correctness is validated, this can become
+                    * false if AM predicate semantics exactly match SQL cube operators.
+                    */
+                    scan->xs_recheck = true;
                     return true;
                 }
 
                 continue;
             }
 
-            if (rtree_box_overlaps(&box, &opaque->query_box))
+            /*
+            * Correctness-first traversal:
+            * Descend into every internal child.
+            *
+            * Leaf tuples are still filtered exactly using rtree_box_matches_strategy().
+            * This avoids false negatives caused by stale/corrupt internal MBRs.
+            *
+            * TODO: Re-enable internal MBR pruning after validating MBR construction,
+            * infinity handling, and split propagation.
+            */
             {
                 BlockNumber childblk = ItemPointerGetBlockNumber(&itup->t_tid);
 
@@ -213,6 +265,8 @@ temporal_rtree_beginscan(Relation r, int nkeys, int norderbys)
 {
     IndexScanDesc scan = RelationGetIndexScan(r, nkeys, norderbys);
     RTreeScanOpaque opaque;
+
+    // elog(NOTICE, "TEMPORAL_RTREE DEBUG: new search.c loaded");
 
     opaque = (RTreeScanOpaque) palloc0(sizeof(RTreeScanOpaqueData));
     opaque->cur_buf = InvalidBuffer;
@@ -251,18 +305,44 @@ temporal_rtree_gettuple(IndexScanDesc scan, ScanDirection dir)
 }
 
 void
-temporal_rtree_rescan(IndexScanDesc scan, ScanKey key, int nkeys, ScanKey orderbys, int norderbys)
+temporal_rtree_rescan(IndexScanDesc scan,
+                      ScanKey key,
+                      int nkeys,
+                      ScanKey orderbys,
+                      int norderbys)
 {
     RTreeScanOpaque opaque = (RTreeScanOpaque) scan->opaque;
 
     if (opaque == NULL)
         return;
 
+    /*
+     * PostgreSQL passes runtime scan keys here.
+     * RelationGetIndexScan() allocates scan->keyData, but the AM must copy
+     * the incoming keys into it during rescan.
+     */
+    if (key != NULL && nkeys > 0)
+    {
+        if (scan->keyData == NULL)
+            elog(ERROR, "temporal_rtree: scan keyData is NULL");
+
+        memcpy(scan->keyData, key, sizeof(ScanKeyData) * nkeys);
+        scan->numberOfKeys = nkeys;
+    }
+
+    /*
+     * This AM does not support order-by scans yet.
+     */
+    (void) orderbys;
+    (void) norderbys;
+
     rtree_release_current_page(opaque);
     rtree_stack_reset(opaque);
+
     opaque->first_call = true;
     opaque->have_query = false;
     opaque->cur_offset = InvalidOffsetNumber;
+    opaque->cur_blkno = InvalidBlockNumber;
 }
 
 void
