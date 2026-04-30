@@ -1,6 +1,6 @@
 ================================================================================
 READ CONFIG: gist_attr_period
-Timestamp: Thu Apr 30 11:43:00 AM IST 2026
+Timestamp: Thu Apr 30 12:10:11 PM IST 2026
 Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
 ================================================================================
 
@@ -12,19 +12,19 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 
                                                               QUERY PLAN                                                               
 ---------------------------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=1002.43..1002.44 rows=1 width=8) (actual time=3.403..3.404 rows=1 loops=1)
-   Buffers: shared hit=509
-   ->  Bitmap Heap Scan on temporal_data  (cost=36.16..1001.18 rows=500 width=0) (actual time=3.324..3.396 rows=38 loops=1)
+ Aggregate  (cost=1002.43..1002.44 rows=1 width=8) (actual time=3.688..3.689 rows=1 loops=1)
+   Buffers: shared hit=517
+   ->  Bitmap Heap Scan on temporal_data  (cost=36.16..1001.18 rows=500 width=0) (actual time=3.607..3.681 rows=38 loops=1)
          Recheck Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
          Heap Blocks: exact=26
-         Buffers: shared hit=509
-         ->  Bitmap Index Scan on idx_gist_attr_period  (cost=0.00..36.03 rows=500 width=0) (actual time=3.312..3.312 rows=38 loops=1)
+         Buffers: shared hit=517
+         ->  Bitmap Index Scan on idx_gist_attr_period  (cost=0.00..36.03 rows=500 width=0) (actual time=3.591..3.591 rows=38 loops=1)
                Index Cond: (temporalbox(attr, valid_period) && '(10, 1672531200),(10, 1685577600)'::cube)
-               Buffers: shared hit=483
+               Buffers: shared hit=491
  Planning:
    Buffers: shared hit=185
- Planning Time: 0.871 ms
- Execution Time: 3.490 ms
+ Planning Time: 1.156 ms
+ Execution Time: 3.827 ms
 (13 rows)
 
 

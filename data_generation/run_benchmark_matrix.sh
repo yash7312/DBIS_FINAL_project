@@ -20,38 +20,83 @@ TRUTH_FILE="$OUTPUT_DIR/truth_counts.csv"
 truth_phase() {
     echo "Running truth phase (forced seq scans) -> $TRUTH_FILE"
     reload_dataset
+
+    # Needed because composite truth queries use temporalbox(), temporalbox_point(), temporalbox_range().
+    ensure_extensions
+
     reset_secondary_indexes
 
-    # Force planner to use seq scan
-    local opts='-c enable_indexscan=off -c enable_bitmapscan=off -c enable_indexonlyscan=off'
+    # These are SERVER options, so pass them through PGOPTIONS, not as psql -c commands.
+    local force_seqscan_opts='-c enable_indexscan=off -c enable_bitmapscan=off -c enable_indexonlyscan=off'
 
+    rm -f "$OUTPUT_DIR/truth_errors.log"
+ 
     cat > "$TRUTH_FILE" <<'CSV'
 family,query_label,count
 CSV
 
-    # Plain temporal family (representative range query)
-    local plain_sql="SELECT count(*) FROM temporal_data WHERE valid_period && tsrange('2023-01-01','2023-06-01','[)';"
-    local c=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$plain_sql") || c=0
-    echo "plain,range,$c" >> "$TRUTH_FILE"
+    run_truth_count() {
+        local family="$1"
+        local label="$2"
+        local sql="$3"
+        local out
 
-    # Composite attr x time family: temporalbox point and range
-    local comp_point_sql="SELECT count(*) FROM temporal_data WHERE temporalbox(attr, valid_period) @> temporalbox_point(10, timestamp '2023-06-01');"
-    local cp=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$comp_point_sql") || cp=0
-    echo "composite,point,$cp" >> "$TRUTH_FILE"
+        echo "Truth: $family,$label" >&2
 
-    local comp_range_sql="SELECT count(*) FROM temporal_data WHERE temporalbox(attr, valid_period) && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');"
-    local cr=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$comp_range_sql") || cr=0
-    echo "composite,range,$cr" >> "$TRUTH_FILE"
+        if ! out=$(env PGOPTIONS="$force_seqscan_opts" psql -v ON_ERROR_STOP=1 -At -d "$DB_NAME" -c "$sql" 2>>"$OUTPUT_DIR/truth_errors.log"); then
+            echo "ERROR: truth query failed for $family,$label. See $OUTPUT_DIR/truth_errors.log" >&2
+            echo "$family,$label,ERROR" >> "$TRUTH_FILE"
+            return 1
+        fi
 
-    # Current-side family: Query D
-    local current_sql="SELECT count(*) FROM temporal_data WHERE upper_inf(valid_period) AND attr = 10 AND lower(valid_period) <= timestamp '2024-01-01';"
-    local cd=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$current_sql") || cd=0
-    echo "current,D,$cd" >> "$TRUTH_FILE"
+        if [ -z "$out" ]; then
+            echo "ERROR: truth query returned blank for $family,$label" >&2
+            echo "$family,$label,BLANK" >> "$TRUTH_FILE"
+            return 1
+        fi
 
-    # Hybrid decomposed count (should match sum of history+current)
-    local hybrid_sql="SELECT count(*) FROM (SELECT 1 FROM temporal_data WHERE NOT upper_inf(valid_period) AND temporalbox(attr, valid_period) @> temporalbox_point(10, timestamp '2023-06-01') UNION ALL SELECT 1 FROM temporal_data WHERE upper_inf(valid_period) AND attr = 10 AND lower(valid_period) <= timestamp '2023-06-01') AS q;"
-    local hd=$(env PGOPTIONS="" psql -v ON_ERROR_STOP=1 -At $opts -d "$DB_NAME" -c "$hybrid_sql") || hd=0
-    echo "current,hybrid_decomposed,$hd" >> "$TRUTH_FILE"
+        echo "$family,$label,$out" >> "$TRUTH_FILE"
+    }
+
+    run_truth_count "plain" "range" \
+"SELECT count(*)
+ FROM temporal_data
+ WHERE valid_period && tsrange('2023-01-01','2023-06-01','[)');"
+
+    run_truth_count "composite" "point" \
+"SELECT count(*)
+ FROM temporal_data
+ WHERE temporalbox(attr, valid_period)
+       @> temporalbox_point(10, timestamp '2023-06-01');"
+
+    run_truth_count "composite" "range" \
+"SELECT count(*)
+ FROM temporal_data
+ WHERE temporalbox(attr, valid_period)
+       && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');"
+
+    run_truth_count "current" "D" \
+"SELECT count(*)
+ FROM temporal_data
+ WHERE upper_inf(valid_period)
+   AND attr = 10
+   AND lower(valid_period) <= timestamp '2024-01-01';"
+
+    run_truth_count "current" "hybrid_decomposed" \
+"SELECT count(*)
+ FROM (
+   SELECT 1
+   FROM temporal_data
+   WHERE NOT upper_inf(valid_period)
+     AND temporalbox(attr, valid_period)
+         @> temporalbox_point(10, timestamp '2023-06-01')
+   UNION ALL
+   SELECT 1
+   FROM temporal_data
+   WHERE upper_inf(valid_period)
+     AND attr = 10
+     AND lower(valid_period) <= timestamp '2023-06-01'
+ ) AS q;"
 
     echo "Truth phase complete. Results: $TRUTH_FILE"
 }

@@ -1,6 +1,6 @@
 ================================================================================
 READ CONFIG: brin
-Timestamp: Thu Apr 30 11:44:46 AM IST 2026
+Timestamp: Thu Apr 30 12:15:53 PM IST 2026
 Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
 ================================================================================
 
@@ -12,22 +12,22 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 
                                                                  QUERY PLAN                                                                 
 --------------------------------------------------------------------------------------------------------------------------------------------
- Finalize Aggregate  (cost=5462.61..5462.62 rows=1 width=8) (actual time=24.721..25.716 rows=1 loops=1)
+ Finalize Aggregate  (cost=5462.67..5462.68 rows=1 width=8) (actual time=25.248..26.517 rows=1 loops=1)
    Buffers: shared hit=2634
-   ->  Gather  (cost=5462.50..5462.61 rows=1 width=8) (actual time=24.631..25.711 rows=2 loops=1)
+   ->  Gather  (cost=5462.56..5462.67 rows=1 width=8) (actual time=25.042..26.512 rows=2 loops=1)
          Workers Planned: 1
          Workers Launched: 1
          Buffers: shared hit=2634
-         ->  Partial Aggregate  (cost=4462.50..4462.51 rows=1 width=8) (actual time=23.302..23.302 rows=1 loops=2)
+         ->  Partial Aggregate  (cost=4462.56..4462.57 rows=1 width=8) (actual time=23.732..23.733 rows=1 loops=2)
                Buffers: shared hit=2634
-               ->  Parallel Seq Scan on temporal_data  (cost=0.00..4447.24 rows=6105 width=0) (actual time=0.105..23.018 rows=5210 loops=2)
+               ->  Parallel Seq Scan on temporal_data  (cost=0.00..4447.24 rows=6128 width=0) (actual time=0.136..23.441 rows=5210 loops=2)
                      Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
                      Rows Removed by Filter: 119790
                      Buffers: shared hit=2634
  Planning:
-   Buffers: shared hit=86
- Planning Time: 0.393 ms
- Execution Time: 25.761 ms
+   Buffers: shared hit=85
+ Planning Time: 0.374 ms
+ Execution Time: 26.559 ms
 (16 rows)
 
 

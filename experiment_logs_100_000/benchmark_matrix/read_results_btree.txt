@@ -1,6 +1,6 @@
 ================================================================================
 READ CONFIG: btree
-Timestamp: Thu Apr 30 11:43:08 AM IST 2026
+Timestamp: Thu Apr 30 12:10:19 PM IST 2026
 Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
 ================================================================================
 
@@ -12,16 +12,16 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 
                                                       QUERY PLAN                                                       
 -----------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=2244.81..2244.82 rows=1 width=8) (actual time=18.594..18.594 rows=1 loops=1)
+ Aggregate  (cost=2244.43..2244.44 rows=1 width=8) (actual time=18.434..18.435 rows=1 loops=1)
    Buffers: shared hit=984
-   ->  Seq Scan on temporal_data  (cost=0.00..2234.00 rows=4324 width=0) (actual time=0.008..18.364 rows=4228 loops=1)
+   ->  Seq Scan on temporal_data  (cost=0.00..2234.00 rows=4171 width=0) (actual time=0.016..18.207 rows=4228 loops=1)
          Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
          Rows Removed by Filter: 95772
          Buffers: shared hit=984
  Planning:
-   Buffers: shared hit=90
- Planning Time: 0.471 ms
- Execution Time: 18.632 ms
+   Buffers: shared hit=87
+ Planning Time: 0.464 ms
+ Execution Time: 18.509 ms
 (10 rows)
 
 

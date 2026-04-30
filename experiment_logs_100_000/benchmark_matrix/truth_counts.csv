@@ -1,6 +1,6 @@
 family,query_label,count
-plain,range,
-composite,point,
-composite,range,
-current,D,
-current,hybrid_decomposed,
+plain,range,4228
+composite,point,33
+composite,range,38
+current,D,58
+current,hybrid_decomposed,33

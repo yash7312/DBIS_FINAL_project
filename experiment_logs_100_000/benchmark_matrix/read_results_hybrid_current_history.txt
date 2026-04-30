@@ -1,6 +1,6 @@
 ================================================================================
 READ CONFIG: hybrid_current_history
-Timestamp: Thu Apr 30 11:43:12 AM IST 2026
+Timestamp: Thu Apr 30 12:10:23 PM IST 2026
 Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
 ================================================================================
 
@@ -13,16 +13,16 @@ Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/ben
 
                                                       QUERY PLAN                                                       
 -----------------------------------------------------------------------------------------------------------------------
- Aggregate  (cost=2244.66..2244.67 rows=1 width=8) (actual time=19.318..19.318 rows=1 loops=1)
+ Aggregate  (cost=2244.86..2244.87 rows=1 width=8) (actual time=19.030..19.031 rows=1 loops=1)
    Buffers: shared hit=984
-   ->  Seq Scan on temporal_data  (cost=0.00..2234.00 rows=4263 width=0) (actual time=0.009..19.070 rows=4228 loops=1)
+   ->  Seq Scan on temporal_data  (cost=0.00..2234.00 rows=4343 width=0) (actual time=0.008..18.785 rows=4228 loops=1)
          Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
          Rows Removed by Filter: 95772
          Buffers: shared hit=984
  Planning:
-   Buffers: shared hit=110
- Planning Time: 0.577 ms
- Execution Time: 19.371 ms
+   Buffers: shared hit=107
+ Planning Time: 0.573 ms
+ Execution Time: 19.073 ms
 (10 rows)
 
 

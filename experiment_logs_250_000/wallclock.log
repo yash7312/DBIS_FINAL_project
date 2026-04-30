@@ -1,19 +1,10 @@
 Running truth phase (forced seq scans) -> /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_matrix/truth_counts.csv
-ERROR:  syntax error at or near "enable_indexscan"
-LINE 1: enable_indexscan=off
-        ^
-ERROR:  syntax error at or near "enable_indexscan"
-LINE 1: enable_indexscan=off
-        ^
-ERROR:  syntax error at or near "enable_indexscan"
-LINE 1: enable_indexscan=off
-        ^
-ERROR:  syntax error at or near "enable_indexscan"
-LINE 1: enable_indexscan=off
-        ^
-ERROR:  syntax error at or near "enable_indexscan"
-LINE 1: enable_indexscan=off
-        ^
+psql:/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
+Truth: plain,range
+Truth: composite,point
+Truth: composite,range
+Truth: current,D
+Truth: current,hybrid_decomposed
 Truth phase complete. Results: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_matrix/truth_counts.csv
 Read-only run complete: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_matrix/read_results_no_index.txt
 Read-only run complete: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_matrix/read_results_brin.txt
@@ -29,5 +20,5 @@ Read-only run complete: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/expe
 psql:/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
 psql:/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
 Benchmark matrix complete. Results written to /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_matrix
-4.43user 0.82system 1:43.90elapsed 5%CPU (0avgtext+0avgdata 4396maxresident)k
-0inputs+304outputs (0major+74205minor)pagefaults 0swaps
+4.46user 0.83system 1:47.91elapsed 4%CPU (0avgtext+0avgdata 4348maxresident)k
+112inputs+304outputs (2major+76191minor)pagefaults 0swaps
