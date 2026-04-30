@@ -59,8 +59,9 @@ SELECT CASE
                WHERE temporalbox(attr, valid_period)
                      && temporalbox_range(10, timestamp '2020-01-01', timestamp '2020-01-04'))
               = (SELECT count(*)
-                 FROM temporal_data
-                 WHERE valid_period && tsrange('2020-01-01', '2020-01-04', '[)'))
+               FROM temporal_data
+               WHERE attr = 10
+                 AND valid_period && tsrange('2020-01-01', '2020-01-04', '[)'))
          THEN 'PASS'
          ELSE 'FAIL'
        END AS correctness;

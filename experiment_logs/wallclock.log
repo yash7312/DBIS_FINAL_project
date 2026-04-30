@@ -29,5 +29,5 @@ Read-only run complete: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/expe
 psql:/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
 psql:/home/yash7312/Desktop/dbis_project/DBIS_Assignment/postgresql/contrib/temporalbox/temporalbox--1.0.sql:1: NOTICE:  extension "cube" already exists, skipping
 Benchmark matrix complete. Results written to /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_matrix
-2.09user 0.68system 0:51.92elapsed 5%CPU (0avgtext+0avgdata 4300maxresident)k
-0inputs+296outputs (0major+73703minor)pagefaults 0swaps
+1.98user 0.60system 0:47.99elapsed 5%CPU (0avgtext+0avgdata 4280maxresident)k
+0inputs+296outputs (0major+74492minor)pagefaults 0swaps

@@ -4,24 +4,20 @@ A PostgreSQL extension implementing a new index access method (`temporal_rtree`)
 
 ## Overview
 
-The temporal R-tree AM is designed to efficiently index temporal data with support for:
-- Pure temporal (tsrange) queries: containment (`@>`), overlap (`&&`), contains (`<@`), etc.
-- Composite attribute × time indexing for 2D range queries
-- Current vs. history row separation and deferred insertion penalties
-- Concurrent inserts, splits, and scans with proper locking
-- Write-Ahead Logging (WAL) via PostgreSQL's generic WAL API
-- VACUUM and cleanup integration
+The temporal R-tree AM is a PostgreSQL prototype index access method over cube keys produced by `temporalbox(attr, valid_period)`. It targets composite attribute × valid-time queries by representing each tuple as a 2D rectangle over `(attr, time)`. Open-ended/current rows are represented using an infinite upper time bound and are handled specially in insertion and split heuristics.
+
+Direct `tsrange` indexing is not registered by this AM; use the separate `temporalbox` extension to produce cube keys.
 
 ## File Layout
 
 - `temporal_rtree.h` — Common header with struct definitions (RTreeTemporalBox, page opaque, etc.)
 - `temporal_rtree_handler.c` — AM entry point, handler function, IndexAmRoutine initialization
 - `temporal_rtree_insert.c` — Insert logic and key normalization
-- `temporal_rtree_search.c` — Scan begin/rescan/gettuple/endscan stubs
+- `temporal_rtree_search.c` — Scan begin/rescan/gettuple/endscan logic using stack-based tree traversal
 - `temporal_rtree_split.c` — In-memory penalty and picksplit algorithms
 - `temporal_rtree_vacuum.c` — VACUUM and cleanup callbacks
 - `temporal_rtree_cost.c` — Query planner cost estimation
-- `temporal_rtree_wal.c` — WAL record generation and replay
+- `temporal_rtree_wal.c` — Generic WAL wrappers for insert/split/vacuum page changes
 - `temporal_rtree--1.0.sql` — Extension SQL: handler, AM, opfamily, opclass registration
 - `temporal_rtree.control` — Extension metadata
 
@@ -81,26 +77,27 @@ All operators map to the underlying `cube` AM operators (same names, same semant
 **Current behavior:**
 - Each `amgettuple` call returns one tuple or false if no more
 - Index pages are pin-and-lock managed by PostgreSQL's buffer manager
-- Lossy filter application by executor (recheck quals if needed)
+- Current scan returns exact matches according to the AM's box predicate checks and sets `xs_recheck = false` in the current prototype.
 
 ### Current WAL Implementation
 
-**WAL style: Generic XLog API with full-image records**
+**WAL style: PostgreSQL GenericXLog full-page logging**
 
-- WAL primitive: `XLogBeginInsert()` + `XLogRegisterData()` + `XLogInsert()`
-- Record types: Custom `RM_TEMPORAL_RTREE_ID` (if registered)
-- Replay logic: Whole-page replacement for simplicity
-- Full-page writes: Enabled (conservative approach; all index page modifications logged in full)
+- WAL primitive: `GenericXLogStart()` + `GenericXLogRegisterBuffer()` + `GenericXLogFinish()`
+- Logged operations: insert, split, vacuum page modifications
+- Logging granularity: full-page image for modified index pages
+- Design choice: favors correctness and crash-restart recoverability over compact WAL records
 
 **Current limitations:**
-- No differential logging (always full-image)
-- No split/rebalancing-specific optimizations
-- No custom resource manager registration (uses generic insert)
+- No custom WAL resource manager
+- No compact/differential WAL records
+- No split-specific replay optimization
+- WAL volume can be high because modified pages are logged as full images
 
 ### Known Limitations
 
 1. **No concurrent split handling:** SplitFollowRight not implemented; excessive locks during splits
-2. **No page-level optimization:** Page picksplit not optimized; balance/penalty routines are in-memory only
+2. **Split policy is prototype-grade:** it includes normalized penalty, current/history-aware grouping, and linear split, but it is not as mature as PostgreSQL GiST's production picksplit logic.
 3. **No predicate locking:** `predlocks` disabled (`ampredlocks = false`)
 4. **Limited query support:** Only single-key searches; multi-column composite keys not optimized
 5. **No index-only scans:** `amgetbitmap = NULL` and no visibility tracking; full heap access required
@@ -172,7 +169,7 @@ The extension registers lightweight hooks for visibility into temporal_rtree usa
 ### GUCs
 
 - `temporal_rtree.enable_hook_debug` (bool, default=on) — Log planner and executor hook hits
-- `temporal_rtree.force_rtree_paths` (bool, default=off) — Reserved for C2: bias planner toward temporal_rtree (currently no-op)
+- `temporal_rtree.force_rtree_paths` (bool, default=off) — Bias planner toward temporal_rtree by reducing matching IndexPath costs when enabled
 - `temporal_rtree.log_dml` (bool, default=on) — Log DML statements on temporal_rtree-indexed tables
 
 ### Planner Hook
@@ -270,70 +267,11 @@ SELECT * FROM temporal_rtree_hook_stats();
 - **Compatible predicates only:** Cost biasing only applied when the WHERE clause contains temporalbox expressions with &&, @>, or <@ operators.
 - **Approximate biasing:** The 0.05× factor is conservative for testing. Real cost models may require calibration.
 
-## Status
-
-### Finalized Core AM and Hooks
-- ✓ Handler scaffold with IndexAmRoutine (stable; see Current AM Semantics above)
-- ✓ Page and tuple struct design (stable; no changes in C1)
-- ✓ In-memory split and penalty routines (stable; in-memory only)
-- ✓ SQL registration (handler, AM, opfamily, opclass)
-- ✓ Basic regression and isolation tests with correctness gates
-- ✓ Lightweight hooks for temporal_rtree detection (planner, executor)
-- ✓ SQL-visible hook statistics counters (for regression testing)
-- ✓ GUCs for hook debugging and configuration
-- ✓ **C1 Stability Promise:** Core AM code (handler, build, insert, search, vacuum, WAL) kept stable; no semantics changes
-
-### Comparative Suite Status
-
-#### Planner Path Steering ✓
-- ✓ Extended hooks with `set_rel_pathlist_hook` support
-- ✓ Operator compatibility detection (&&, @>, <@)
-- ✓ Clause analysis for temporal_rtree-eligible predicates (temporalbox expressions)
-- ✓ Cost biasing: temporal_rtree IndexPath cost *= 0.05 when `force_rtree_paths = on`
-- ✓ New GUC: `temporal_rtree.force_rtree_paths` (bool, default=off) controls path bias
-- ✓ New hook statistic: `path_bias_applied` counter (incremented when cost bias applied)
-- ✓ Test: `temporal_rtree_path_bias.sql` — demonstrates path steering with and without forcing
-- ✓ Applies only to SELECT/UPDATE/DELETE (INSERT maintains all indexes, not a path choice)
-
-**Path Biasing Semantics:**
-- When `force_rtree_paths = off` (default): Planner chooses paths naturally
-- When `force_rtree_paths = on`: Planner biases temporal_rtree paths via 0.05× cost multiplier
-- Biasing only applied to tables with temporal_rtree indexes AND compatible predicates
-- Safe fallback: Incompatible queries unaffected; cost biasing silently skipped
-
-#### Comparative benchmarking and write workloads
-- ○ Full comparative benchmarking (temporal_rtree vs. GiST, BRIN, B-tree, hybrid)
-- ○ Query family cost comparison (plain temporal, composite attr×time, current-side)
-- ○ Performance baseline collection and analysis
-- ○ Cost model refinement based on benchmark results
-
-## Final Reporting Tables
-
-Every benchmark run set should be summarized with two tables.
-
-### Correctness Table
-
-| query name | seq-scan row count | index-scan row count | pass/fail | crash-restart pass/fail |
-|---|---:|---:|---|---|
-| Q1 |  |  |  |  |
-
-### Performance Table
-
-| config | dataset shape | plan node | planning time | execution time | shared hits | shared reads | WAL bytes | index size | notes |
-|---|---|---|---:|---:|---:|---:|---:|---:|---|
-| baseline |  |  |  |  |  |  |  |  |  |
-
-### Post-C2 Work
-- ○ Full page-level insert/search with buffer manager (async work)
-- ○ Concurrent locking and split-follow-right logic (concurrency work)
-- ○ Complete WAL integration with custom resource manager (durability enhancement)
-- ○ Index-only scan support and visibility map integration
-- ○ Ambulkdelete and amvacuumcleanup implementation
-
 ## Future Work
 
-1. Implement full buffer management and page-level insert/search
-2. Add split-follow-right and concurrent scan state management
-3. Implement ambulkdelete and amvacuumcleanup
-4. Register custom WAL resource manager (Phase 2 WAL)
-5. Benchmark Q1–Q7 queries against GiST and B-tree indexes
+1. Add split-follow-right and stronger concurrent scan/retry logic.
+2. Replace GenericXLog full-page logging with compact custom WAL records.
+3. Calibrate the planner cost model using benchmark results.
+4. Add index-only scan support and visibility-map integration.
+5. Expand benchmarks against GiST, BRIN, B-tree, and hybrid current/history indexes.
+6. Add a direct `tsrange` operator class if pure temporal indexing is required without `temporalbox()`.

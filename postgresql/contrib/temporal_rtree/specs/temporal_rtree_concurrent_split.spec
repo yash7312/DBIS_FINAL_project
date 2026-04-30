@@ -22,18 +22,16 @@ teardown
 
 session "s1"
 step "s1_insert_a" {
-    INSERT INTO temporal_data VALUES
-      (1, 10, tsrange('2020-01-01', '2020-01-02', '[)'), 'a1'),
-      (2, 10, tsrange('2020-01-02', '2020-01-03', '[)'), 'a2'),
-      (3, 10, tsrange('2020-01-03', '2020-01-04', '[)'), 'a3');
+    INSERT INTO temporal_data (id, attr, valid_period, data)
+    SELECT g, 10, tsrange('2020-01-01', '2020-01-02', '[)'), 'a' || g
+    FROM generate_series(1, 1000) g;
 }
 
 session "s2"
 step "s2_insert_b" {
-    INSERT INTO temporal_data VALUES
-      (101, 10, tsrange('2020-01-01 12:00', '2020-01-02 12:00', '[)'), 'b1'),
-      (102, 10, tsrange('2020-01-02 12:00', '2020-01-03 12:00', '[)'), 'b2'),
-      (103, 10, tsrange('2020-01-03 12:00', '2020-01-04 12:00', '[)'), 'b3');
+    INSERT INTO temporal_data (id, attr, valid_period, data)
+    SELECT g, 10, tsrange('2020-01-01', '2020-01-02', '[)'), 'b' || g
+    FROM generate_series(1001, 2000) g;
 }
 
 session "s3"
@@ -44,9 +42,10 @@ step "s3_correctness" {
          FROM temporal_data
          WHERE temporalbox(attr, valid_period)
                && temporalbox_range(10, timestamp '2020-01-01', timestamp '2020-01-04')) AS indexed_hits,
-        (SELECT count(*)
-         FROM temporal_data
-         WHERE valid_period && tsrange('2020-01-01', '2020-01-04', '[)')) AS truth_hits;
+                (SELECT count(*)
+                 FROM temporal_data
+                 WHERE attr = 10
+                     AND valid_period && tsrange('2020-01-01', '2020-01-04', '[)')) AS truth_hits;
 }
 
 session "s4"
