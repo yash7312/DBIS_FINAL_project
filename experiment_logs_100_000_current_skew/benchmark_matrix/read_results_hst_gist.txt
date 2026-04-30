@@ -1,0 +1,29 @@
+================================================================================
+READ CONFIG: hst_gist
+Timestamp: Thu Apr 30 02:41:42 PM IST 2026
+Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
+================================================================================
+
+     indexname      |                                                    indexdef                                                     
+--------------------+-----------------------------------------------------------------------------------------------------------------
+ idx_hst_gist       | CREATE INDEX idx_hst_gist ON public.temporal_data USING gist (valid_period) WHERE (NOT upper_inf(valid_period))
+ temporal_data_pkey | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(2 rows)
+
+                                                      QUERY PLAN                                                       
+-----------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=2215.90..2215.91 rows=1 width=8) (actual time=19.430..19.431 rows=1 loops=1)
+   Buffers: shared hit=955
+   ->  Seq Scan on temporal_data  (cost=0.00..2205.00 rows=4361 width=0) (actual time=0.016..19.070 rows=4283 loops=1)
+         Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
+         Rows Removed by Filter: 95717
+         Buffers: shared hit=955
+ Planning:
+   Buffers: shared hit=82
+ Planning Time: 0.483 ms
+ Execution Time: 19.472 ms
+(10 rows)
+
+
+-- END READ_SELECT
+

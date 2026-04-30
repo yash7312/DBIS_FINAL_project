@@ -69,3 +69,4 @@ temporal_rtree_handler(PG_FUNCTION_ARGS)
 
     PG_RETURN_POINTER(amroutine);
 }
+    

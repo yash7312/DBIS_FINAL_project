@@ -1,2 +1,0 @@
-index_config,index_names,index_count,total_index_size_bytes,total_index_size_pretty,total_idx_scan,total_idx_tup_read,total_idx_tup_fetch,n_live_tup,n_dead_tup,n_mod_since_analyze,table_size_bytes,table_size_pretty,snapshot_ts
-no_index,temporal_data_pkey,1,5627904,5496 kB,0,0,0,250000,0,0,27041792,26 MB,2026-04-30T12:16:40.642521

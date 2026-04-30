@@ -2459,3 +2459,861 @@
 	WHERE NOT upper_inf(valid_period)
 	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
 2026-04-30 12:17:28.232 IST [8596] LOG:  checkpoint complete: wrote 501 buffers (3.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.825 s, sync=0.006 s, total=1.853 s; sync files=19, longest=0.002 s, average=0.001 s; distance=540670 kB, estimate=542831 kB; lsn=12/C9B12EC8, redo lsn=12/AB406198
+2026-04-30 12:22:26.332 IST [8596] LOG:  checkpoint starting: time
+2026-04-30 12:26:56.073 IST [8596] LOG:  checkpoint complete: wrote 5289 buffers (32.3%); 0 WAL file(s) added, 0 removed, 30 recycled; write=269.703 s, sync=0.008 s, total=269.742 s; sync files=15, longest=0.006 s, average=0.001 s; distance=498869 kB, estimate=538434 kB; lsn=12/C9B33680, redo lsn=12/C9B335F0
+2026-04-30 12:29:10.403 IST [185411] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:29:10.403 IST [185411] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:29:10.403 IST [185411] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 12:29:33.335 IST [185732] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:29:33.335 IST [185732] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:29:33.335 IST [185732] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 12:29:56.992 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:30:20.498 IST [8596] LOG:  checkpoint complete: wrote 122 buffers (0.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=23.449 s, sync=0.029 s, total=23.507 s; sync files=92, longest=0.018 s, average=0.001 s; distance=529224 kB, estimate=537513 kB; lsn=12/FF65F038, redo lsn=12/EA005678
+2026-04-30 12:30:36.375 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:30:37.867 IST [186585] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:30:37.867 IST [186585] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:30:37.867 IST [186585] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 12:31:12.974 IST [186929] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:31:12.974 IST [186929] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:31:12.974 IST [186929] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 12:31:12.979 IST [186931] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:31:12.979 IST [186931] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:31:12.979 IST [186931] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 12:31:13.743 IST [8596] LOG:  checkpoint complete: wrote 1017 buffers (6.2%); 0 WAL file(s) added, 1 removed, 32 recycled; write=37.278 s, sync=0.032 s, total=37.369 s; sync files=79, longest=0.017 s, average=0.001 s; distance=540679 kB, estimate=540679 kB; lsn=13/2A011F60, redo lsn=13/B007558
+2026-04-30 12:31:13.822 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:15.329 IST [8596] LOG:  checkpoint complete: wrote 14087 buffers (86.0%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.458 s, sync=0.005 s, total=1.507 s; sync files=61, longest=0.002 s, average=0.001 s; distance=544755 kB, estimate=544755 kB; lsn=13/4B1A35D8, redo lsn=13/2C404408
+2026-04-30 12:31:15.389 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:15.389 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:15.389 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:16.784 IST [8596] LOG:  checkpoint complete: wrote 564 buffers (3.4%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.357 s, sync=0.003 s, total=1.396 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540690 kB, estimate=544349 kB; lsn=13/6B9AB9E0, redo lsn=13/4D408E38
+2026-04-30 12:31:16.864 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:16.864 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:16.864 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:18.271 IST [8596] LOG:  checkpoint complete: wrote 1325 buffers (8.1%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.366 s, sync=0.002 s, total=1.408 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540658 kB, estimate=543980 kB; lsn=13/8DEBA3A0, redo lsn=13/6E405790
+2026-04-30 12:31:18.298 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:18.298 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:18.298 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:19.686 IST [8596] LOG:  checkpoint complete: wrote 708 buffers (4.3%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.343 s, sync=0.003 s, total=1.389 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540679 kB, estimate=543650 kB; lsn=13/AEB229C8, redo lsn=13/8F407580
+2026-04-30 12:31:19.730 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:19.730 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:19.730 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:21.100 IST [8596] LOG:  checkpoint complete: wrote 1201 buffers (7.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.338 s, sync=0.003 s, total=1.370 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540655 kB, estimate=543350 kB; lsn=13/CE0EF178, redo lsn=13/B0403478
+2026-04-30 12:31:21.215 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:21.215 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:21.215 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:22.618 IST [8596] LOG:  checkpoint complete: wrote 871 buffers (5.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.348 s, sync=0.003 s, total=1.403 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540680 kB, estimate=543083 kB; lsn=13/EFBCB9A0, redo lsn=13/D14057A0
+2026-04-30 12:31:22.688 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:22.688 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:22.689 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:24.173 IST [8596] LOG:  checkpoint complete: wrote 910 buffers (5.6%); 0 WAL file(s) added, 2 removed, 31 recycled; write=1.436 s, sync=0.003 s, total=1.485 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540646 kB, estimate=542839 kB; lsn=14/12353C08, redo lsn=13/F23FF1A0
+2026-04-30 12:31:24.188 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:24.188 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:24.188 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:25.586 IST [8596] LOG:  checkpoint complete: wrote 865 buffers (5.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.358 s, sync=0.003 s, total=1.398 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540689 kB, estimate=542624 kB; lsn=14/31BA6588, redo lsn=14/134037D0
+2026-04-30 12:31:25.665 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:25.665 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:25.665 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:27.143 IST [8596] LOG:  checkpoint complete: wrote 910 buffers (5.6%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.441 s, sync=0.003 s, total=1.479 s; sync files=2, longest=0.002 s, average=0.002 s; distance=540658 kB, estimate=542428 kB; lsn=14/539DE9F8, redo lsn=14/34400150
+2026-04-30 12:31:27.185 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:27.185 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:27.185 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:28.570 IST [8596] LOG:  checkpoint complete: wrote 858 buffers (5.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.349 s, sync=0.004 s, total=1.385 s; sync files=7, longest=0.002 s, average=0.001 s; distance=540688 kB, estimate=542254 kB; lsn=14/73A23490, redo lsn=14/55404168
+2026-04-30 12:31:28.662 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:28.662 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:28.662 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:30.135 IST [8596] LOG:  checkpoint complete: wrote 710 buffers (4.3%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.437 s, sync=0.002 s, total=1.473 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540676 kB, estimate=542096 kB; lsn=14/95582A50, redo lsn=14/764052B0
+2026-04-30 12:31:30.193 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:30.193 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:30.193 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:31.668 IST [8596] LOG:  checkpoint complete: wrote 679 buffers (4.1%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.439 s, sync=0.002 s, total=1.475 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540767 kB, estimate=541963 kB; lsn=14/B6D3CBB8, redo lsn=14/9741CF30
+2026-04-30 12:31:31.704 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:31.704 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:31.704 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:33.175 IST [8596] LOG:  checkpoint complete: wrote 833 buffers (5.1%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.436 s, sync=0.002 s, total=1.471 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540555 kB, estimate=541822 kB; lsn=14/D757B200, redo lsn=14/B83FFD18
+2026-04-30 12:31:33.233 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:33.233 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:33.233 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:34.617 IST [8596] LOG:  checkpoint complete: wrote 666 buffers (4.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.346 s, sync=0.002 s, total=1.385 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540699 kB, estimate=541710 kB; lsn=14/F7BDABC0, redo lsn=14/D9406BC8
+2026-04-30 12:31:34.701 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:34.701 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:34.701 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:36.188 IST [8596] LOG:  checkpoint complete: wrote 629 buffers (3.8%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.447 s, sync=0.003 s, total=1.488 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540685 kB, estimate=541607 kB; lsn=15/19BCED18, redo lsn=14/FA40A118
+2026-04-30 12:31:36.233 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:36.233 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:36.233 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:37.612 IST [8596] LOG:  checkpoint complete: wrote 646 buffers (3.9%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.337 s, sync=0.002 s, total=1.380 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540653 kB, estimate=541512 kB; lsn=15/39E7FBF0, redo lsn=15/1B4057A8
+2026-04-30 12:31:37.680 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:37.680 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:37.680 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:39.081 IST [8596] LOG:  checkpoint complete: wrote 640 buffers (3.9%); 0 WAL file(s) added, 2 removed, 31 recycled; write=1.354 s, sync=0.002 s, total=1.401 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540684 kB, estimate=541429 kB; lsn=15/5C099380, redo lsn=15/3C408860
+2026-04-30 12:31:39.110 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:39.110 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:39.110 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:40.596 IST [8596] LOG:  checkpoint complete: wrote 664 buffers (4.1%); 0 WAL file(s) added, 2 removed, 31 recycled; write=1.439 s, sync=0.002 s, total=1.487 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540657 kB, estimate=541352 kB; lsn=15/7D1663B0, redo lsn=15/5D404D10
+2026-04-30 12:31:40.618 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:40.618 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:40.618 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:42.024 IST [8596] LOG:  checkpoint complete: wrote 662 buffers (4.0%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.357 s, sync=0.002 s, total=1.406 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540677 kB, estimate=541284 kB; lsn=15/9D129F28, redo lsn=15/7E406278
+2026-04-30 12:31:42.087 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:42.087 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:42.087 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:43.470 IST [8596] LOG:  checkpoint complete: wrote 672 buffers (4.1%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.350 s, sync=0.002 s, total=1.383 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540641 kB, estimate=541220 kB; lsn=15/BE44DEE8, redo lsn=15/9F3FE790
+2026-04-30 12:31:43.524 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:43.524 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:43.524 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:44.913 IST [8596] LOG:  checkpoint complete: wrote 714 buffers (4.4%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.340 s, sync=0.002 s, total=1.389 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540699 kB, estimate=541168 kB; lsn=15/DF0156D0, redo lsn=15/C0405748
+2026-04-30 12:31:44.978 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:44.978 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:44.978 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:46.350 IST [8596] LOG:  checkpoint complete: wrote 774 buffers (4.7%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.336 s, sync=0.002 s, total=1.373 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540670 kB, estimate=541118 kB; lsn=16/849BF0, redo lsn=15/E14051C8
+2026-04-30 12:31:46.395 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:46.395 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:46.395 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:47.772 IST [8596] LOG:  checkpoint complete: wrote 694 buffers (4.2%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.342 s, sync=0.002 s, total=1.377 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540675 kB, estimate=541074 kB; lsn=16/21EE75E8, redo lsn=16/2405E90
+2026-04-30 12:31:47.800 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:31:47.800 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:47.800 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:49.185 IST [8596] LOG:  checkpoint complete: wrote 638 buffers (3.9%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.345 s, sync=0.002 s, total=1.385 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540641 kB, estimate=541031 kB; lsn=16/42400FC0, redo lsn=16/233FE648
+2026-04-30 12:31:49.569 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:31:49.569 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:31:49.569 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:31:49.578 IST [187382] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:31:49.578 IST [187382] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:31:49.578 IST [187382] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 12:31:49.585 IST [187386] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:31:49.585 IST [187386] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:31:49.585 IST [187386] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 12:31:49.592 IST [187389] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:31:49.592 IST [187389] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:31:49.592 IST [187389] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 12:32:23.998 IST [8596] LOG:  checkpoint complete: wrote 26 buffers (0.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=34.372 s, sync=0.022 s, total=34.429 s; sync files=28, longest=0.012 s, average=0.001 s; distance=536600 kB, estimate=540587 kB; lsn=16/61CF7B50, redo lsn=16/440046E8
+2026-04-30 12:32:27.130 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:33:04.369 IST [8596] LOG:  checkpoint complete: wrote 464 buffers (2.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=37.183 s, sync=0.018 s, total=37.240 s; sync files=60, longest=0.009 s, average=0.001 s; distance=540762 kB, estimate=540762 kB; lsn=16/82CEA220, redo lsn=16/6501B0B8
+2026-04-30 12:33:07.527 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:33:33.462 IST [8596] LOG:  checkpoint complete: wrote 3316 buffers (20.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=25.875 s, sync=0.025 s, total=25.936 s; sync files=50, longest=0.014 s, average=0.001 s; distance=540640 kB, estimate=540750 kB; lsn=16/A3C166E0, redo lsn=16/860130C0
+2026-04-30 12:33:43.721 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:33:57.280 IST [189068] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:33:57.280 IST [189068] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:33:57.280 IST [189068] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 12:34:27.080 IST [8596] LOG:  checkpoint complete: wrote 3960 buffers (24.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=43.313 s, sync=0.019 s, total=43.360 s; sync files=79, longest=0.008 s, average=0.001 s; distance=544851 kB, estimate=544851 kB; lsn=16/C5054A50, redo lsn=16/A7427DB8
+2026-04-30 12:34:30.044 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:02.095 IST [8596] LOG:  checkpoint complete: wrote 3068 buffers (18.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=31.994 s, sync=0.018 s, total=32.051 s; sync files=53, longest=0.011 s, average=0.001 s; distance=536541 kB, estimate=544020 kB; lsn=16/E5D34488, redo lsn=16/C801F410
+2026-04-30 12:35:05.233 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:07.284 IST [189963] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:07.284 IST [189963] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:07.284 IST [189963] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 12:35:07.290 IST [189965] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:07.290 IST [189965] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:07.290 IST [189965] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 12:35:08.724 IST [8596] LOG:  checkpoint complete: wrote 11412 buffers (69.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=3.443 s, sync=0.010 s, total=3.492 s; sync files=41, longest=0.004 s, average=0.001 s; distance=540576 kB, estimate=543675 kB; lsn=17/78D8268, redo lsn=16/E90076E8
+2026-04-30 12:35:08.825 IST [8596] LOG:  checkpoints are occurring too frequently (3 seconds apart)
+2026-04-30 12:35:08.825 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:08.825 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:10.193 IST [8596] LOG:  checkpoint complete: wrote 3426 buffers (20.9%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.332 s, sync=0.005 s, total=1.368 s; sync files=44, longest=0.003 s, average=0.001 s; distance=544759 kB, estimate=544759 kB; lsn=17/28161380, redo lsn=17/A405520
+2026-04-30 12:35:10.300 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:10.300 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:10.300 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:11.705 IST [8596] LOG:  checkpoint complete: wrote 788 buffers (4.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.364 s, sync=0.003 s, total=1.405 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540672 kB, estimate=544350 kB; lsn=17/49D19960, redo lsn=17/2B405690
+2026-04-30 12:35:11.774 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:11.774 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:11.774 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:13.161 IST [8596] LOG:  checkpoint complete: wrote 963 buffers (5.9%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.346 s, sync=0.003 s, total=1.388 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540690 kB, estimate=543984 kB; lsn=17/6BB68738, redo lsn=17/4C40A148
+2026-04-30 12:35:13.186 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:13.186 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:13.186 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:14.588 IST [8596] LOG:  checkpoint complete: wrote 1109 buffers (6.8%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.351 s, sync=0.003 s, total=1.403 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540660 kB, estimate=543652 kB; lsn=17/8CB77830, redo lsn=17/6D4073B8
+2026-04-30 12:35:14.618 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:14.618 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:14.618 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:16.002 IST [8596] LOG:  checkpoint complete: wrote 1045 buffers (6.4%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.344 s, sync=0.003 s, total=1.385 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540635 kB, estimate=543350 kB; lsn=17/ACC80178, redo lsn=17/8E3FE198
+2026-04-30 12:35:16.077 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:16.077 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:16.077 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:17.563 IST [8596] LOG:  checkpoint complete: wrote 965 buffers (5.9%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.446 s, sync=0.003 s, total=1.486 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540723 kB, estimate=543087 kB; lsn=17/CEFC9428, redo lsn=17/AF40B008
+2026-04-30 12:35:17.589 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:17.589 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:17.589 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:18.967 IST [8596] LOG:  checkpoint complete: wrote 783 buffers (4.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.350 s, sync=0.002 s, total=1.379 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540650 kB, estimate=542844 kB; lsn=17/EE915968, redo lsn=17/D04058B0
+2026-04-30 12:35:19.064 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:19.064 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:19.064 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:20.448 IST [8596] LOG:  checkpoint complete: wrote 895 buffers (5.5%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.353 s, sync=0.002 s, total=1.385 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540683 kB, estimate=542628 kB; lsn=18/FA83260, redo lsn=17/F1408580
+2026-04-30 12:35:20.536 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:20.536 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:20.536 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:21.930 IST [8596] LOG:  checkpoint complete: wrote 896 buffers (5.5%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.354 s, sync=0.002 s, total=1.394 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540640 kB, estimate=542429 kB; lsn=18/304ADA98, redo lsn=18/124007E8
+2026-04-30 12:35:22.031 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:22.031 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:22.031 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:23.419 IST [8596] LOG:  checkpoint complete: wrote 697 buffers (4.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.348 s, sync=0.002 s, total=1.388 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540696 kB, estimate=542256 kB; lsn=18/51C1F0C8, redo lsn=18/33406AE0
+2026-04-30 12:35:23.493 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:23.493 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:23.493 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:24.869 IST [8596] LOG:  checkpoint complete: wrote 709 buffers (4.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.337 s, sync=0.002 s, total=1.376 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540673 kB, estimate=542097 kB; lsn=18/72BE43C0, redo lsn=18/54406FC8
+2026-04-30 12:35:24.945 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:24.945 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:24.945 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:26.422 IST [8596] LOG:  checkpoint complete: wrote 717 buffers (4.4%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.435 s, sync=0.002 s, total=1.478 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540666 kB, estimate=541954 kB; lsn=18/94CCE0B0, redo lsn=18/754058E8
+2026-04-30 12:35:26.453 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:26.453 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:26.453 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:27.935 IST [8596] LOG:  checkpoint complete: wrote 825 buffers (5.0%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.450 s, sync=0.003 s, total=1.483 s; sync files=7, longest=0.002 s, average=0.001 s; distance=540670 kB, estimate=541826 kB; lsn=18/B554C4A0, redo lsn=18/96405420
+2026-04-30 12:35:27.989 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:27.989 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:27.989 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:29.470 IST [8596] LOG:  checkpoint complete: wrote 674 buffers (4.1%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.444 s, sync=0.002 s, total=1.482 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540676 kB, estimate=541711 kB; lsn=18/D6D6E398, redo lsn=18/B7406628
+2026-04-30 12:35:29.506 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:29.506 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:29.506 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:30.882 IST [8596] LOG:  checkpoint complete: wrote 607 buffers (3.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.343 s, sync=0.002 s, total=1.376 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540673 kB, estimate=541607 kB; lsn=18/F6285548, redo lsn=18/D8406DD0
+2026-04-30 12:35:30.994 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:30.994 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:30.994 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:32.388 IST [8596] LOG:  checkpoint complete: wrote 670 buffers (4.1%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.346 s, sync=0.002 s, total=1.394 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540684 kB, estimate=541515 kB; lsn=19/18400258, redo lsn=18/F940A080
+2026-04-30 12:35:32.440 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:32.440 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:32.440 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:33.932 IST [8596] LOG:  checkpoint complete: wrote 633 buffers (3.9%); 0 WAL file(s) added, 2 removed, 31 recycled; write=1.439 s, sync=0.002 s, total=1.492 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540662 kB, estimate=541430 kB; lsn=19/3A24A5E8, redo lsn=19/1A407C00
+2026-04-30 12:35:33.953 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:33.953 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:33.953 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:35.343 IST [8596] LOG:  checkpoint complete: wrote 687 buffers (4.2%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.351 s, sync=0.002 s, total=1.391 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540657 kB, estimate=541352 kB; lsn=19/5A916AB8, redo lsn=19/3B404050
+2026-04-30 12:35:35.382 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:35.382 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:35.382 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:36.770 IST [8596] LOG:  checkpoint complete: wrote 647 buffers (3.9%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.347 s, sync=0.002 s, total=1.388 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540686 kB, estimate=541286 kB; lsn=19/7B83A6D0, redo lsn=19/5C407B08
+2026-04-30 12:35:36.816 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:36.816 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:36.816 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:38.196 IST [8596] LOG:  checkpoint complete: wrote 690 buffers (4.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.344 s, sync=0.002 s, total=1.380 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540660 kB, estimate=541223 kB; lsn=19/9BBD92E8, redo lsn=19/7D404CD8
+2026-04-30 12:35:38.269 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:38.269 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:38.269 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:39.644 IST [8596] LOG:  checkpoint complete: wrote 707 buffers (4.3%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.337 s, sync=0.002 s, total=1.376 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540688 kB, estimate=541170 kB; lsn=19/BDD5DE60, redo lsn=19/9E409058
+2026-04-30 12:35:39.673 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:39.673 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:39.673 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:41.064 IST [8596] LOG:  checkpoint complete: wrote 743 buffers (4.5%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.350 s, sync=0.004 s, total=1.392 s; sync files=1, longest=0.004 s, average=0.004 s; distance=540648 kB, estimate=541117 kB; lsn=19/DEDA5DE0, redo lsn=19/BF4031E0
+2026-04-30 12:35:41.090 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:41.090 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:41.090 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:42.476 IST [8596] LOG:  checkpoint complete: wrote 696 buffers (4.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.349 s, sync=0.002 s, total=1.386 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540678 kB, estimate=541073 kB; lsn=19/FE7807F0, redo lsn=19/E0404A68
+2026-04-30 12:35:42.572 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:42.572 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:42.572 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:43.770 IST [190411] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:43.770 IST [190411] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:43.770 IST [190411] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 12:35:43.782 IST [190413] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:43.782 IST [190413] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:43.782 IST [190413] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 12:35:43.790 IST [190417] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:43.790 IST [190417] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:43.790 IST [190417] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 12:35:43.795 IST [190419] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:43.795 IST [190419] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:43.795 IST [190419] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 12:35:43.804 IST [190421] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:43.804 IST [190421] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:43.804 IST [190421] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 12:35:44.324 IST [190430] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:44.324 IST [190430] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:44.324 IST [190430] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 12:35:44.324 IST [190430] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 12:35:44.324 IST [190430] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 12:35:44.449 IST [8596] LOG:  checkpoint complete: wrote 652 buffers (4.0%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.834 s, sync=0.007 s, total=1.877 s; sync files=3, longest=0.004 s, average=0.003 s; distance=540667 kB, estimate=541033 kB; lsn=1A/20476540, redo lsn=1A/14038B0
+2026-04-30 12:35:44.522 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:44.522 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:44.522 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:46.131 IST [8596] LOG:  checkpoint complete: wrote 10988 buffers (67.1%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.571 s, sync=0.005 s, total=1.610 s; sync files=16, longest=0.003 s, average=0.001 s; distance=540662 kB, estimate=540996 kB; lsn=1A/41922C10, redo lsn=1A/22401180
+2026-04-30 12:35:46.177 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 12:35:46.177 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:46.177 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:47.755 IST [8596] LOG:  checkpoint complete: wrote 6333 buffers (38.7%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.530 s, sync=0.007 s, total=1.579 s; sync files=5, longest=0.003 s, average=0.002 s; distance=540698 kB, estimate=540966 kB; lsn=1A/6240C170, redo lsn=1A/43407BF8
+2026-04-30 12:35:47.811 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 12:35:47.811 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 12:35:47.811 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 12:35:48.016 IST [190482] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 12:35:48.016 IST [190482] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 12:35:48.016 IST [190482] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 12:35:48.016 IST [190482] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 12:35:48.016 IST [190482] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 12:40:17.092 IST [8596] LOG:  checkpoint complete: wrote 6352 buffers (38.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=269.237 s, sync=0.009 s, total=269.282 s; sync files=5, longest=0.007 s, average=0.002 s; distance=540651 kB, estimate=540934 kB; lsn=1A/6CC9C8C0, redo lsn=1A/64402910
+2026-04-30 13:05:25.560 IST [204407] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:05:25.560 IST [204407] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:05:25.560 IST [204407] STATEMENT:  
+	SET enable_indexscan = off;
+	SET enable_bitmapscan = off;
+	SET enable_indexonlyscan = off;
+	
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+	
+2026-04-30 13:05:38.457 IST [204579] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:05:38.457 IST [204579] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:05:38.457 IST [204579] STATEMENT:  
+	SET enable_seqscan = off;
+	SET enable_bitmapscan = off;
+	SET enable_indexscan = on;
+	
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+	
+2026-04-30 13:06:06.144 IST [204832] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:06:06.144 IST [204832] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:06:06.144 IST [204832] STATEMENT:  
+	SET enable_seqscan = off;
+	SET enable_bitmapscan = off;
+	SET enable_indexscan = on;
+	
+	EXPLAIN (ANALYZE, BUFFERS)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+	
+2026-04-30 13:12:51.954 IST [209340] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:12:51.954 IST [209340] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:12:51.954 IST [209340] STATEMENT:  DROP INDEX IF EXISTS idx_rtree_temporalbox;
+	
+	CREATE INDEX idx_rtree_temporalbox
+	ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 13:12:53.053 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:12:54.433 IST [8596] LOG:  checkpoint complete: wrote 7314 buffers (44.6%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.340 s, sync=0.005 s, total=1.380 s; sync files=19, longest=0.003 s, average=0.001 s; distance=540700 kB, estimate=540911 kB; lsn=1A/A47E7FE8, redo lsn=1A/854099F8
+2026-04-30 13:12:54.476 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:12:54.476 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:12:54.476 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:12:55.862 IST [8596] LOG:  checkpoint complete: wrote 1516 buffers (9.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.348 s, sync=0.003 s, total=1.386 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540633 kB, estimate=540883 kB; lsn=1A/C41F8550, redo lsn=1A/A6400150
+2026-04-30 13:12:55.973 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:12:55.973 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:12:55.973 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:12:57.360 IST [8596] LOG:  checkpoint complete: wrote 947 buffers (5.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.349 s, sync=0.005 s, total=1.387 s; sync files=1, longest=0.005 s, average=0.005 s; distance=540722 kB, estimate=540867 kB; lsn=1A/E5449258, redo lsn=1A/C740C970
+2026-04-30 13:12:57.463 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:12:57.463 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:12:57.463 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:12:58.868 IST [8596] LOG:  checkpoint complete: wrote 898 buffers (5.5%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.357 s, sync=0.003 s, total=1.406 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540667 kB, estimate=540847 kB; lsn=1B/70B2EA0, redo lsn=1A/E840B858
+2026-04-30 13:12:58.919 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:12:58.919 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:12:58.919 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:00.303 IST [8596] LOG:  checkpoint complete: wrote 920 buffers (5.6%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.351 s, sync=0.002 s, total=1.385 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540629 kB, estimate=540825 kB; lsn=1B/27C53FB8, redo lsn=1B/9400FC8
+2026-04-30 13:13:00.373 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:00.373 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:00.373 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:01.753 IST [8596] LOG:  checkpoint complete: wrote 843 buffers (5.1%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.340 s, sync=0.005 s, total=1.381 s; sync files=1, longest=0.005 s, average=0.005 s; distance=537968 kB, estimate=540540 kB; lsn=1B/494069A0, redo lsn=1B/2A15D290
+2026-04-30 13:13:01.807 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:01.807 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:01.807 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:03.176 IST [8596] LOG:  checkpoint complete: wrote 778 buffers (4.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.333 s, sync=0.002 s, total=1.369 s; sync files=1, longest=0.002 s, average=0.002 s; distance=543397 kB, estimate=543397 kB; lsn=1B/6921F260, redo lsn=1B/4B4069C8
+2026-04-30 13:13:03.290 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:03.290 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:03.290 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:04.692 IST [8596] LOG:  checkpoint complete: wrote 878 buffers (5.4%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.358 s, sync=0.002 s, total=1.403 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540661 kB, estimate=543124 kB; lsn=1B/8A7F9628, redo lsn=1B/6C403E78
+2026-04-30 13:13:04.779 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:04.779 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:04.779 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:06.265 IST [8596] LOG:  checkpoint complete: wrote 845 buffers (5.2%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.449 s, sync=0.002 s, total=1.486 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540652 kB, estimate=542876 kB; lsn=1B/ACDA17F0, redo lsn=1B/8D3FF0E0
+2026-04-30 13:13:06.298 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:06.298 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:06.298 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:07.682 IST [8596] LOG:  checkpoint complete: wrote 823 buffers (5.0%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.349 s, sync=0.002 s, total=1.385 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540698 kB, estimate=542659 kB; lsn=1B/CC48B1A0, redo lsn=1B/AE4059F8
+2026-04-30 13:13:07.779 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:07.779 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:07.779 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:09.160 IST [8596] LOG:  checkpoint complete: wrote 797 buffers (4.9%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.341 s, sync=0.003 s, total=1.382 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540670 kB, estimate=542460 kB; lsn=1B/EE401318, redo lsn=1B/CF4054C0
+2026-04-30 13:13:09.220 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:09.220 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:09.220 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:10.609 IST [8596] LOG:  checkpoint complete: wrote 803 buffers (4.9%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.352 s, sync=0.002 s, total=1.390 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540681 kB, estimate=542282 kB; lsn=1C/ED44478, redo lsn=1B/F0407BA0
+2026-04-30 13:13:10.689 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:10.689 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:10.689 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:12.080 IST [8596] LOG:  checkpoint complete: wrote 969 buffers (5.9%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.345 s, sync=0.003 s, total=1.391 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540652 kB, estimate=542119 kB; lsn=1C/30193838, redo lsn=1C/11402E08
+2026-04-30 13:13:12.146 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:12.146 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:12.146 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:13.515 IST [8596] LOG:  checkpoint complete: wrote 1053 buffers (6.4%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.333 s, sync=0.004 s, total=1.370 s; sync files=1, longest=0.004 s, average=0.004 s; distance=540685 kB, estimate=541976 kB; lsn=1C/50428F38, redo lsn=1C/32406470
+2026-04-30 13:13:13.622 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:13.622 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:13.622 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:15.102 IST [8596] LOG:  checkpoint complete: wrote 1175 buffers (7.2%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.439 s, sync=0.003 s, total=1.480 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540661 kB, estimate=541844 kB; lsn=1C/72F1E7F8, redo lsn=1C/53403B48
+2026-04-30 13:13:15.131 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:15.131 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:15.132 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:16.508 IST [8596] LOG:  checkpoint complete: wrote 1168 buffers (7.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.335 s, sync=0.003 s, total=1.377 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540662 kB, estimate=541726 kB; lsn=1C/926F7B20, redo lsn=1C/74401450
+2026-04-30 13:13:16.609 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:16.609 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:16.609 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:17.983 IST [8596] LOG:  checkpoint complete: wrote 1157 buffers (7.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.341 s, sync=0.003 s, total=1.374 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540676 kB, estimate=541621 kB; lsn=1C/B3EF9F18, redo lsn=1C/95402468
+2026-04-30 13:13:18.056 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:18.056 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:18.056 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:19.434 IST [8596] LOG:  checkpoint complete: wrote 954 buffers (5.8%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.338 s, sync=0.003 s, total=1.378 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540666 kB, estimate=541525 kB; lsn=1C/D4BE1398, redo lsn=1C/B6401008
+2026-04-30 13:13:19.513 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:19.513 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:19.513 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:20.888 IST [8596] LOG:  checkpoint complete: wrote 1075 buffers (6.6%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.335 s, sync=0.003 s, total=1.375 s; sync files=1, longest=0.003 s, average=0.003 s; distance=540680 kB, estimate=541441 kB; lsn=1C/F53FFB38, redo lsn=1C/D74030C0
+2026-04-30 13:13:20.986 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:20.986 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:20.986 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:22.367 IST [8596] LOG:  checkpoint complete: wrote 959 buffers (5.9%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.345 s, sync=0.002 s, total=1.381 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540699 kB, estimate=541367 kB; lsn=1D/1613E498, redo lsn=1C/F8409F48
+2026-04-30 13:13:22.484 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:22.484 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:22.484 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:23.860 IST [8596] LOG:  checkpoint complete: wrote 709 buffers (4.3%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.334 s, sync=0.012 s, total=1.376 s; sync files=1, longest=0.012 s, average=0.012 s; distance=540649 kB, estimate=541295 kB; lsn=1D/3709B8D8, redo lsn=1D/194043C8
+2026-04-30 13:13:23.976 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:23.976 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:23.976 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:25.456 IST [8596] LOG:  checkpoint complete: wrote 761 buffers (4.6%); 0 WAL file(s) added, 1 removed, 32 recycled; write=1.431 s, sync=0.007 s, total=1.480 s; sync files=1, longest=0.007 s, average=0.007 s; distance=540678 kB, estimate=541233 kB; lsn=1D/59401F78, redo lsn=1D/3A405C68
+2026-04-30 13:13:25.506 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:13:25.506 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:25.506 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:26.874 IST [8596] LOG:  checkpoint complete: wrote 597 buffers (3.6%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.331 s, sync=0.002 s, total=1.368 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540661 kB, estimate=541176 kB; lsn=1D/79B056D0, redo lsn=1D/5B403198
+2026-04-30 13:13:26.952 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:13:26.952 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:13:26.952 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:13:46.723 IST [210033] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:13:46.723 IST [210033] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:13:46.723 IST [210033] STATEMENT:  SET enable_seqscan = off;
+	SET enable_bitmapscan = off;
+	SET enable_indexscan = on;
+	
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 13:13:52.656 IST [8596] LOG:  checkpoint complete: wrote 286 buffers (1.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=25.676 s, sync=0.002 s, total=25.705 s; sync files=1, longest=0.002 s, average=0.002 s; distance=540664 kB, estimate=541125 kB; lsn=1D/7F998CC8, redo lsn=1D/7C4012C8
+2026-04-30 13:22:16.810 IST [218600] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:16.810 IST [218600] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:16.810 IST [218600] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 13:22:19.350 IST [218649] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:19.350 IST [218649] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:19.350 IST [218649] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:22:27.509 IST [218896] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:27.509 IST [218896] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:27.509 IST [218896] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:22:31.991 IST [218984] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:31.991 IST [218984] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:31.991 IST [218984] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:22:31.997 IST [218987] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:31.997 IST [218987] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:31.997 IST [218987] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 13:22:33.135 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:22:34.725 IST [8596] LOG:  checkpoint complete: wrote 2279 buffers (13.9%); 0 WAL file(s) added, 2 removed, 31 recycled; write=1.539 s, sync=0.007 s, total=1.591 s; sync files=103, longest=0.003 s, average=0.001 s; distance=540713 kB, estimate=541084 kB; lsn=1D/BD35ECB0, redo lsn=1D/9D40B8A8
+2026-04-30 13:22:34.741 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:22:34.741 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:22:34.741 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:22:35.490 IST [219019] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:35.490 IST [219019] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:35.490 IST [219019] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 13:22:35.496 IST [219023] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:35.496 IST [219023] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:35.496 IST [219023] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 13:22:35.502 IST [219026] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:35.502 IST [219026] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:35.502 IST [219026] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 13:22:51.796 IST [219509] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:22:51.796 IST [219509] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:22:51.796 IST [219509] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:23:00.875 IST [219713] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:00.875 IST [219713] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:00.875 IST [219713] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:23:00.880 IST [219715] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:00.880 IST [219715] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:00.880 IST [219715] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 13:23:01.170 IST [8596] LOG:  checkpoint complete: wrote 208 buffers (1.3%); 0 WAL file(s) added, 2 removed, 31 recycled; write=26.372 s, sync=0.013 s, total=26.429 s; sync files=77, longest=0.003 s, average=0.001 s; distance=540646 kB, estimate=541040 kB; lsn=1D/DE07EAE8, redo lsn=1D/BE405288
+2026-04-30 13:23:01.196 IST [8596] LOG:  checkpoints are occurring too frequently (27 seconds apart)
+2026-04-30 13:23:01.196 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:23:01.196 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:23:02.560 IST [8596] LOG:  checkpoint complete: wrote 1821 buffers (11.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.327 s, sync=0.005 s, total=1.364 s; sync files=65, longest=0.003 s, average=0.001 s; distance=540665 kB, estimate=541002 kB; lsn=1D/FD79A680, redo lsn=1D/DF403718
+2026-04-30 13:23:02.647 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:23:02.647 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:23:02.647 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:23:04.035 IST [219766] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:04.035 IST [219766] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:04.035 IST [219766] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 13:23:04.047 IST [219768] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:04.047 IST [219768] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:04.047 IST [219768] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 13:23:04.055 IST [219772] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:04.055 IST [219772] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:04.055 IST [219772] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 13:23:04.060 IST [219774] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:04.060 IST [219774] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:04.060 IST [219774] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 13:23:04.068 IST [219776] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:04.068 IST [219776] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:04.068 IST [219776] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 13:23:04.344 IST [8596] LOG:  checkpoint complete: wrote 839 buffers (5.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.652 s, sync=0.006 s, total=1.697 s; sync files=4, longest=0.002 s, average=0.002 s; distance=540677 kB, estimate=540970 kB; lsn=1E/1E4B85D8, redo lsn=1E/404DF0
+2026-04-30 13:23:04.480 IST [219785] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:04.480 IST [219785] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:04.480 IST [219785] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 13:23:04.481 IST [219785] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 13:23:04.481 IST [219785] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 13:23:04.496 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:23:04.496 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:23:04.496 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:23:04.722 IST [219787] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:04.722 IST [219787] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:04.722 IST [219787] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 13:23:04.723 IST [219787] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 13:23:04.723 IST [219787] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 13:23:10.738 IST [220293] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:10.738 IST [220293] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:10.738 IST [220293] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 13:23:13.248 IST [220378] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:13.248 IST [220378] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:13.248 IST [220378] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:23:21.211 IST [220597] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:21.211 IST [220597] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:21.211 IST [220597] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:23:25.146 IST [220683] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:25.146 IST [220683] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:25.146 IST [220683] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:23:25.151 IST [220685] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:25.151 IST [220685] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:25.151 IST [220685] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 13:23:26.092 IST [8596] LOG:  checkpoint complete: wrote 272 buffers (1.7%); 0 WAL file(s) added, 1 removed, 32 recycled; write=21.546 s, sync=0.014 s, total=21.596 s; sync files=54, longest=0.003 s, average=0.001 s; distance=540671 kB, estimate=540940 kB; lsn=1E/40B3A968, redo lsn=1E/21404BD0
+2026-04-30 13:23:26.127 IST [8596] LOG:  checkpoints are occurring too frequently (22 seconds apart)
+2026-04-30 13:23:26.127 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:23:26.127 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:23:27.511 IST [8596] LOG:  checkpoint complete: wrote 2246 buffers (13.7%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.342 s, sync=0.006 s, total=1.384 s; sync files=63, longest=0.002 s, average=0.001 s; distance=540683 kB, estimate=540914 kB; lsn=1E/60817F20, redo lsn=1E/42407918
+2026-04-30 13:23:27.602 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:23:27.602 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:23:27.602 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:23:28.396 IST [220744] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:28.396 IST [220744] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:28.396 IST [220744] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 13:23:28.404 IST [220748] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:28.404 IST [220748] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:28.404 IST [220748] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 13:23:28.409 IST [220751] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:28.409 IST [220751] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:28.409 IST [220751] STATEMENT:  DROP TABLE IF EXISTS temporal_data CASCADE;
+2026-04-30 13:23:44.759 IST [221200] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:44.759 IST [221200] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:44.759 IST [221200] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:23:53.872 IST [221430] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:53.872 IST [221430] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:53.872 IST [221430] STATEMENT:  CREATE EXTENSION temporal_rtree;
+2026-04-30 13:23:53.878 IST [221432] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:53.878 IST [221432] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:53.878 IST [221432] STATEMENT:  CREATE INDEX idx_rtree_temporalbox ON temporal_data
+	USING temporal_rtree (temporalbox(attr, valid_period) temporal_cube_ops);
+2026-04-30 13:23:54.128 IST [8596] LOG:  checkpoint complete: wrote 266 buffers (1.6%); 0 WAL file(s) added, 1 removed, 32 recycled; write=26.458 s, sync=0.014 s, total=26.526 s; sync files=116, longest=0.003 s, average=0.001 s; distance=540666 kB, estimate=540889 kB; lsn=1E/8235E2A8, redo lsn=1E/63406188
+2026-04-30 13:23:54.184 IST [8596] LOG:  checkpoints are occurring too frequently (27 seconds apart)
+2026-04-30 13:23:54.184 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:23:54.184 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:23:55.550 IST [8596] LOG:  checkpoint complete: wrote 1814 buffers (11.1%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.325 s, sync=0.006 s, total=1.366 s; sync files=68, longest=0.003 s, average=0.001 s; distance=540677 kB, estimate=540868 kB; lsn=1E/A2D99C80, redo lsn=1E/84407900
+2026-04-30 13:23:55.627 IST [8596] LOG:  checkpoints are occurring too frequently (1 second apart)
+2026-04-30 13:23:55.627 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:23:55.627 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:23:57.100 IST [221482] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:57.100 IST [221482] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:57.100 IST [221482] STATEMENT:  SELECT indexname, indexdef
+	FROM pg_indexes
+	WHERE tablename = 'temporal_data'
+	ORDER BY indexname;
+2026-04-30 13:23:57.111 IST [221484] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:57.111 IST [221484] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:57.111 IST [221484] STATEMENT:  SELECT
+	    'temporal_rtree'::text AS index_config,
+	    COALESCE(string_agg(i.indexname, '; ' ORDER BY i.indexname), '') AS index_names,
+	    COUNT(*)::int AS index_count,
+	    COALESCE(SUM(pg_relation_size(c.oid)), 0)::bigint AS total_index_size_bytes,
+	    pg_size_pretty(COALESCE(SUM(pg_relation_size(c.oid)), 0))::text AS total_index_size_pretty,
+	    COALESCE(SUM(s.idx_scan), 0)::bigint AS total_idx_scan,
+	    COALESCE(SUM(s.idx_tup_read), 0)::bigint AS total_idx_tup_read,
+	    COALESCE(SUM(s.idx_tup_fetch), 0)::bigint AS total_idx_tup_fetch,
+	    (SELECT reltuples::bigint FROM pg_class WHERE oid = 'temporal_data'::regclass) AS n_live_tup,
+	    COALESCE((SELECT n_dead_tup FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_dead_tup,
+	    COALESCE((SELECT n_mod_since_analyze FROM pg_stat_all_tables WHERE relname = 'temporal_data'), 0)::bigint AS n_mod_since_analyze,
+	    pg_total_relation_size('temporal_data')::bigint AS table_size_bytes,
+	    pg_size_pretty(pg_total_relation_size('temporal_data'))::text AS table_size_pretty,
+	    to_char(clock_timestamp(), 'YYYY-MM-DD"T"HH24:MI:SS.US') AS snapshot_ts
+	FROM pg_indexes i
+	JOIN pg_class c ON c.relname = i.indexname
+	LEFT JOIN pg_stat_all_indexes s ON s.indexrelid = c.oid
+	WHERE i.tablename = 'temporal_data';
+2026-04-30 13:23:57.119 IST [221488] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:57.119 IST [221488] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:57.119 IST [221488] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2023-01-01', timestamp '2023-06-01');
+2026-04-30 13:23:57.123 IST [221490] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:57.123 IST [221490] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:57.123 IST [221490] STATEMENT:  SELECT setval('temporal_data_id_seq', (SELECT MAX(id) FROM temporal_data) + 1);
+2026-04-30 13:23:57.131 IST [221492] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:57.131 IST [221492] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:57.131 IST [221492] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	INSERT INTO temporal_data(attr, valid_period, payload)
+	SELECT
+	  (random()*100)::int,
+	  tsrange(timestamp '2024-01-01',
+	          timestamp '2024-01-01' + ((random()*100+1)||' days')::interval,
+	          '[)'),
+	  md5(random()::text)
+	FROM generate_series(1, 10000);
+2026-04-30 13:23:57.425 IST [8596] LOG:  checkpoint complete: wrote 855 buffers (5.2%); 0 WAL file(s) added, 0 removed, 33 recycled; write=1.749 s, sync=0.005 s, total=1.798 s; sync files=3, longest=0.002 s, average=0.002 s; distance=540667 kB, estimate=540848 kB; lsn=1E/C3C04B30, redo lsn=1E/A54066F8
+2026-04-30 13:23:57.530 IST [8596] LOG:  checkpoints are occurring too frequently (2 seconds apart)
+2026-04-30 13:23:57.530 IST [8596] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 13:23:57.530 IST [8596] LOG:  checkpoint starting: wal
+2026-04-30 13:23:57.536 IST [221495] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:57.536 IST [221495] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:57.536 IST [221495] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 13:23:57.537 IST [221495] LOG:  temporal_rtree executor hook: UPDATE statement on temporal_rtree-indexed relation
+2026-04-30 13:23:57.537 IST [221495] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	UPDATE temporal_data
+	SET valid_period = tsrange(lower(valid_period), timestamp '2030-12-31', '[)')
+	WHERE upper_inf(valid_period)
+	  AND lower(valid_period) < timestamp '2030-12-31'
+	  AND attr BETWEEN 1 AND 10;
+2026-04-30 13:23:57.766 IST [221504] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:23:57.766 IST [221504] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:23:57.766 IST [221504] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 13:23:57.767 IST [221504] LOG:  temporal_rtree executor hook: DELETE statement on temporal_rtree-indexed relation
+2026-04-30 13:23:57.767 IST [221504] STATEMENT:  EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+	DELETE FROM temporal_data
+	WHERE NOT upper_inf(valid_period)
+	  AND valid_period && tsrange('2020-01-01','2021-01-01','[)');
+2026-04-30 13:24:26.974 IST [221816] LOG:  temporal_rtree module initialized with hooks
+2026-04-30 13:24:26.974 IST [221816] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-30 13:24:43.391 IST [8595] LOG:  received fast shutdown request
+2026-04-30 13:24:43.397 IST [8595] LOG:  aborting any active transactions
+2026-04-30 13:24:43.397 IST [8595] LOG:  background worker "logical replication launcher" (PID 8601) exited with exit code 1
+2026-04-30 13:24:43.427 IST [8596] LOG:  checkpoint complete: wrote 1721 buffers (10.5%); 0 WAL file(s) added, 0 removed, 33 recycled; write=45.859 s, sync=0.002 s, total=45.897 s; sync files=15, longest=0.001 s, average=0.001 s; distance=537506 kB, estimate=540514 kB; lsn=1E/C9CD4118, redo lsn=1E/C60EF128
+2026-04-30 13:24:43.427 IST [8596] LOG:  shutting down
+2026-04-30 13:24:43.427 IST [8596] LOG:  checkpoint starting: shutdown immediate
+2026-04-30 13:24:43.439 IST [8596] LOG:  checkpoint complete: wrote 1563 buffers (9.5%); 0 WAL file(s) added, 0 removed, 3 recycled; write=0.006 s, sync=0.002 s, total=0.012 s; sync files=21, longest=0.001 s, average=0.001 s; distance=61332 kB, estimate=492596 kB; lsn=1E/C9CD4190, redo lsn=1E/C9CD4190
+2026-04-30 13:24:43.450 IST [8595] LOG:  database system is shut down
+2026-04-30 14:41:16.669 IST [268805] LOG:  starting PostgreSQL 17.9 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-04-30 14:41:16.669 IST [268805] LOG:  listening on IPv4 address "127.0.0.1", port 5543
+2026-04-30 14:41:16.671 IST [268805] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5543"
+2026-04-30 14:41:16.673 IST [268808] LOG:  database system was shut down at 2026-04-30 14:41:12 IST
+2026-04-30 14:41:16.676 IST [268805] LOG:  database system is ready to accept connections
+2026-04-30 14:42:05.272 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:45:23.870 IST [268806] LOG:  checkpoint complete: wrote 1758 buffers (10.7%); 0 WAL file(s) added, 0 removed, 134 recycled; write=198.430 s, sync=0.058 s, total=198.607 s; sync files=218, longest=0.028 s, average=0.001 s; distance=2191547 kB, estimate=2191547 kB; lsn=28/86B45720, redo lsn=28/1A403EC0
+2026-04-30 14:45:41.084 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:45:47.562 IST [268806] LOG:  checkpoint complete: wrote 13918 buffers (84.9%); 0 WAL file(s) added, 1 removed, 133 recycled; write=6.324 s, sync=0.009 s, total=6.478 s; sync files=65, longest=0.006 s, average=0.001 s; distance=2195601 kB, estimate=2195601 kB; lsn=29/1A7B9278, redo lsn=28/A0428548
+2026-04-30 14:45:47.968 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:45:47.968 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:45:47.969 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:45:54.181 IST [268806] LOG:  checkpoint complete: wrote 1211 buffers (7.4%); 0 WAL file(s) added, 0 removed, 134 recycled; write=6.050 s, sync=0.005 s, total=6.213 s; sync files=1, longest=0.005 s, average=0.005 s; distance=2195326 kB, estimate=2195574 kB; lsn=29/9F153660, redo lsn=29/26407E80
+2026-04-30 14:45:54.683 IST [268806] LOG:  checkpoints are occurring too frequently (7 seconds apart)
+2026-04-30 14:45:54.683 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:45:54.683 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:46:00.893 IST [268806] LOG:  checkpoint complete: wrote 1912 buffers (11.7%); 0 WAL file(s) added, 1 removed, 133 recycled; write=6.059 s, sync=0.007 s, total=6.210 s; sync files=1, longest=0.007 s, average=0.007 s; distance=2195447 kB, estimate=2195561 kB; lsn=2A/26BA8340, redo lsn=29/AC405C20
+2026-04-30 14:46:01.343 IST [268806] LOG:  checkpoints are occurring too frequently (7 seconds apart)
+2026-04-30 14:46:01.343 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:46:01.343 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:46:07.499 IST [268806] LOG:  checkpoint complete: wrote 2590 buffers (15.8%); 0 WAL file(s) added, 0 removed, 134 recycled; write=6.005 s, sync=0.005 s, total=6.156 s; sync files=10, longest=0.005 s, average=0.001 s; distance=2195433 kB, estimate=2195548 kB; lsn=2A/AB96C2D0, redo lsn=2A/32400070
+2026-04-30 14:46:07.968 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:46:07.968 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:46:07.968 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:46:13.924 IST [268806] LOG:  checkpoint complete: wrote 2304 buffers (14.1%); 0 WAL file(s) added, 0 removed, 134 recycled; write=5.807 s, sync=0.004 s, total=5.956 s; sync files=1, longest=0.004 s, average=0.004 s; distance=2195457 kB, estimate=2195539 kB; lsn=2B/31F756E8, redo lsn=2A/B8400798
+2026-04-30 14:46:14.405 IST [268806] LOG:  checkpoints are occurring too frequently (7 seconds apart)
+2026-04-30 14:46:14.405 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:46:14.408 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:46:20.611 IST [268806] LOG:  checkpoint complete: wrote 2958 buffers (18.1%); 0 WAL file(s) added, 1 removed, 133 recycled; write=6.054 s, sync=0.005 s, total=6.207 s; sync files=1, longest=0.005 s, average=0.005 s; distance=2195454 kB, estimate=2195531 kB; lsn=2B/B8B2F068, redo lsn=2B/3E4002D8
+2026-04-30 14:46:21.109 IST [268806] LOG:  checkpoints are occurring too frequently (7 seconds apart)
+2026-04-30 14:46:21.109 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:46:21.109 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:46:26.955 IST [268806] LOG:  checkpoint complete: wrote 2452 buffers (15.0%); 0 WAL file(s) added, 1 removed, 133 recycled; write=5.690 s, sync=0.009 s, total=5.846 s; sync files=1, longest=0.009 s, average=0.009 s; distance=2195460 kB, estimate=2195523 kB; lsn=2C/3E4065C0, redo lsn=2B/C4401330
+2026-04-30 14:46:27.337 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:46:27.337 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:46:27.337 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:46:32.985 IST [268806] LOG:  checkpoint complete: wrote 2816 buffers (17.2%); 0 WAL file(s) added, 1 removed, 133 recycled; write=5.487 s, sync=0.007 s, total=5.648 s; sync files=1, longest=0.007 s, average=0.007 s; distance=2195468 kB, estimate=2195518 kB; lsn=2C/C425B738, redo lsn=2C/4A4043A0
+2026-04-30 14:46:33.389 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:46:33.389 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:46:33.389 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:47:09.067 IST [268806] LOG:  checkpoint complete: wrote 2643 buffers (16.1%); 0 WAL file(s) added, 0 removed, 134 recycled; write=35.570 s, sync=0.011 s, total=35.679 s; sync files=35, longest=0.004 s, average=0.001 s; distance=2195479 kB, estimate=2195514 kB; lsn=2D/48E86AF8, redo lsn=2C/D040A150
+2026-04-30 14:47:26.460 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:50:12.361 IST [268806] LOG:  checkpoint complete: wrote 245 buffers (1.5%); 0 WAL file(s) added, 1 removed, 133 recycled; write=165.697 s, sync=0.041 s, total=165.902 s; sync files=126, longest=0.019 s, average=0.001 s; distance=2191324 kB, estimate=2195095 kB; lsn=2D/D0131068, redo lsn=2D/56001548
+2026-04-30 14:50:12.794 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:50:18.430 IST [268806] LOG:  checkpoint complete: wrote 14181 buffers (86.6%); 0 WAL file(s) added, 0 removed, 134 recycled; write=5.485 s, sync=0.007 s, total=5.636 s; sync files=61, longest=0.005 s, average=0.001 s; distance=2199539 kB, estimate=2199539 kB; lsn=2E/55DF51B0, redo lsn=2D/DC3FE500
+2026-04-30 14:50:18.855 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:50:18.855 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:50:18.855 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:50:24.374 IST [268806] LOG:  checkpoint complete: wrote 1129 buffers (6.9%); 0 WAL file(s) added, 0 removed, 134 recycled; write=5.369 s, sync=0.005 s, total=5.519 s; sync files=1, longest=0.005 s, average=0.005 s; distance=2195488 kB, estimate=2199134 kB; lsn=2E/DB50B930, redo lsn=2E/624065C8
+2026-04-30 14:50:24.800 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:50:24.800 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:50:24.800 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:50:30.537 IST [268806] LOG:  checkpoint complete: wrote 1985 buffers (12.1%); 0 WAL file(s) added, 1 removed, 133 recycled; write=5.577 s, sync=0.006 s, total=5.737 s; sync files=1, longest=0.006 s, average=0.006 s; distance=2195446 kB, estimate=2198765 kB; lsn=2F/62045AD0, redo lsn=2E/E8403F00
+2026-04-30 14:50:30.966 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:50:30.966 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:50:30.966 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:50:36.601 IST [268806] LOG:  checkpoint complete: wrote 2581 buffers (15.8%); 0 WAL file(s) added, 0 removed, 134 recycled; write=5.489 s, sync=0.005 s, total=5.635 s; sync files=1, longest=0.005 s, average=0.005 s; distance=2195484 kB, estimate=2198437 kB; lsn=2F/E7E76DA8, redo lsn=2F/6E40AF48
+2026-04-30 14:50:37.017 IST [268806] LOG:  checkpoints are occurring too frequently (7 seconds apart)
+2026-04-30 14:50:37.017 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:50:37.017 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:50:42.486 IST [268806] LOG:  checkpoint complete: wrote 2389 buffers (14.6%); 0 WAL file(s) added, 0 removed, 134 recycled; write=5.325 s, sync=0.006 s, total=5.469 s; sync files=1, longest=0.006 s, average=0.006 s; distance=2195408 kB, estimate=2198134 kB; lsn=30/6D948A28, redo lsn=2F/F43FF200
+2026-04-30 14:50:42.924 IST [268806] LOG:  checkpoints are occurring too frequently (5 seconds apart)
+2026-04-30 14:50:42.924 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:50:42.924 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:50:48.444 IST [268806] LOG:  checkpoint complete: wrote 2952 buffers (18.0%); 0 WAL file(s) added, 0 removed, 134 recycled; write=5.365 s, sync=0.008 s, total=5.520 s; sync files=1, longest=0.008 s, average=0.008 s; distance=2195496 kB, estimate=2197870 kB; lsn=30/F3432700, redo lsn=30/7A409258
+2026-04-30 14:50:48.885 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:50:48.885 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:50:48.885 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:50:54.539 IST [268806] LOG:  checkpoint complete: wrote 2430 buffers (14.8%); 0 WAL file(s) added, 1 removed, 133 recycled; write=5.490 s, sync=0.007 s, total=5.654 s; sync files=1, longest=0.007 s, average=0.007 s; distance=2195443 kB, estimate=2197628 kB; lsn=31/7A76D1A0, redo lsn=31/406238
+2026-04-30 14:50:54.899 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:50:54.899 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:50:54.899 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:51:00.536 IST [268806] LOG:  checkpoint complete: wrote 2826 buffers (17.2%); 0 WAL file(s) added, 1 removed, 133 recycled; write=5.486 s, sync=0.006 s, total=5.638 s; sync files=1, longest=0.006 s, average=0.006 s; distance=2195468 kB, estimate=2197412 kB; lsn=32/B28DF8, redo lsn=31/864095B0
+2026-04-30 14:51:00.925 IST [268806] LOG:  checkpoints are occurring too frequently (6 seconds apart)
+2026-04-30 14:51:00.925 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:51:00.925 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:51:08.006 IST [268806] LOG:  checkpoint complete: wrote 2634 buffers (16.1%); 0 WAL file(s) added, 1 removed, 133 recycled; write=6.872 s, sync=0.049 s, total=7.082 s; sync files=12, longest=0.041 s, average=0.005 s; distance=2195444 kB, estimate=2197215 kB; lsn=32/861DFB28, redo lsn=32/C4065E8
+2026-04-30 14:51:08.462 IST [268806] LOG:  checkpoints are occurring too frequently (8 seconds apart)
+2026-04-30 14:51:08.462 IST [268806] HINT:  Consider increasing the configuration parameter "max_wal_size".
+2026-04-30 14:51:08.462 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:55:49.230 IST [268806] LOG:  checkpoint complete: wrote 3996 buffers (24.4%); 0 WAL file(s) added, 0 removed, 134 recycled; write=280.667 s, sync=0.009 s, total=280.769 s; sync files=70, longest=0.002 s, average=0.001 s; distance=2195434 kB, estimate=2197037 kB; lsn=33/AE2B718, redo lsn=32/92401038
+2026-04-30 14:56:10.406 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:56:49.909 IST [268806] LOG:  checkpoint complete: wrote 1168 buffers (7.1%); 0 WAL file(s) added, 0 removed, 134 recycled; write=39.401 s, sync=0.012 s, total=39.504 s; sync files=130, longest=0.006 s, average=0.001 s; distance=2191357 kB, estimate=2196469 kB; lsn=33/6D06BDB0, redo lsn=33/18000720
+2026-04-30 14:57:17.924 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 14:57:54.259 IST [268806] LOG:  checkpoint complete: wrote 679 buffers (4.1%); 0 WAL file(s) added, 0 removed, 134 recycled; write=36.167 s, sync=0.018 s, total=36.336 s; sync files=174, longest=0.004 s, average=0.001 s; distance=2199662 kB, estimate=2199662 kB; lsn=34/17BEA7B0, redo lsn=33/9E41BF70
+2026-04-30 14:57:55.226 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 15:03:39.245 IST [268806] LOG:  checkpoint complete: wrote 3441 buffers (21.0%); 0 WAL file(s) added, 0 removed, 134 recycled; write=343.908 s, sync=0.009 s, total=344.019 s; sync files=62, longest=0.006 s, average=0.001 s; distance=2193923 kB, estimate=2199088 kB; lsn=34/2493D0C8, redo lsn=34/2429CD48
+2026-04-30 15:24:24.907 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 15:27:29.957 IST [268806] LOG:  checkpoint complete: wrote 2627 buffers (16.0%); 0 WAL file(s) added, 0 removed, 134 recycled; write=184.950 s, sync=0.007 s, total=185.051 s; sync files=188, longest=0.002 s, average=0.001 s; distance=2197012 kB, estimate=2198880 kB; lsn=34/CF1E9C98, redo lsn=34/AA421E58
+2026-04-30 16:20:11.665 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 16:21:24.596 IST [268806] LOG:  checkpoint complete: wrote 1687 buffers (10.3%); 0 WAL file(s) added, 0 removed, 134 recycled; write=72.823 s, sync=0.014 s, total=72.931 s; sync files=187, longest=0.006 s, average=0.001 s; distance=2195365 kB, estimate=2198529 kB; lsn=35/79A33970, redo lsn=35/3040B468
+2026-04-30 16:35:45.386 IST [268806] LOG:  checkpoint starting: wal
+2026-04-30 16:36:53.115 IST [268806] LOG:  checkpoint complete: wrote 338 buffers (2.1%); 0 WAL file(s) added, 0 removed, 134 recycled; write=67.634 s, sync=0.011 s, total=67.729 s; sync files=173, longest=0.006 s, average=0.001 s; distance=2195518 kB, estimate=2198228 kB; lsn=36/235E1BB8, redo lsn=35/B641ADA8

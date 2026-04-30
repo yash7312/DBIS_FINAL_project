@@ -40,9 +40,9 @@ static ExecutorStart_hook_type prev_ExecutorStart_hook = NULL;
 static set_rel_pathlist_hook_type prev_set_rel_pathlist_hook = NULL;
 
 /* GUC variables */
-static bool trtree_enable_hook_debug = true;
+static bool trtree_enable_hook_debug = false;
 static bool trtree_force_rtree_paths = false;
-static bool trtree_log_dml = true;
+static bool trtree_log_dml = false;
 
 /* Statistics counters */
 static uint64 hook_stats_planner_hits = 0;
@@ -213,7 +213,7 @@ trtree_clause_is_temporal_rtree_compatible(Node *clause)
 			if (trtree_contains_temporalbox(leftarg) &&
 				trtree_is_compatible_operator(opexpr->opno))
 				return true;
-
+          
 			/* Also check if right arg is temporalbox(...) */
 			if (trtree_contains_temporalbox(rightarg) &&
 				trtree_is_compatible_operator(opexpr->opno))
@@ -574,7 +574,7 @@ _PG_init(void)
 							 "Log hook hits for temporal_rtree detection.",
 							 NULL,
 							 &trtree_enable_hook_debug,
-							 true,
+							 false,
 							 PGC_SUSET,
 							 0,
 							 NULL, NULL, NULL);
@@ -592,7 +592,7 @@ _PG_init(void)
 							 "Log DML statements targeting temporal_rtree indexes.",
 							 NULL,
 							 &trtree_log_dml,
-							 true,
+							 false,
 							 PGC_SUSET,
 							 0,
 							 NULL, NULL, NULL);
@@ -607,9 +607,9 @@ _PG_init(void)
 	prev_set_rel_pathlist_hook = set_rel_pathlist_hook;
 	set_rel_pathlist_hook = trtree_set_rel_pathlist_hook;
 
-	ereport(LOG,
-			(errmsg("temporal_rtree module initialized with hooks"),
-			 errhint("Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml")));
+	// ereport(LOG,
+	// 		(errmsg("temporal_rtree module initialized with hooks"),
+	// 		 errhint("Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml")));
 }
 
 /* Module cleanup */

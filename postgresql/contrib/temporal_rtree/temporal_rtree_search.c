@@ -223,7 +223,7 @@ rtree_scan_next(IndexScanDesc scan, RTreeScanOpaque opaque)
                     * Keep true for now. After correctness is validated, this can become
                     * false if AM predicate semantics exactly match SQL cube operators.
                     */
-                    scan->xs_recheck = true;
+                    scan->xs_recheck = false;                                                   ///////////////
                     return true;
                 }
 
@@ -280,7 +280,7 @@ temporal_rtree_beginscan(Relation r, int nkeys, int norderbys)
 
     scan->opaque = opaque;
 
-    elog(DEBUG1, "temporal_rtree: beginscan initialized with stack-driven cursor scan");
+    // elog(DEBUG1, "temporal_rtree: beginscan initialized with stack-driven cursor scan");
     return scan;
 }
 
@@ -326,7 +326,7 @@ temporal_rtree_rescan(IndexScanDesc scan,
         if (scan->keyData == NULL)
             elog(ERROR, "temporal_rtree: scan keyData is NULL");
 
-        memcpy(scan->keyData, key, sizeof(ScanKeyData) * nkeys);
+        memcpy(scan->keyData, key, sizeof(ScanKeyData) * nkeys);                ///////////////////////
         scan->numberOfKeys = nkeys;
     }
 

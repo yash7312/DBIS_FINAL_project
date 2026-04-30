@@ -1,0 +1,29 @@
+================================================================================
+READ CONFIG: brin
+Timestamp: Thu Apr 30 02:41:26 PM IST 2026
+Dataset: /home/yash7312/Desktop/dbis_project/DBIS_Assignment/experiment_logs/benchmark_dataset.sql
+================================================================================
+
+     indexname      |                                    indexdef                                     
+--------------------+---------------------------------------------------------------------------------
+ idx_brin           | CREATE INDEX idx_brin ON public.temporal_data USING brin (valid_period)
+ temporal_data_pkey | CREATE UNIQUE INDEX temporal_data_pkey ON public.temporal_data USING btree (id)
+(2 rows)
+
+                                                      QUERY PLAN                                                       
+-----------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=2216.14..2216.15 rows=1 width=8) (actual time=19.691..19.692 rows=1 loops=1)
+   Buffers: shared hit=955
+   ->  Seq Scan on temporal_data  (cost=0.00..2205.00 rows=4457 width=0) (actual time=0.026..19.359 rows=4283 loops=1)
+         Filter: (valid_period && '["2023-01-01 00:00:00","2023-06-01 00:00:00")'::tsrange)
+         Rows Removed by Filter: 95717
+         Buffers: shared hit=955
+ Planning:
+   Buffers: shared hit=81 read=1
+ Planning Time: 0.492 ms
+ Execution Time: 19.735 ms
+(10 rows)
+
+
+-- END READ_SELECT
+

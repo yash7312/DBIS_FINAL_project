@@ -129,7 +129,9 @@ if [ ! -d "$PGDATA/base" ]; then
 fi
 
 if ! run_as_bench_user "$PG_CTL_BIN" -D "$PGDATA" status >/dev/null 2>&1; then
-  run_as_bench_user "$PG_CTL_BIN" -D "$PGDATA" -o "-p $PGPORT" -l "$PGROOT/server.log" start
+  run_as_bench_user "$PG_CTL_BIN" -D "$PGDATA" \
+    -o "-p $PGPORT -c max_wal_size=4GB -c checkpoint_timeout=30min -c checkpoint_completion_target=0.9" \
+    -l "$PGROOT/server.log" start
 fi
 
 sleep 2
