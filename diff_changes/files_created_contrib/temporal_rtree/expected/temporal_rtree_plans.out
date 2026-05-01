@@ -1,0 +1,37 @@
+CREATE EXTENSION
+CREATE TABLE
+INSERT 0 4
+ temporal_rtree_hook_reset 
+---------------------------
+
+(1 row)
+
+SET
+SET
+SET
+                              QUERY PLAN                              
+----------------------------------------------------------------------
+ Index Scan using temporal_idx on temporal_data
+   Index Cond: (temporalbox(attr, valid_period) && temporalbox_range(10, '2020-01-01'::timestamp without time zone, '2020-01-04'::timestamp without time zone))
+(2 rows)
+
+ planner_hits | planner_rtree_eligible_hits 
+--------------+-----------------------------
+            1 |                           1
+(1 row)
+
+                              QUERY PLAN                              
+----------------------------------------------------------------------
+ Index Scan using temporal_idx on temporal_data
+   Index Cond: (temporalbox(attr, valid_period) @> temporalbox_point(10, '2020-01-02'::timestamp without time zone))
+(2 rows)
+
+ planner_hits 
+--------------
+            2
+(1 row)
+
+RESET
+RESET
+DROP INDEX
+DROP TABLE

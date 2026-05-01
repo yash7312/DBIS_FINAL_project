@@ -1,0 +1,39 @@
+2026-04-29 23:13:27.803 IST [279504] LOG:  starting PostgreSQL 17.9 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-04-29 23:13:27.803 IST [279504] LOG:  listening on IPv4 address "127.0.0.1", port 5540
+2026-04-29 23:13:27.805 IST [279504] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5540"
+2026-04-29 23:13:27.807 IST [279507] LOG:  database system was shut down at 2026-04-29 23:13:27 IST
+2026-04-29 23:13:27.810 IST [279504] LOG:  database system is ready to accept connections
+2026-04-29 23:13:30.022 IST [279504] LOG:  received fast shutdown request
+2026-04-29 23:13:30.025 IST [279504] LOG:  aborting any active transactions
+2026-04-29 23:13:30.026 IST [279504] LOG:  background worker "logical replication launcher" (PID 279510) exited with exit code 1
+2026-04-29 23:13:30.026 IST [279505] LOG:  shutting down
+2026-04-29 23:13:30.027 IST [279505] LOG:  checkpoint starting: shutdown immediate
+2026-04-29 23:13:30.040 IST [279505] LOG:  checkpoint complete: wrote 174 buffers (1.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.007 s, total=0.015 s; sync files=78, longest=0.001 s, average=0.001 s; distance=10089 kB, estimate=10089 kB; lsn=0/1E584B0, redo lsn=0/1E584B0
+2026-04-29 23:13:30.043 IST [279504] LOG:  database system is shut down
+2026-04-29 23:15:58.021 IST [281259] LOG:  starting PostgreSQL 17.9 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-04-29 23:15:58.021 IST [281259] LOG:  listening on IPv4 address "127.0.0.1", port 5540
+2026-04-29 23:15:58.023 IST [281259] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5540"
+2026-04-29 23:15:58.025 IST [281262] LOG:  database system was shut down at 2026-04-29 23:15:57 IST
+2026-04-29 23:15:58.029 IST [281259] LOG:  database system is ready to accept connections
+2026-04-29 23:16:00.150 IST [281302] LOG:  temporal_rtree module initialized with hooks
+2026-04-29 23:16:00.150 IST [281302] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-29 23:16:00.150 IST [281302] STATEMENT:  CREATE EXTENSION IF NOT EXISTS temporal_rtree;
+2026-04-29 23:16:00.217 IST [281305] LOG:  temporal_rtree module initialized with hooks
+2026-04-29 23:16:00.217 IST [281305] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-29 23:16:00.217 IST [281305] STATEMENT:  SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2020-01-01', timestamp '2020-12-31');
+2026-04-29 23:16:00.239 IST [281308] LOG:  temporal_rtree module initialized with hooks
+2026-04-29 23:16:00.239 IST [281308] HINT:  Set GUCs: temporal_rtree.enable_hook_debug, temporal_rtree.force_rtree_paths, temporal_rtree.log_dml
+2026-04-29 23:16:00.239 IST [281308] STATEMENT:  SELECT count(*)
+	FROM temporal_data
+	WHERE temporalbox(attr, valid_period)
+	      && temporalbox_range(10, timestamp '2020-01-01', timestamp '2020-12-31');
+2026-04-29 23:16:00.242 IST [281259] LOG:  received fast shutdown request
+2026-04-29 23:16:00.243 IST [281259] LOG:  aborting any active transactions
+2026-04-29 23:16:00.244 IST [281259] LOG:  background worker "logical replication launcher" (PID 281265) exited with exit code 1
+2026-04-29 23:16:00.244 IST [281260] LOG:  shutting down
+2026-04-29 23:16:00.245 IST [281260] LOG:  checkpoint starting: shutdown immediate
+2026-04-29 23:16:00.257 IST [281260] LOG:  checkpoint complete: wrote 175 buffers (1.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.005 s, total=0.014 s; sync files=78, longest=0.001 s, average=0.001 s; distance=10099 kB, estimate=10099 kB; lsn=0/1E5ACC0, redo lsn=0/1E5ACC0
+2026-04-29 23:16:00.260 IST [281259] LOG:  database system is shut down

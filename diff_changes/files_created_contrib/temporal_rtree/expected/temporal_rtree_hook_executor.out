@@ -1,0 +1,21 @@
+LOAD
+SET
+CREATE TABLE
+CREATE INDEX
+ temporal_rtree_hook_reset 
+---------------------------
+ 
+(1 row)
+
+ planner_hits | planner_rtree_eligible_hits | executor_dml_hits | executor_target_with_rtree_hits 
+--------------+-----------------------------+-------------------+--------------------------------
+            0 |                           0 |                 0 |                              0
+(1 row)
+
+INSERT 0 1
+UPDATE 1
+DELETE 1
+ planner_hits | planner_rtree_eligible_hits | executor_dml_hits | executor_target_with_rtree_hits 
+--------------+-----------------------------+-------------------+--------------------------------
+            0 |                           0 |                 3 |                              3
+(1 row)
